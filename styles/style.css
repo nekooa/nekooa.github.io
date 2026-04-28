@@ -1481,7 +1481,7 @@ code-box {
 
 /* 当父容器触发 fade-in / fade-out 时，联动图片播放缩放动画 */
 .header-container.fade-in .home-header {
-  animation: homeHeaderIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: homeHeaderIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .header-container.fade-out .home-header {
