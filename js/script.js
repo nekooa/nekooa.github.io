@@ -257,7 +257,7 @@ function addRippleEffect() {
     .close-button, 
     .md3-button, 
     .md3-list-item,
-    .home-link-card
+    .spa-link
   `);
 
   rippleElements.forEach(element => {
