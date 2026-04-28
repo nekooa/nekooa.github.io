@@ -256,8 +256,7 @@ function addRippleEffect() {
     .settings-button-m,
     .close-button, 
     .md3-button, 
-    .md3-list-item,
-    .spa-link
+    .md3-list-item
   `);
 
   rippleElements.forEach(element => {
