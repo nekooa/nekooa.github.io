@@ -1490,7 +1490,7 @@ code-box {
 
 @keyframes homeHeaderIn {
   from {
-    transform: scale(1.7); /* 进场时从 1.7 倍开始收缩 */
+    transform: scale(1.9); /* 进场时从 1.9 倍开始收缩 */
   }
   to {
     transform: scale(1.2); /* 停留在 1.2 倍的基准状态 */
