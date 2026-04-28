@@ -340,7 +340,7 @@ async function initHitokoto(delay = false) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-    const res = await fetch('https://v1.hitokoto.cn/?c=a&c=c&c=b', {
+    const res = await fetch('https://v1.hitokoto.cn/', {
       signal: controller.signal
     });
 
