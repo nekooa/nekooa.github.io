@@ -252,12 +252,12 @@ function fallbackCopyText(text, copyBtn) {
 function addRippleEffect() {
   const rippleElements = document.querySelectorAll(`
     .sidebar a, 
-    .li-a, 
-    .settings-button, 
+    .li-a,
     .settings-button-m,
     .close-button, 
     .md3-button, 
-    .md3-list-item
+    .md3-list-item,
+    .home-link-card
   `);
 
   rippleElements.forEach(element => {
