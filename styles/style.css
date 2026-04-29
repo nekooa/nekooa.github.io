@@ -1791,7 +1791,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 	    .footer {
     margin-left: 0;
     width: 100%;
-    padding-bottom: 90px;   /* 避免被底部导航遮挡 */
+    padding-bottom: 120px;   /* 避免被底部导航遮挡 */
 		}
 }
 
