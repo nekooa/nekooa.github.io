@@ -1704,6 +1704,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   .content {
     padding-left: 10px;
     padding-right: 10px;
+	padding-bottom: 120px;
     margin: 0 auto 30px;
 	max-width: 1200px;
     display: grid;
@@ -1791,7 +1792,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 	    .footer {
     margin-left: 0;
     width: 100%;
-    padding-bottom: 120px;   /* 避免被底部导航遮挡 */
+    padding-bottom: 80px;   /* 避免被底部导航遮挡 */
 		}
 }
 
