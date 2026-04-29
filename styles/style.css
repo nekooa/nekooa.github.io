@@ -109,6 +109,23 @@ hr {
   opacity: 0.6;
 }
 
+.footer {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  padding: 24px 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  color: var(--color-text);
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
 
 
 /* =========================
@@ -1770,6 +1787,12 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   .home-right-cards {
     flex-direction: column;
   }
+
+	    .footer {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: 90px;   /* 避免被底部导航遮挡 */
+		}
 }
 
 
