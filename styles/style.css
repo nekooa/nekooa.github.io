@@ -551,15 +551,6 @@ body {
   transform: scaleX(1);
 }
 
-/* 底部区域 - 利用 margin-top: auto 推到底部 */
-.sidebar-footer {
-  margin-top: 0;
-  padding-bottom: 18px;         /* 与底部保持间距 */
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
 
 
 /* =========================
