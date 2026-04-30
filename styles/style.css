@@ -1526,7 +1526,7 @@ code-box {
 
 
 /* =========================
-   首页 Flex 容器（占满网格一行）
+   首页 Flex 容器
 ========================= */
 .home-flex {
   grid-column: 1 / -1;
@@ -1538,6 +1538,25 @@ code-box {
   max-width: 500px;
   margin: 0 auto 30px;
 }
+
+
+
+/* =========================
+   footer 容器
+========================= */
+.footer {
+    padding-left: 10px;
+    padding-right: 10px;
+	padding-bottom: 120px;
+    margin: 0 auto 30px;
+	max-width: 1200px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+}
+
+
 
 /* =========================
    左侧个人卡片
@@ -1571,6 +1590,8 @@ code-box {
 .home-profile .profile-list {
   justify-content: center;
 }
+
+
 
 /* =========================
    右侧链接卡片
@@ -1607,8 +1628,10 @@ code-box {
   flex-direction: column;
 }
 
+
+
 /* =========================
-   右侧箭头 SVG（核心）
+   右侧箭头 SVG
 ========================= */
 .home-link-card::after {
   content: '';
