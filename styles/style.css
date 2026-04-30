@@ -169,7 +169,7 @@ hr {
   }
 
   .profile-list li {
-    background: rgb(90,63,72) !important;
+    background: rgb(90,63,72,0.5) !important;
   }
 
   .about-card {
@@ -177,7 +177,7 @@ hr {
   }
 
   .about-list li {
-    background: rgb(90,63,72) !important;
+    background: rgb(90,63,72,0.5) !important;
   }
 
   .time-badge {
