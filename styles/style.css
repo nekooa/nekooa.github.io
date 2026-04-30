@@ -165,7 +165,7 @@ hr {
   }
   
   .profile-card {
-    background: rgb(65,42,52) !important;
+    background: #2A2125 !important;
   }
 
   .profile-list li {
@@ -173,7 +173,7 @@ hr {
   }
 
   .about-card {
-    background: rgb(65,42,52) !important;
+    background: #2A2125 !important;
   }
 
   .about-list li {
@@ -200,7 +200,7 @@ hr {
   }
 
   .home-link-card {
-    background: rgb(65,42,52) !important;
+    background: #2A2125 !important;
   }
 	
   .home-link-card::after {
@@ -262,13 +262,13 @@ hr {
     color: #c9c9c9 !important;
 }
 [data-theme="dark"] .profile-card {
-  background: rgb(65,42,52) !important;
+  background: #2A2125 !important;
 }
 [data-theme="dark"] .profile-list li {
   background: rgb(90,63,72) !important;
 }
 [data-theme="dark"] .about-card {
-  background: rgb(65,42,52) !important;
+  background: #2A2125 !important;
 }
 [data-theme="dark"] .about-list li {
   background: rgb(90,63,72) !important;
@@ -318,7 +318,7 @@ hr {
   background: rgba(0, 0, 0, 0.5);
 }
 [data-theme="dark"] .home-link-card {
-  background: rgb(65,42,52) !important;
+  background: #2A2125 !important;
 }
 [data-theme="dark"] .home-link-card::after {
 background: no-repeat center / contain url("data:image/svg+xml;utf8,\
