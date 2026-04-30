@@ -162,8 +162,8 @@ hr {
     color: #f5f5f5;
   }
 
-.hitokoto {
-  background: rgb(65,42,52) !important;
+.hitokoto-from {
+  color: #c9c9c9 !important;
 }
 
 .profile-card {
@@ -252,8 +252,8 @@ body::-webkit-scrollbar {
 [data-theme="dark"] .article-card .meta {
   color: #f5f5f5;
 }
-[data-theme="dark"] .hitokoto {
-  background-color: rgba(0, 0, 0, 0) !important;
+[data-theme="dark"] .hitokoto-from {
+    color: #c9c9c9 !important;
 }
 [data-theme="dark"] .profile-card {
   background: rgb(65,42,52) !important;
@@ -351,6 +351,9 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 [data-theme="light"] .nav-time {
   background: var(--color-pink-soft, rgba(255,216,231,0.8));
   color: var(--color-text, #3d3d3d);
+}
+[data-theme="light"] .hitokoto-from {
+    color: #666 !important;
 }
 [data-theme="light"] .profile-list li {
   background: rgba(255, 216, 231, 0.3);
