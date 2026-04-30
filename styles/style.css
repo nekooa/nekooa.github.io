@@ -131,7 +131,7 @@ hr {
 ========================= */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #201418;
+    --color-bg: #1F1A1C;
     --color-text: #f5f5f5;
     --sidebar-bg: rgba(30,30,30);
     --shadow: rgba(0,0,0,0.5);
@@ -233,7 +233,7 @@ hr {
 ========================= */
 /* 强制深色模式 */
 [data-theme="dark"] {
-  --color-bg: #201418;
+  --color-bg: #1F1A1C;
   --color-text: #f5f5f5;
   --sidebar-bg: rgba(30,30,30);
   --shadow: rgba(0,0,0,0.5);
