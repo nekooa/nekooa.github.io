@@ -114,13 +114,11 @@ hr {
   width: calc(100% - var(--sidebar-width));
   padding: 24px 20px;
   box-sizing: border-box;
-
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-
   color: var(--color-text);
   font-size: 0.85rem;
   transition: var(--transition);
@@ -201,6 +199,10 @@ hr {
     background: rgba(0, 0, 0, 0.5) !important;
   }
 
+  .home-link-card {
+    background: rgb(65,42,52) !important;
+  }
+	
   .home-link-card::after {
     background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fed9e6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
@@ -220,7 +222,7 @@ hr {
   }
 
   img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
-    background-color: #3a3a3a;
+    background-color: #3a3a3a !important;
   }
 }
 
@@ -315,7 +317,9 @@ hr {
 [data-theme="dark"] .header-overlay {
   background: rgba(0, 0, 0, 0.5);
 }
-
+[data-theme="dark"] .home-link-card {
+  background: rgb(65,42,52) !important;
+}
 [data-theme="dark"] .home-link-card::after {
 background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fed9e6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'>\
@@ -372,6 +376,9 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 }
 [data-theme="light"] .header-overlay {
   background: rgba(255, 255, 255, 0.5) !important;
+}
+[data-theme="dark"] .home-link-card {
+  background: rgb(250, 242, 248) !important;
 }
 [data-theme="light"]  .home-link-card::after {
 background: no-repeat center / contain url("data:image/svg+xml;utf8,\
@@ -1087,7 +1094,6 @@ body {
   padding: 20px;
   margin: 0 auto 30px auto;  /* 上 0，下 30px，左右 auto */
   max-width: 800px;
-
   opacity: 1;
   transform: translateY(0);
   transition: 0.4s;
@@ -1136,17 +1142,13 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-
   grid-column: 1 / -1;
   background: rgb(250, 242, 248);
   border-radius: 16px;
-
   padding: 24px;
   margin: 0 auto 30px auto;
   max-width: 800px;
-
   gap: 10px;
-
   opacity: 1;
   transform: translateY(0);
   transition: 0.4s;
@@ -1540,7 +1542,7 @@ code-box {
 
 
 /* =========================
-   首页 Flex 容器
+   home Flex 容器
 ========================= */
 .home-flex {
   grid-column: 1 / -1;
@@ -1572,7 +1574,7 @@ code-box {
 
 
 /* =========================
-   左侧个人卡片
+    home 个人卡片
 ========================= */
 .home-profile {
   flex-direction: column !important;   /* 垂直排列 */
@@ -1627,12 +1629,10 @@ code-box {
   justify-content: space-between;
   padding: 28px 48px 28px 24px;
   border-radius: 16px;
-  background: var(--card-bg, rgba(255, 216, 231, 0.3));
-  backdrop-filter: blur(10px);
+  background: rgb(250, 242, 248);
   text-decoration: none;
   color: var(--color-text);
   transition: var(--transition);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 /* 内容区域 */
@@ -1835,27 +1835,22 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 
 
 /* =========================
-   浅色模式强制覆盖（修复所有异常）
+   浅色模式强制覆盖
 ========================= */
-/* 提高特异性：使用 body 前缀或双类选择器 */
 body[data-theme="light"] .profile-list li,
 [data-theme="light"] .profile-list li {
   background: rgba(255, 216, 231, 0.3) !important;
   color: #3d3d3d !important;
 }
-
 body[data-theme="light"] .about-list li,
 [data-theme="light"] .about-list li {
   background: rgba(255, 216, 231, 0.3) !important;
   color: #3d3d3d !important;
 }
-
 [data-theme="light"] .time-badge {
   background: var(--color-pink-soft, rgba(255,216,231,0.8)) !important;
   color: var(--color-text, #3d3d3d) !important;
 }
-
-/* 文章卡片文字强制深色 */
 [data-theme="light"] .article-card,
 [data-theme="light"] .article-card h1,
 [data-theme="light"] .article-card h2,
@@ -1866,74 +1861,55 @@ body[data-theme="light"] .about-list li,
 [data-theme="light"] .article-card span {
   color: #3d3d3d !important;
 }
-
 [data-theme="light"] .article-card {
   background: #F7ECF4 !important;
 }
-
-/* 卡片标题文字 */
 [data-theme="light"] .card-title h3,
 [data-theme="light"] .card p {
   color: #3d3d3d !important;
 }
-
-/* 代码框浅色模式 */
 [data-theme="light"] code-box {
   background-color: #f6f8fa !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
-
 [data-theme="light"] .code-box-header {
   color: #222 !important;
 }
-
 [data-theme="light"] .copy-btn {
   color: #222 !important;
 }
-
 [data-theme="light"] .copy-btn:hover {
   background-color: rgba(0, 0, 0, 0.06) !important;
 }
-
 [data-theme="light"] .code-box-content pre code {
   color: #1f2328 !important;
 }
-
-/* 深色模式代码框（确保手动深色时也正确） */
 [data-theme="dark"] code-box {
   background-color: #2d2d2d !important;
   border: 1px solid rgba(225, 225, 225, 0.3) !important;
 }
-
 [data-theme="dark"] .code-box-header {
   color: #fff !important;
 }
-
 [data-theme="dark"] .copy-btn {
   color: #fff !important;
 }
-
 [data-theme="dark"] .code-box-content pre code {
   color: #f5f5f5 !important;
 }
-
-/* 导航栏时间标签背景色 */
 [data-theme="light"] .nav-time {
   background: var(--color-pink-soft, rgba(255,216,231,0.8)) !important;
   color: #3d3d3d !important;
 }
-
 [data-theme="dark"] .nav-time {
   background: rgba(255, 179, 207, 0.2) !important;
   color: #f5f5f5 !important;
 }
 
 /* =========================
-   播放器手动主题适配（data-theme）
+   播放器手动主题适配
 ========================= */
-
-/* 深色模式覆盖 */
 [data-theme="dark"] #xf-MusicPlayer .xf-girlPink {
   --playerColor-1: #1f1a1c;
   --playerColor-2: #ebe0e2;
@@ -1954,21 +1930,16 @@ body[data-theme="light"] .about-list li,
   --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
   --playerTextShadow-2: 0 0 1px rgba(0, 0, 0, 0.5);
 }
-
 [data-theme="dark"] #xf-lyric {
   background-color: rgba(65, 42, 52, 0.9) !important;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
 }
-
 [data-theme="dark"] .xf-music-pop {
   background-color: rgba(89, 64, 75, 0.6) !important;
 }
-
 [data-theme="dark"] .xf-throughDisplay {
   background-color: rgba(65, 42, 52, 0.9) !important;
 }
-
-/* 浅色模式强制覆盖（保证手动浅色时变量与默认一致） */
 [data-theme="light"] #xf-MusicPlayer .xf-girlPink {
   --playerColor-1: #fffbff;
   --playerColor-2: #1f1a1c;
@@ -1989,16 +1960,13 @@ body[data-theme="light"] .about-list li,
   --playerTextShadow-1: 0 0 1px rgba(176, 0, 92, 0.15);
   --playerTextShadow-2: 0 0 1px rgba(255, 255, 255, 0.5);
 }
-
 [data-theme="light"] #xf-lyric {
   background-color: rgba(253, 217, 231, 0.7) !important;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
-
 [data-theme="light"] .xf-music-pop {
   background-color: rgba(253, 217, 231, 0.7) !important;
 }
-
 [data-theme="light"] .xf-throughDisplay {
   background-color: rgba(0, 0, 0, 0.75) !important;
 }
