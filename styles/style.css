@@ -162,46 +162,46 @@ hr {
     color: #f5f5f5;
   }
 
-.hitokoto-from {
-  color: #c9c9c9 !important;
-}
+  .hitokoto-from {
+    color: #c9c9c9 !important;
+  }
+  
+  .profile-card {
+    background: rgb(65,42,52) !important;
+  }
 
-.profile-card {
-  background: rgb(65,42,52) !important;
-}
+  .profile-list li {
+    background: rgb(90,63,72) !important;
+  }
 
-.profile-list li {
-  background: rgb(90,63,72) !important;
-}
+  .about-card {
+    background: rgb(65,42,52) !important;
+  }
 
-.about-card {
-  background: rgb(65,42,52) !important;
-}
+  .about-list li {
+    background: rgb(90,63,72) !important;
+  }
 
-.about-list li {
-  background: rgb(90,63,72) !important;
-}
+  .time-badge {
+    background: rgba(255, 179, 207, 0.2);
+    color: #f5f5f5;
+  }
 
-.time-badge {
-  background: rgba(255, 179, 207, 0.2);
-  color: #f5f5f5;
-}
+  .divider::before,
+  .divider::after {
+    background: var(--color-pink-soft);
+  }
 
-.divider::before,
-.divider::after {
-  background: var(--color-pink-soft);
-}
-
-.divider span {
-  color: var(--color-text);
- opacity: 0.8;
-}
+  .divider span {
+    color: var(--color-text);
+    opacity: 0.8;
+  }
 	
-.header-overlay {
-  background: rgba(0, 0, 0, 0.5) !important;
-}
+  .header-overlay {
+    background: rgba(0, 0, 0, 0.5) !important;
+  }
 
-.home-link-card::after {
+  .home-link-card::after {
     background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fed9e6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
 <path d='M5 12h14'/>\
@@ -209,15 +209,19 @@ hr {
 </svg>");
   }
 
-body {
- overflow: auto; /* 启用滚动 */
- -ms-overflow-style: none; /* IE 和旧版 Edge 隐藏滚动条 */
- scrollbar-width: none; /* Firefox 隐藏滚动条 */
-}
-body::-webkit-scrollbar {
- display: none; /* Chrome、Safari、Edge 隐藏滚动条 */
-}
+  body {
+   overflow: auto; /* 启用滚动 */
+   -ms-overflow-style: none; /* IE 和旧版 Edge 隐藏滚动条 */
+   scrollbar-width: none; /* Firefox 隐藏滚动条 */
+  }
 	
+  body::-webkit-scrollbar {
+   display: none; /* Chrome、Safari、Edge 隐藏滚动条 */
+  }
+
+  img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
+    background-color: #3a3a3a;
+  }
 }
 
 
@@ -317,7 +321,12 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fed9e6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'>\
 <polyline points='9 6 15 12 9 18'/>\
 </svg>");
-  }
+}
+
+[data-theme="dark"] img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
+  background-color: #3a3a3a;   /* 深灰色占位 */
+}
+
 
 /* 强制浅色模式（覆盖系统深色） */
 [data-theme="light"] {
@@ -369,7 +378,11 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23352f31' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'>\
 <polyline points='9 6 15 12 9 18'/>\
 </svg>");
-  }
+}
+[data-theme="light"] img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
+  background-color: #e0e0e0;   /* 深灰色占位 */
+}
+
 
 
 /* =========================
@@ -647,6 +660,45 @@ body {
     justify-items: center;
     gap: 40px 20px;
   }
+}
+
+
+
+/* =========================
+   一言
+========================= */
+.hitokoto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: auto;
+  min-width: 300px;
+  max-width: 700px;
+  text-align: center;
+  background: none !important;
+  margin: 0;
+}
+
+/* 头图一言文字亮色 */
+.hitokoto .hitokoto-content .a {
+  color: var(--color-text);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.hitokoto #hitokoto_text{
+  font-size: 1.3rem;
+  align-self: flex-start;
+}
+.hitokoto .hitokoto-from {
+  align-self: flex-end;
+  margin-top: 6px;
+  color: #666;
+  font-size: 1rem;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
 
@@ -1023,44 +1075,6 @@ body {
 
 
 /* =========================
-   一言
-========================= */
-.hitokoto {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  width: auto;
-  min-width: 300px;
-  max-width: 700px;
-  text-align: center;
-  background: none !important;
-  margin: 0;
-}
-
-/* 头图一言文字亮色 */
-.hitokoto .hitokoto-content .a {
-  color: var(--color-text);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
-.hitokoto #hitokoto_text{
-  font-size: 1.3rem;
-  align-self: flex-start;
-}
-.hitokoto .hitokoto-from {
-  align-self: flex-end;
-  margin-top: 6px;
-  color: #666;
-  font-size: 1rem;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-}
-
-
-/* =========================
    个人卡片
 ========================= */
 .profile-card {
@@ -1208,7 +1222,6 @@ body {
 
 
 
-
 /* =========================
    卡片
 ========================= */
@@ -1248,7 +1261,7 @@ body {
 }
 
 .card-list li{
-	  padding: 4px 10px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: rgba(255,255,255,0.4);
 }
@@ -1257,13 +1270,14 @@ body {
   transform: translateY(-3px);
 }
 
-/* 普通图片 */
+/* card 图片 */
 img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
   width: 300px;
   height: 180px;
   object-fit: cover;
   border-radius: 16px;
   display: block;
+  background-color: #e0e0e0;
 }
 
 
