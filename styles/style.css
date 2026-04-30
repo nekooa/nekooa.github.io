@@ -471,7 +471,7 @@ body {
   left: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  z-index: 114514;
+  z-index: 1145;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -494,9 +494,9 @@ body {
 
 .sidebar ul li {
   display: flex;
-  flex-direction: column; /* 图标在上，文字在下 */
-  align-items: center;    /* 水平居中 */
-  gap: 4px;               /* 图标和文字间距 */
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .sidebar a {
@@ -1724,7 +1724,6 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     backdrop-filter: var(--blur);
     background: var(--sidebar-bg-mobile);
     box-shadow: var(--sidebar-shadow-mobile);
-    z-index: 1000;
   }
 
   .sidebar ul {
