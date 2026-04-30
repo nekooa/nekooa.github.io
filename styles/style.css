@@ -1507,7 +1507,7 @@ code-box {
 
 @keyframes homeHeaderIn {
   from {
-    transform: scale(1.9); /* 进场时从 1.9 倍开始收缩 */
+    transform: scale(1.8); /* 进场时从 1.9 倍开始收缩 */
   }
   to {
     transform: scale(1.2); /* 停留在 1.2 倍的基准状态 */
@@ -1786,7 +1786,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 }
 	
   .home-header {
-	height: 40vh !important;
+	height: 45vh !important;
     width: 100%;
     margin: 0 0 0 0;
   }
@@ -1812,11 +1812,11 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     flex-direction: column;
   }
 
-	    .footer {
+  .footer {
     margin-left: 0;
     width: 100%;
-    padding-bottom: 80px;   /* 避免被底部导航遮挡 */
-		}
+    padding-bottom: 80px;
+  }
 }
 
 
