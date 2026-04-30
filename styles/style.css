@@ -1545,8 +1545,8 @@ code-box {
    footer 容器
 ========================= */
 .footer {
-    padding-left: 10px;
-    padding-right: 10px;
+    margin-left: var(--sidebar-width);
+    margin-right: 0px;
 	padding-bottom: 120px;
     margin: 0 auto 30px;
 	max-width: 1200px;
