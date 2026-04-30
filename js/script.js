@@ -86,18 +86,28 @@ async function loadPage(url) {
     const newHeaderContainer = doc.querySelector('.header-container');
     const newHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
+    const newFooter = doc.querySelector('.footer');                     // ★ 新增：获取新页面的 footer
 
     const currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     const currentLogo = document.querySelector('.logo');
     let currentHeaderContainer = document.querySelector('.header-container');
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
+    let currentFooter = document.querySelector('.footer');             // ★ 新增：当前页面的 footer
 
     if (newContent && currentContent) {
       const newContentClasses = newContent.className;
 
       // 1. 全局元素退场 (添加 fade-out，触发 0.2s 消失动画)
-      const outElements = [currentContent, currentLogo, currentHeaderContainer, currentHeader, currentArticleCard].filter(Boolean);
+      // ★ 退场元素中加入 footer
+      const outElements = [
+        currentContent,
+        currentLogo,
+        currentHeaderContainer,
+        currentHeader,
+        currentArticleCard,
+        currentFooter,         // ← 加入 footer
+      ].filter(Boolean);
       outElements.forEach(el => el.classList.add('fade-out'));
 
       // 2. 等待 0.2s 退场结束后，进行 DOM 替换
@@ -130,11 +140,22 @@ async function loadPage(url) {
           else document.body.insertBefore(newArticleCard, currentContent);
         } else if (currentArticleCard) currentArticleCard.remove();
 
+        // ★ 新增：替换 footer
+        if (newFooter) {
+          if (currentFooter) {
+            currentFooter.replaceWith(newFooter);
+          } else {
+            document.body.appendChild(newFooter);   // 原来没有 footer 就直接追加到 body 末尾
+          }
+        } else if (currentFooter) {
+          currentFooter.remove();
+        }
+
         // 初始化新页面的代码框
         initCodeBoxes();
 
-        // 3. 统一触发入场动画 (将容器与卡片同时纳入上浮动画)
-        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo');
+        // 3. 统一触发入场动画 (将容器与卡片同时纳入上浮动画，★ 加入 .footer)
+        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer');
 
         // 4. 重置新页面组件状态
         initHitokoto(true);
@@ -507,8 +528,8 @@ function initAll() {
   initHitokoto();
   bindSettingsTrigger();
   
-  // 初次加载时，触发页面内所有核心组件和卡片的入场动画
-  playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header');
+  // 初次加载时，触发页面内所有核心组件和卡片的入场动画（★ 加入 .footer）
+  playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .footer');
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCodeBoxes);
