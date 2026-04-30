@@ -1272,13 +1272,13 @@ body {
   transform: translateY(-3px);
 }
 
-/* card 图片 */
-img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
+.card img {
+  display: block;
   width: 300px;
   height: 180px;
+  min-height: 180px;
   object-fit: cover;
   border-radius: 16px;
-  display: block;
   background-color: #e0e0e0;
 }
 
