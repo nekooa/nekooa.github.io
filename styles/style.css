@@ -327,7 +327,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 </svg>");
 }
 
-[data-theme="dark"] img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
+[data-theme="dark"] .card img {
   background-color: #3a3a3a;   /* 深灰色占位 */
 }
 
@@ -377,7 +377,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 [data-theme="light"] .header-overlay {
   background: rgba(255, 255, 255, 0.5) !important;
 }
-[data-theme="dark"] .home-link-card {
+[data-theme="light"] .home-link-card {
   background: rgb(250, 242, 248) !important;
 }
 [data-theme="light"]  .home-link-card::after {
@@ -386,8 +386,8 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 <polyline points='9 6 15 12 9 18'/>\
 </svg>");
 }
-[data-theme="light"] img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
-  background-color: #e0e0e0;   /* 深灰色占位 */
+[data-theme="light"] .card img {
+  background-color: #e0e0e0;
 }
 
 
