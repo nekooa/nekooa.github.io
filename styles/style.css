@@ -1761,8 +1761,8 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     scrollbar-width: thin;
     text-align: left;
     top: calc(anchor(bottom) - 1px);
-    /* 移除原先的 opacity: 0，仅保留动画 */
-    transition: opacity 0.2s allow-discrete;
+    transition: opacity 0.2s allow-discrete, transform 0.2s allow-discrete;
+    transform-origin: top center;  
   }
 
   .ui-select.reverse::picker(select) {
@@ -1771,19 +1771,20 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     border-top: 1px solid var(--color-pink);
     border-bottom: none;
     border-radius: 8px 8px 0 0;
+	transform-origin: bottom center; 
   }
 
-  /* 面板打开时的动画 (popover-open 是真正触发显示的状态) */
   .ui-select::picker(select):popover-open {
     opacity: 1;
+    transform: scaleY(1);
   }
   @starting-style {
     .ui-select::picker(select):popover-open {
       opacity: 0;
+      transform: scaleY(0.8);              /* 初始纵向缩小 */
     }
   }
 
-  /* 选项 */
   .ui-select option {
     display: block;
     line-height: 20px;
@@ -1815,7 +1816,6 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     cursor: default;
   }
 
-  /* 分隔线 */
   .ui-select hr {
     border: 0;
     border-top: 1px solid var(--color-text);
@@ -1823,7 +1823,6 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     margin: 0 12px;
   }
 
-  /* optgroup */
   .ui-select optgroup[label] {
     font-size: 0;
   }
@@ -1850,7 +1849,6 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     margin-inline: 12px;
   }
 
-  /* 隐藏默认对勾 */
   .ui-select option::checkmark {
     display: none;
   }
