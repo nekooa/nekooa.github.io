@@ -1694,7 +1694,6 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   }
 
   .ui-select {
-    /* 触发器样式 */
     line-height: 20px;
     padding: 9px 6px 9px 12px;
     font-size: var(--ui-font, 14px);
@@ -1705,6 +1704,8 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     border-radius: 8px;
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
+	position: relative;
+    overflow: hidden;
   }
 
   /* 深/浅模式下的边框 */
