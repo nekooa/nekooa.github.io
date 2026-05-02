@@ -439,33 +439,8 @@ function createSettingsDialog() {
   const animationToggle = document.getElementById('animationToggle');
   const resetBtn = document.getElementById('resetSettingsBtn');
 
-// 阻止 select 点击冒泡到父级 .md3-list-item
-themeSelect.addEventListener('click', (e) => e.stopPropagation());
+  themeSelect.addEventListener('click', (e) => e.stopPropagation());
 
-// 为 select 本身添加涟漪效果
-themeSelect.addEventListener('click', function(e) {
-  // 计算点击位置（相对 select 本身）
-  const rect = this.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  // 创建涟漪元素
-  const ripple = document.createElement('span');
-  ripple.className = 'ripple';
-  const size = Math.max(rect.width, rect.height);
-  ripple.style.width = ripple.style.height = `${size}px`;
-  ripple.style.left = `${x - size / 2}px`;
-  ripple.style.top = `${y - size / 2}px`;
-
-  // 移除旧的涟漪
-  const old = this.querySelector('.ripple');
-  if (old) old.remove();
-
-  this.appendChild(ripple);
-
-  // 动画结束后清理
-  ripple.addEventListener('animationend', () => ripple.remove());
-});
   themeSelect.value = ThemeManager.getTheme();
   const animEnabled = localStorage.getItem('animations-enabled') !== 'false';
   animationToggle.checked = animEnabled;
