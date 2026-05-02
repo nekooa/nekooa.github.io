@@ -1741,7 +1741,6 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   .ui-select:open {
     border-color: var(--color-pink);
     border-radius: 8px 8px 0 0;
-    box-shadow: 0 0 0 3px var(--color-pink-soft);
   }
 
   .ui-select.reverse:open {
