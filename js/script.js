@@ -40,25 +40,25 @@ const ThemeManager = {
 ThemeManager.init();
 
 /* =========================
-   统一动画执行器 (核心修复：解决上浮动画失效)
+   统一动画执行
 ========================= */
 function playEnterAnimation(selectors) {
   const elements = document.querySelectorAll(selectors);
   if (!elements.length) return;
 
   elements.forEach(el => {
-    // 1. 禁用过渡，瞬间将元素下沉并隐藏（设置动画起始点）
+    // 1. 禁用过渡，瞬间将元素下沉并隐藏
     el.style.transition = 'none';
     el.style.opacity = '0';
     el.style.transform = 'translateY(15px)';
     el.classList.remove('fade-out', 'fade-in');
   });
 
-  // 2. 强制触发浏览器重排，让刚才的瞬间改变立刻生效
+  // 2. 强制触发浏览器重排
   void document.body.offsetWidth;
 
   elements.forEach(el => {
-    // 3. 清理内联样式，交回给 CSS 控制，并添加入场类名
+    // 3. 清理内联样式，交给 CSS 控制，添加入场类名
     el.style.transition = '';
     el.style.opacity = '';
     el.style.transform = '';
@@ -86,33 +86,32 @@ async function loadPage(url) {
     const newHeaderContainer = doc.querySelector('.header-container');
     const newHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
-    const newFooter = doc.querySelector('.footer');                     // ★ 新增：获取新页面的 footer
+    const newFooter = doc.querySelector('.footer');
 
     const currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     const currentLogo = document.querySelector('.logo');
     let currentHeaderContainer = document.querySelector('.header-container');
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
-    let currentFooter = document.querySelector('.footer');             // ★ 新增：当前页面的 footer
+    let currentFooter = document.querySelector('.footer');
 
     if (newContent && currentContent) {
       const newContentClasses = newContent.className;
 
       // 1. 全局元素退场 (添加 fade-out，触发 0.2s 消失动画)
-      // ★ 退场元素中加入 footer
       const outElements = [
         currentContent,
         currentLogo,
         currentHeaderContainer,
         currentHeader,
         currentArticleCard,
-        currentFooter,         // ← 加入 footer
+        currentFooter,
       ].filter(Boolean);
       outElements.forEach(el => el.classList.add('fade-out'));
 
       // 2. 等待 0.2s 退场结束后，进行 DOM 替换
       setTimeout(() => {
-        // 让页面瞬间回到顶部，避免在新内容下方渲染
+        // 让页面瞬间回到顶部
         window.scrollTo({ top: 0, behavior: 'auto' });
 
         // 头图容器替换
@@ -140,12 +139,12 @@ async function loadPage(url) {
           else document.body.insertBefore(newArticleCard, currentContent);
         } else if (currentArticleCard) currentArticleCard.remove();
 
-        // ★ 新增：替换 footer
+        // footer 替换
         if (newFooter) {
           if (currentFooter) {
             currentFooter.replaceWith(newFooter);
           } else {
-            document.body.appendChild(newFooter);   // 原来没有 footer 就直接追加到 body 末尾
+            document.body.appendChild(newFooter);
           }
         } else if (currentFooter) {
           currentFooter.remove();
@@ -154,7 +153,7 @@ async function loadPage(url) {
         // 初始化新页面的代码框
         initCodeBoxes();
 
-        // 3. 统一触发入场动画 (将容器与卡片同时纳入上浮动画，★ 加入 .footer)
+        // 3. 统一触发入场动画
         playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer');
 
         // 4. 重置新页面组件状态
