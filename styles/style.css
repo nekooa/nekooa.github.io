@@ -1684,11 +1684,17 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 
 
 /* =========================
-   下拉框 (Chrome 135+)
+    .ui-select (Chrome 135+)
 ========================= */
 @supports (appearance: base-select) {
-  .ui-select {
+  /* 必须先“重置”元素，并告诉浏览器我们要自定义 */
+  .ui-select,
+  .ui-select::picker(select) {
     appearance: base-select;
+  }
+
+  .ui-select {
+    /* 触发器样式 */
     line-height: 20px;
     padding: 9px 6px 9px 12px;
     font-size: var(--ui-font, 14px);
@@ -1696,12 +1702,12 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     color: var(--color-text);
     background-color: var(--color-bg);
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;                   /* MD3 圆角 */
+    border-radius: 8px;
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
 
-  /* 浅色模式下边框自动跟随主题（通过媒体查询 / data-theme 覆盖） */
+  /* 深/浅模式下的边框 */
   @media (prefers-color-scheme: dark) {
     .ui-select {
       border-color: rgba(255, 255, 255, 0.2);
@@ -1714,30 +1720,30 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     border-color: rgba(0, 0, 0, 0.2);
   }
 
-  /* 悬停 */
   .ui-select:hover {
     border-color: var(--color-pink);
   }
 
-  /* 下拉箭头：使用 mask 自动继承文字颜色 */
+  /* 下拉箭头 (picker-icon) */
   .ui-select::picker-icon {
     content: "";
     display: block;
     width: 20px;
     height: 20px;
-    background-color: var(--color-svg);        /* 浅色 #352f31，深色 #fed9e6 */
+    background-color: var(--color-svg);
     mask: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
     -webkit-mask: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
     mask-size: 12px 8px;
     -webkit-mask-size: 12px 8px;
   }
 
-  /* 打开状态（与面板连接感） */
+  /* 打开状态 */
   .ui-select:open {
     border-color: var(--color-pink);
-    border-radius: 8px 8px 0 0;             /* 底部直角 */
+    border-radius: 8px 8px 0 0;
     box-shadow: 0 0 0 3px var(--color-pink-soft);
   }
+
   .ui-select.reverse:open {
     border-radius: 0 0 8px 8px;
   }
@@ -1747,7 +1753,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     padding: 8px 0;
     background: var(--color-bg);
     border: 1px solid var(--color-pink);
-    border-top: none;                        /* 与触发器无间隔 */
+    border-top: none;
     border-radius: 0 0 8px 8px;
     box-shadow: var(--shadow);
     max-height: 306px;
@@ -1756,9 +1762,10 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     scrollbar-width: thin;
     text-align: left;
     top: calc(anchor(bottom) - 1px);
-    opacity: 0;
+    /* 移除原先的 opacity: 0，仅保留动画 */
     transition: opacity 0.2s allow-discrete;
   }
+
   .ui-select.reverse::picker(select) {
     top: auto;
     bottom: calc(anchor(top) - 1px);
@@ -1766,6 +1773,8 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     border-bottom: none;
     border-radius: 8px 8px 0 0;
   }
+
+  /* 面板打开时的动画 (popover-open 是真正触发显示的状态) */
   .ui-select::picker(select):popover-open {
     opacity: 1;
   }
@@ -1815,13 +1824,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     margin: 0 12px;
   }
 
-  /* 分组标题 */
-  .ui-select optgroup {
-    padding-top: 6px;
-    font-weight: 700;
-    color: var(--color-text);
-    line-height: 20px;
-  }
+  /* optgroup */
   .ui-select optgroup[label] {
     font-size: 0;
   }
@@ -1834,9 +1837,11 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     margin-bottom: -1.2em;
     color: var(--color-text);
   }
+
   .ui-select optgroup option {
     text-indent: 0.5em;
   }
+
   .ui-select optgroup:not([label]):not(:first-child)::before {
     content: '';
     display: block;
