@@ -401,7 +401,7 @@ function createSettingsDialog() {
               <div class="item-label">主题模式</div>
               <div class="item-supporting">切换浅色/深色外观</div>
             </span>
-            <select id="themeSelect" class="theme-select" style="padding: 8px 12px; border-radius: 20px; border: 1px solid var(--color-pink-soft); background: var(--color-bg); color: var(--color-text);">
+            <select id="themeSelect" class="ui-select">
               <option value="auto">跟随系统</option>
               <option value="light">浅色模式</option>
               <option value="dark">深色模式</option>
