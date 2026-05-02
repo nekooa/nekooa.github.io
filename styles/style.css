@@ -1863,6 +1863,92 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 
 
 /* =========================
+   日历组件
+========================= */
+
+.calendar-card {
+  background: var(--sidebar-bg);
+  backdrop-filter: var(--blur);
+  box-shadow: 0 6px 20px var(--shadow);
+}
+
+/* 标题 */
+.calendar-header {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+/* 切换按钮 */
+.calendar-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.calendar-nav button {
+  border: none;
+  background: var(--color-pink-soft);
+  color: var(--color-text);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.calendar-nav button:hover {
+  background: var(--color-pink);
+  color: var(--color-white);
+}
+
+/* 星期 */
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+
+/* 日期网格 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+/* 单天 */
+.calendar-day {
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: var(--transition);
+}
+
+/* hover */
+.calendar-day:hover {
+  background: var(--color-pink-soft);
+}
+
+/* 今天 */
+.calendar-day.today {
+  background: var(--color-pink);
+  color: var(--color-white);
+}
+
+/* 非本月 */
+.calendar-day.other {
+  opacity: 0.3;
+}
+
+
+
+/* =========================
    移动端
 ========================= */
 @media (max-width: 768px) {
