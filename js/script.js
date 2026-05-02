@@ -161,6 +161,7 @@ async function loadPage(url) {
         bindLinks();
         addRippleEffect();
         bindSettingsTrigger();
+        Calendar.init();
       }, 200); 
     }
 
@@ -521,6 +522,83 @@ function bindSettingsTrigger() {
 }
 
 /* =========================
+   日历组件
+========================= */
+const Calendar = {
+  current: new Date(),
+
+  init() {
+    this.render();
+    this.bindEvents();
+  },
+
+  render() {
+    const container = document.getElementById('calendar');
+    if (!container) return;
+
+    const year = this.current.getFullYear();
+    const month = this.current.getMonth();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    const today = new Date();
+
+    let html = `
+      <div class="calendar-header">
+        <button class="cal-prev">‹</button>
+        <span>${year} 年 ${month + 1} 月</span>
+        <button class="cal-next">›</button>
+      </div>
+      <div class="calendar-grid">
+        ${['日','一','二','三','四','五','六'].map(d => `<div class="cal-day-name">${d}</div>`).join('')}
+    `;
+
+    // 空白占位
+    for (let i = 0; i < firstDay; i++) {
+      html += `<div class="cal-day empty"></div>`;
+    }
+
+    // 日期
+    for (let d = 1; d <= lastDate; d++) {
+      const isToday =
+        d === today.getDate() &&
+        month === today.getMonth() &&
+        year === today.getFullYear();
+
+      html += `
+        <div class="cal-day ${isToday ? 'today' : ''}">
+          ${d}
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    container.innerHTML = html;
+  },
+
+  bindEvents() {
+    const container = document.getElementById('calendar');
+    if (!container) return;
+
+    const prev = container.querySelector('.cal-prev');
+    const next = container.querySelector('.cal-next');
+
+    prev.onclick = () => {
+      this.current.setMonth(this.current.getMonth() - 1);
+      this.render();
+      this.bindEvents();
+    };
+
+    next.onclick = () => {
+      this.current.setMonth(this.current.getMonth() + 1);
+      this.render();
+      this.bindEvents();
+    };
+  }
+};
+
+/* =========================
    初始化执行
 ========================= */
 function initAll() {
@@ -528,6 +606,7 @@ function initAll() {
   addRippleEffect();
   initHitokoto();
   bindSettingsTrigger();
+  Calendar.init();
   
   // 初次加载时，触发页面内所有核心组件和卡片的入场动画
   playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .footer');
