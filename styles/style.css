@@ -1055,6 +1055,65 @@ body {
   margin-top: 25px;
 }
 
+/* ===== 高潮口号 ===== */
+.slogan {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e91e63;           /* 糖果粉 */
+  text-shadow: 0 2px 8px rgba(233, 30, 99, 0.25);
+  margin: 1.5em 0 1em;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+
+/* ===== 角色内心独白 ===== */
+.thoughts {
+  display: block;
+  font-style: italic;
+  color: #b06a8c;
+  background: rgba(255, 235, 245, 0.5);
+  border-left: 3px solid #f8bbd0;
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  border-radius: 0 8px 8px 0;
+  line-height: 1.8;
+}
+
+/* ===== 广播/通知 ===== */
+.announcement {
+  display: block;
+  font-family: "Courier New", "Noto Sans SC", monospace;
+  font-size: 0.95rem;
+  color: #5d6d7e;
+  background: #f0f3f5;
+  border: 1px dashed #b0bec5;
+  padding: 0.7em 1.2em;
+  margin: 1.5em 0;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* ===== 场景分隔线 ===== */
+hr.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #f48fb1, transparent);
+  margin: 2em 0;
+  opacity: 0.6;
+}
+
+/* ===== 未完待续提示 ===== */
+.to-be-continued {
+  text-align: center;
+  font-style: italic;
+  color: #b0a0a8;
+  font-size: 0.95rem;
+  margin-top: 2.5em;
+  letter-spacing: 0.1em;
+}
+
 
 
 /* =========================
