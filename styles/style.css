@@ -316,6 +316,37 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   background-color: #3a3a3a;   /* 深灰色占位 */
 }
 
+[data-theme="dark"] .slogan {
+  color: #f48fb1 !important;
+  text-shadow: 0 2px 12px rgba(244, 143, 177, 0.35) !important;
+}
+
+[data-theme="dark"] .thoughts {
+  color: #f8bbd0 !important;
+  background: rgba(255, 210, 225, 0.08) !important;
+  border-left-color: #f06292 !important;
+}
+
+[data-theme="dark"] .announcement {
+  color: #b0bec5 !important;
+  background: #1c2529 !important;
+  border-color: #455a64 !important;
+}
+
+[data-theme="dark"] hr.divider {
+  background: linear-gradient(
+    to right,
+    transparent,
+    #f06292,
+    transparent
+  ) !important;
+  opacity: 0.5 !important;
+}
+
+[data-theme="dark"] .to-be-continued {
+  color: #bc9aa8 !important;
+}
+
 
 /* 强制浅色模式（覆盖系统深色） */
 [data-theme="light"] {
@@ -374,7 +405,36 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 [data-theme="light"] .card img {
   background-color: #e0e0e0;
 }
+[data-theme="light"] .slogan {
+  color: #e91e63 !important;
+  text-shadow: 0 2px 8px rgba(233, 30, 99, 0.25) !important;
+}
 
+[data-theme="light"] .thoughts {
+  color: #b06a8c !important;
+  background: rgba(255, 235, 245, 0.5) !important;
+  border-left-color: #f8bbd0 !important;
+}
+
+[data-theme="light"] .announcement {
+  color: #5d6d7e !important;
+  background: #f0f3f5 !important;
+  border-color: #b0bec5 !important;
+}
+
+[data-theme="light"] hr.divider {
+  background: linear-gradient(
+    to right,
+    transparent,
+    #f48fb1,
+    transparent
+  ) !important;
+  opacity: 0.6 !important;
+}
+
+[data-theme="light"] .to-be-continued {
+  color: #b0a0a8 !important;
+}
 
 
 /* =========================
@@ -1112,6 +1172,40 @@ hr.divider {
   font-size: 0.95rem;
   margin-top: 2.5em;
   letter-spacing: 0.1em;
+}
+
+/* ===== 深色模式适配 ===== */
+@media (prefers-color-scheme: dark) {
+  .slogan {
+    color: #f48fb1;                 /* 更明亮的糖果粉 */
+    text-shadow: 0 2px 12px rgba(244, 143, 177, 0.35);
+  }
+
+  .thoughts {
+    color: #f8bbd0;                 /* 浅粉文字 */
+    background: rgba(255, 210, 225, 0.08); /* 极浅粉透明背景 */
+    border-left-color: #f06292;     /* 更鲜艳的左边框 */
+  }
+
+  .announcement {
+    color: #b0bec5;                 /* 浅灰蓝文字 */
+    background: #1c2529;            /* 深灰蓝底色 */
+    border-color: #455a64;          /* 较亮的虚线边框 */
+  }
+
+  hr.divider {
+    background: linear-gradient(
+      to right,
+      transparent,
+      #f06292,
+      transparent
+    );
+    opacity: 0.5;
+  }
+
+  .to-be-continued {
+    color: #bc9aa8;                 /* 暖灰粉，保持安静感 */
+  }
 }
 
 
