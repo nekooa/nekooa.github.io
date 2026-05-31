@@ -643,7 +643,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 两列布局 */
     justify-items: center;
-    gap: 40px 20px;
+    gap: 40px 20px !important;
   }
 
   .card {
@@ -2177,7 +2177,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     margin: 0 auto 30px;
 	max-width: 1200px;
     display: grid;
-    gap: 10px;
+    gap: 10px !important;
     grid-template-columns: 1fr;
     justify-items: center;   /* 子元素居中 */
   }
