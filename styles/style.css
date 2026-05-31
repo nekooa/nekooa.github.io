@@ -1304,7 +1304,6 @@ hr.divider {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  grid-column: 1 / -1;
   background: rgb(250, 242, 248);
   border-radius: 16px;
   padding: 24px;
