@@ -1208,18 +1208,14 @@ hr.divider {
    通用卡片
 ========================= */
 .content-card {
-  display: flex;
-  grid-column: 1 / -1;
-  align-items: center;
-  gap: 20px;
-  background: rgb(250, 242, 248);
-  border-radius: 16px;
-  padding: 20px;
-  margin: 0 auto 30px auto;  /* 上 0，下 30px，左右 auto */
+  position: relative;
+  margin: 0 auto 30px auto;
   max-width: 800px;
-  opacity: 1;
-  transform: translateY(0);
-  transition: 0.4s;
+  align-items: center;
+  padding: 30px;
+  border-radius: 20px;
+  background: #F7ECF4;
+  box-sizing: border-box;
 }
 
 .content-card.fade-in {
