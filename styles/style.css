@@ -1216,6 +1216,9 @@ hr.divider {
   border-radius: 16px;
   background: rgb(250, 242, 248);
   box-sizing: border-box;
+  opacity: 1;
+  transform: translateY(0);
+  transition: 0.4s;
 }
 
 .content-card.fade-in {
