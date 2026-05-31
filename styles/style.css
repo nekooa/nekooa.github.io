@@ -1210,8 +1210,8 @@ hr.divider {
   margin: 0 auto 30px auto;
   max-width: 800px;
   align-items: center;
-  padding: 30px;
-  border-radius: 20px;
+  padding: 24px;
+  border-radius: 16px;
   background: rgb(250, 242, 248);
   box-sizing: border-box;
 }
