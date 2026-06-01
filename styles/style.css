@@ -2160,6 +2160,10 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     box-shadow: var(--sidebar-shadow-mobile);
   }
 
+  .sidebar a:hover {
+    background: transparent;
+  }
+	
   .sidebar ul {
     flex-direction: row;
     width: 100%;
@@ -2209,10 +2213,6 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     margin: 0 auto 0 auto;
     box-sizing: border-box;
 	padding: 12px 12px;
-  }
-
-  .sidebar-footer {
-    display: none;   /* 移动端隐藏底部设置按钮 */
   }
 
   .header-container {
