@@ -2150,7 +2150,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   .sidebar {
     top: auto;
     bottom: 0;
-    width: 100%;
+    width: 100vw;
     height: 70px;
 	padding-left: 10px;
 	padding-right: 10px;
