@@ -2173,7 +2173,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   }
 
   .sidebar ul li {
-    gap: 2px;
+    gap: 2px !important;
   }
 	
   .sidebar a {
