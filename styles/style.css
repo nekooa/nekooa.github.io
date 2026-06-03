@@ -2172,6 +2172,10 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     justify-content: space-around;
   }
 
+  .sidebar ul li {
+    gap: 2px;
+  }
+	
   .sidebar a {
     flex: 1;
   }
