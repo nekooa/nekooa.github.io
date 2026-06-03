@@ -21,7 +21,7 @@
   --sidebar-a: rgba(106, 106, 106, 0.2);
   --shadow: rgba(0, 0, 0, 0.2);
   --sidebar-bg-mobile: rgba(247, 236, 244, 0.8);
-  --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.2);
+  --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.1);
 }
 
 @font-face {
