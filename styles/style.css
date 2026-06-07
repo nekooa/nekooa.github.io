@@ -757,7 +757,7 @@ body {
   opacity: 0;
 }
 #hitokoto_text.loading {
-  transform: scaleX(0.4);
+  transform: scaleX(0.7);
 }
 #hitokoto_from.loading {
   transform: translateY(-10px);
