@@ -108,10 +108,6 @@ async function loadPage(url) {
         currentFooter,
       ].filter(Boolean);
       outElements.forEach(el => el.classList.add('fade-out'));
-      const hitokotoText = document.getElementById('hitokoto_text');
-      const hitokotoFrom = document.getElementById('hitokoto_from');
-      if (hitokotoText) hitokotoText.classList.add('fade-out');
-      if (hitokotoFrom) hitokotoFrom.classList.add('fade-out');
        
       // 2. 等待 0.2s 退场结束后，进行 DOM 替换
       setTimeout(() => {
