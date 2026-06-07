@@ -770,12 +770,61 @@ body {
   transform: translateY(0);
   opacity: 1;
 }
-/* 一言退场动画：下沉 10px + 淡出，覆盖其他状态 */
-#hitokoto_text.fade-out,
-#hitokoto_from.fade-out {
-  opacity: 0 !important;
-  transform: translateY(10px) !important;  /* 强制覆盖 scaleX / 上浮 */
-  transition: all 0.2s ease;
+/* 一言加载状态 */
+#hitokoto_text.loading,
+#hitokoto_from.loading {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+/* 数据就绪后正常显示 */
+#hitokoto_text:not(.loading),
+#hitokoto_from:not(.loading) {
+  opacity: 1;
+}
+@keyframes heroIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes heroOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/* 入场时从偏上位置滑入并淡入 */
+.header-container.fade-in .hitokoto {
+  animation: heroTextIn 0.5s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+/* 退场时快速淡出并上移 */
+.header-container.fade-out .hitokoto {
+  animation: heroTextOut 0.4s ease forwards;
+}
+@keyframes heroTextIn {
+  from {
+    opacity: 0;
+    /* 保持水平居中，垂直方向从 -40% 滑到 -50% */
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes heroTextOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
 }
 
 
@@ -1600,7 +1649,6 @@ code-box {
 /* =========================
    首页头图
 ========================= */
-
 .header-container {
   position: relative;
   width: calc(100% - var(--sidebar-width));
@@ -1610,84 +1658,16 @@ code-box {
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
 }
-
-
 .header-container.fade-in {
   animation: heroIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   opacity: 1;
   transform: none;
 }
-
 .header-container.fade-out {
   animation: heroOut 0.4s ease forwards;
   opacity: 0;
   transform: none;
 }
-
-/* 一言加载状态 */
-#hitokoto_text.loading,
-#hitokoto_from.loading {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-/* 数据就绪后正常显示 */
-#hitokoto_text:not(.loading),
-#hitokoto_from:not(.loading) {
-  opacity: 1;
-}
-
-@keyframes heroIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes heroOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-/* 入场时从偏上位置滑入并淡入 */
-.header-container.fade-in .hitokoto {
-  animation: heroTextIn 0.5s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-/* 退场时快速淡出并上移 */
-.header-container.fade-out .hitokoto {
-  animation: heroTextOut 0.3s ease forwards;
-}
-
-@keyframes heroTextIn {
-  from {
-    opacity: 0;
-    /* 保持水平居中，垂直方向从 -40% 滑到 -50% */
-    transform: translate(-50%, -40%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-@keyframes heroTextOut {
-  from {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -60%);
-  }
-}
-
 .home-header {
   width: 100%;
   margin: auto;
@@ -1701,7 +1681,6 @@ code-box {
   height: 55vh;
   transform: scale(1.2); 
 }
-
 .header-overlay {
   position: absolute;
   width: 100%;
@@ -1714,16 +1693,13 @@ code-box {
   pointer-events: none;
   height: 55vh;
 }
-
 /* 当父容器触发 fade-in / fade-out 时，联动图片播放缩放动画 */
 .header-container.fade-in .home-header {
   animation: homeHeaderIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
-
 .header-container.fade-out .home-header {
   animation: homeHeaderOut 0.4s ease forwards;
 }
-
 @keyframes homeHeaderIn {
   from {
     transform: scale(1.8); /* 进场时从 1. 倍开始收缩 */
@@ -1732,7 +1708,6 @@ code-box {
     transform: scale(1.2); /* 停留在 1.2 倍的基准状态 */
   }
 }
-
 @keyframes homeHeaderOut {
   from {
     transform: scale(1.2); /* 离场时从 1.2 倍基准开始 */
