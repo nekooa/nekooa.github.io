@@ -309,12 +309,16 @@ function addRippleEffect() {
 }
 
 /* =========================
-   一言 API
+   一言 API（修复闪烁版）
 ========================= */
 let hitokotoCache = null;
 let hitokotoCacheTime = 0;
-const HITOKOTO_CACHE_DURATION = 5 * 60 * 1000;
+const HITOKOTO_CACHE_DURATION = 5 * 60 * 1000; // 5 分钟缓存
 
+/**
+ * 将一言数据渲染到页面
+ * @param {Object} data - 一言 API 返回的数据
+ */
 function applyHitokoto(data) {
   const mainText = document.getElementById('hitokoto_text');
   const mainFrom = document.getElementById('hitokoto_from');
@@ -324,33 +328,60 @@ function applyHitokoto(data) {
   const sentence = data.hitokoto;
   const source = data.from ? `—— ${data.from}` : '';
 
+  // 避免相同句子重复渲染
   if (mainText.dataset.current === sentence) return;
-
   mainText.dataset.current = sentence;
+
+  // 填充内容
   mainText.textContent = sentence;
   mainText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
 
-  if (mainFrom) mainFrom.textContent = source;
+  if (mainFrom) {
+    mainFrom.textContent = source;
+  }
+
+  // 移除加载状态，触发 CSS 淡入动画
+  mainText.classList.remove('loading');
+  if (mainFrom) mainFrom.classList.remove('loading');
 }
 
+/**
+ * 应用兜底文案（网络异常或超时时使用）
+ */
 function applyFallback() {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
+
   const fallback = '愿你的每一天都独特而美好';
+
   if (mainText.dataset.current === fallback) return;
   mainText.dataset.current = fallback;
   mainText.textContent = fallback;
+
+  // 同样移除 loading 状态，正常显示
+  mainText.classList.remove('loading');
+  const mainFrom = document.getElementById('hitokoto_from');
+  if (mainFrom) {
+    mainFrom.textContent = '';
+    mainFrom.classList.remove('loading');
+  }
 }
 
+/**
+ * 初始化一言（获取并显示）
+ * @param {boolean} delay - 是否延迟加载（SPA 切换时使用）
+ */
 async function initHitokoto(delay = false) {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
 
+  // 如果要求延迟，则 350ms 后再执行（避免与页面动画冲突）
   if (delay) {
     setTimeout(() => initHitokoto(false), 350);
     return;
   }
 
+  // 缓存有效时直接使用
   if (hitokotoCache && (Date.now() - hitokotoCacheTime) < HITOKOTO_CACHE_DURATION) {
     applyHitokoto(hitokotoCache);
     return;
@@ -358,7 +389,7 @@ async function initHitokoto(delay = false) {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 秒超时
 
     const res = await fetch('https://v1.hitokoto.cn/', {
       signal: controller.signal
@@ -373,8 +404,12 @@ async function initHitokoto(delay = false) {
     applyHitokoto(data);
   } catch (e) {
     console.warn('一言获取失败', e);
-    if (hitokotoCache) applyHitokoto(hitokotoCache);
-    else applyFallback();
+    // 有缓存但已过期时仍可使用旧数据
+    if (hitokotoCache) {
+      applyHitokoto(hitokotoCache);
+    } else {
+      applyFallback();
+    }
   }
 }
 
