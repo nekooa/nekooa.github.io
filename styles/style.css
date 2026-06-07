@@ -770,6 +770,13 @@ body {
   transform: translateY(0);
   opacity: 1;
 }
+/* 一言退场动画：下沉 10px + 淡出，覆盖其他状态 */
+#hitokoto_text.fade-out,
+#hitokoto_from.fade-out {
+  opacity: 0 !important;
+  transform: translateY(10px) !important;  /* 强制覆盖 scaleX / 上浮 */
+  transition: all 0.2s ease;
+}
 
 
 
