@@ -747,7 +747,7 @@ body {
     transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     opacity 0.4s ease;
 }
-/* 一言出处样式：从下方 10px 上浮 + 淡入，稍晚于正文出现 */
+/* 一言出处样式：从上方 10px 上浮 + 淡入，稍晚于正文出现 */
 #hitokoto_from {
   display: inline-block;
   transition:
@@ -763,7 +763,7 @@ body {
   transform: scaleX(0);        /* 正文收拢为一条线 */
 }
 #hitokoto_from.loading {
-  transform: translateY(10px); /* 出处下沉 10px */
+  transform: translateY(-10px);
 }
 /* 加载完成后自动过渡到正常状态（移除 .loading 即生效） */
 #hitokoto_text:not(.loading) {
