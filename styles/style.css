@@ -1181,7 +1181,7 @@ body {
 
 .article-card img {
   display: block;
-  width: 85%;
+  width: 95%;
   max-height: 400px;
   object-fit: cover;
   border-radius: 16px;
