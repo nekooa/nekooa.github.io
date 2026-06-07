@@ -739,25 +739,39 @@ body {
   font-size: 1rem;
   text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
-/* 一言文字基础样式 */
-#hitokoto_text,
-#hitokoto_from {
-  display: inline-block;        /* 使 transform 生效 */
-  transform-origin: center;     /* 变形中心在中间 */
-  transition: 
-    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),  /* 展开缓动 */
-    opacity 0.4s ease;          /* 透明度渐变 */
+/* 一言正文（句子）样式：中间向两侧展开 + 淡入 */
+#hitokoto_text {
+  display: inline-block;
+  transform-origin: center;
+  transition:
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.4s ease;
 }
-/* 加载中状态：完全收拢为一条线并透明 */
+/* 一言出处样式：从下方 10px 上浮 + 淡入，稍晚于正文出现 */
+#hitokoto_from {
+  display: inline-block;
+  transition:
+    transform 0.4s ease 0.15s,   /* 延迟 0.15s 再移动 */
+    opacity 0.3s ease 0.15s;     /* 延迟 0.15s 再淡入 */
+}
+/* 加载中状态 */
 #hitokoto_text.loading,
 #hitokoto_from.loading {
-  transform: scaleX(0);
   opacity: 0;
 }
-/* 加载完成后自动过渡到展开状态（移除 .loading 时触发） */
-#hitokoto_text:not(.loading),
-#hitokoto_from:not(.loading) {
+#hitokoto_text.loading {
+  transform: scaleX(0);        /* 正文收拢为一条线 */
+}
+#hitokoto_from.loading {
+  transform: translateY(10px); /* 出处下沉 10px */
+}
+/* 加载完成后自动过渡到正常状态（移除 .loading 即生效） */
+#hitokoto_text:not(.loading) {
   transform: scaleX(1);
+  opacity: 1;
+}
+#hitokoto_from:not(.loading) {
+  transform: translateY(0);
   opacity: 1;
 }
 
