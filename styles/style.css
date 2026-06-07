@@ -1182,7 +1182,7 @@ body {
 .article-card img {
   display: block;
   width: 85%;
-  max-height: 180px;
+  max-height: 400px;
   object-fit: cover;
   border-radius: 16px;
   background-color: #e0e0e0;
