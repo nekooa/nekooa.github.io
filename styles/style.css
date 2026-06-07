@@ -724,8 +724,6 @@ body {
   background: none !important;
   margin: 0;
 }
-
-/* 头图一言文字亮色 */
 .hitokoto .hitokoto-content .a {
   color: var(--color-text);
   text-shadow: 0 2px 8px rgba(0,0,0,0.5);
@@ -740,6 +738,27 @@ body {
   color: #666;
   font-size: 1rem;
   text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+/* 一言文字基础样式 */
+#hitokoto_text,
+#hitokoto_from {
+  display: inline-block;        /* 使 transform 生效 */
+  transform-origin: center;     /* 变形中心在中间 */
+  transition: 
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),  /* 展开缓动 */
+    opacity 0.4s ease;          /* 透明度渐变 */
+}
+/* 加载中状态：完全收拢为一条线并透明 */
+#hitokoto_text.loading,
+#hitokoto_from.loading {
+  transform: scaleX(0);
+  opacity: 0;
+}
+/* 加载完成后自动过渡到展开状态（移除 .loading 时触发） */
+#hitokoto_text:not(.loading),
+#hitokoto_from:not(.loading) {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
 
