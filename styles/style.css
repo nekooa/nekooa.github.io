@@ -1354,7 +1354,6 @@ hr.divider {
   background: rgba(255, 216, 231, 0.3);
 }
 
-/* 底部按钮区 */
 .about-a {
   margin-top: auto;
   align-items: center;
@@ -1467,7 +1466,6 @@ hr.divider {
 /* =========================
    codeblock
 ========================= */
-/* 代码框基础样式 */
 code-box {
     display: block;
     margin: 20px 0;
@@ -1477,8 +1475,7 @@ code-box {
     background-color: #2d2d2d;
     border: 1px solid rgba(225, 225, 225, 0.3);
 }
-        
-/* 顶部标题栏 */
+
 .code-box-header {
     display: flex;
     justify-content: space-between;
@@ -1488,14 +1485,12 @@ code-box {
     font-size: 14px;
     font-family: 'Consolas', 'Monaco', monospace;
 }
-        
-/* 语言标签 */
+
 .code-lang {
     font-weight: bold;
     text-transform: uppercase;
 }
-        
-/* 复制按钮 */
+
 .copy-btn {
     background: none;
     border: none;
@@ -1510,8 +1505,7 @@ code-box {
 .copy-btn:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
-        
-/* 代码区域 */
+
 .code-box-content {
     margin: 0;
     overflow-x: auto;
@@ -1532,15 +1526,13 @@ code-box {
 .code-box-content pre code {
     color: #f5f5f5;			
 }
-        
-/* 强制取消 hljs 默认的背景和内边距，由 code-box 统一控制 */
+
 .hljs {
     background: transparent !important; 
     padding: 0 !important;
     font-family: inherit !important;
 }
 
-/* 确保 pre 标签不会产生额外的边距 */
 .code-box-content pre {
     background: transparent !important;
     margin: 0 !important;
@@ -1594,6 +1586,19 @@ code-box {
   animation: heroOut 0.4s ease forwards;
   opacity: 0;
   transform: none;
+}
+
+/* 一言加载状态 */
+#hitokoto_text.loading,
+#hitokoto_from.loading {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* 数据就绪后正常显示 */
+#hitokoto_text:not(.loading),
+#hitokoto_from:not(.loading) {
+  opacity: 1;
 }
 
 @keyframes heroIn {
@@ -1661,7 +1666,6 @@ code-box {
   transform: scale(1.2); 
 }
 
-/* 半透明遮罩层 */
 .header-overlay {
   position: absolute;
   width: 100%;
@@ -1670,7 +1674,7 @@ code-box {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.5); /* 可调整透明度 */
+  background: rgba(255, 255, 255, 0.5);
   pointer-events: none;
   height: 55vh;
 }
@@ -1686,7 +1690,7 @@ code-box {
 
 @keyframes homeHeaderIn {
   from {
-    transform: scale(1.8); /* 进场时从 1.9 倍开始收缩 */
+    transform: scale(1.8); /* 进场时从 1. 倍开始收缩 */
   }
   to {
     transform: scale(1.2); /* 停留在 1.2 倍的基准状态 */
