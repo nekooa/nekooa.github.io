@@ -1412,8 +1412,6 @@ hr.divider {
   border-radius: 16px;
   background: rgb(250, 242, 248);
   box-sizing: border-box;
-  opacity: 1;
-  transform: translateY(0);
   transition: 0.4s;
 }
 
@@ -1457,8 +1455,6 @@ hr.divider {
   padding: 20px;
   margin: 0 auto 30px auto;  /* 上 0，下 30px，左右 auto */
   max-width: 800px;
-  opacity: 1;
-  transform: translateY(0);
   transition: 0.4s;
 }
 
@@ -1512,8 +1508,6 @@ hr.divider {
   margin: 0 auto 30px auto;
   max-width: 800px;
   gap: 10px;
-  opacity: 1;
-  transform: translateY(0);
   transition: 0.4s;
 }
 
