@@ -707,9 +707,9 @@ body {
   animation: heroIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 .header-container.fade-out {
-  transform: none !important;
   transition: none !important;
-  animation: heroOut 0.4s ease forwards;
+  animation: heroOut 0.4s ease forwards;  animation: heroContainerOut 0.4s ease forwards !important;
+  transform: none !important;
 }
 /* 头图容器专属退场 */
 .header-container.hero-fade-out {
