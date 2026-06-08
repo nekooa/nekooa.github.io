@@ -718,23 +718,35 @@ const Calendar = {
 };
 
 /* =========================
-   初始化执行
+   初始化执行（增强首次入场动画）
 ========================= */
 function initAll() {
+  // 先执行不依赖布局的操作
   bindLinks();
   addRippleEffect();
-  initHitokoto();
   bindSettingsTrigger();
   Calendar.init();
-  initGiscus();  // ← 初次加载也渲染评论区
-  
-  // 初次加载时，触发页面内所有核心组件和卡片的入场动画
-  playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .footer');
+  initGiscus();
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCodeBoxes);
-  } else {
+  // 等待 DOM 完全就绪后再触发入场动画
+  const ready = () => {
+    // 代码框需要先生成，否则没有内容可动画
     initCodeBoxes();
+    // 一言会异步加载，但它的容器已经存在，动画会作用在容器上
+    initHitokoto();
+    // 统一播放入场动画（所有核心区块）
+    playEnterAnimation(
+      '.content, .home-content, .card, .home-link-card, .about-card, ' +
+      '.profile-card, .article-card, .header-container, .article-header, ' +
+      '.logo, .footer, .comment-content'
+    );
+  };
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    // DOM 已就绪，立即执行
+    setTimeout(ready, 0);
+  } else {
+    document.addEventListener('DOMContentLoaded', ready);
   }
 }
 
