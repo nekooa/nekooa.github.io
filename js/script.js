@@ -63,15 +63,10 @@ function playEnterAnimation(selectors) {
   if (!elements.length) return;
 
   elements.forEach(el => {
-    // 移除可能残留的退出类，然后添加入场类
     el.classList.remove('fade-out');
     el.classList.add('fade-in');
   });
-
-  // 动画结束后清理类名，避免影响后续样式覆盖或交互
-  setTimeout(() => {
-    elements.forEach(el => el.classList.remove('fade-in'));
-  }, 400); // 与 CSS 过渡时间一致
+  // 不再需要 setTimeout 清理
 }
 
 /* =========================
@@ -115,7 +110,10 @@ async function loadPage(url) {
       currentFooter,
       currentCommentContent,
     ].filter(Boolean);
-    outElements.forEach(el => el.classList.add('fade-out'));
+    outElements.forEach(el => {
+      el.classList.remove('fade-in');   // 先移除入场状态
+      el.classList.add('fade-out');     // 再添加退场类
+    });
 
     // 2. DOM 替换
     setTimeout(() => {
