@@ -712,7 +712,10 @@ body {
   transition: none !important;
   animation: heroOut 0.4s ease forwards;
 }
-
+/* 头图专属退场动画 */
+.hero-fade-out {
+  animation: heroOut 0.4s ease forwards;
+}
 /* 针对需要水平居中的元素，保留 translateX */
 .article-card.fade-in,
 .comment-content.fade-in {
