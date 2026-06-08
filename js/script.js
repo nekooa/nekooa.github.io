@@ -67,12 +67,14 @@ function playEnterAnimation(selectors) {
   elements.forEach(el => {
     el.classList.remove('fade-out', 'fade-in');
 
-    let initTransform = 'translateY(15px)';
-    // 需要水平居中的元素：桌面端附加 translateX(-50%)
-    if (el.matches('.article-card, .comment-content')) {
-      initTransform = isMobile ? 'translateY(15px)' : 'translateX(-50%) translateY(15px)';
+    // 头图容器用自己的缩放动画，不设置初始 translate
+    if (!el.matches('.header-container')) {
+      let initTransform = 'translateY(15px)';
+      if (el.matches('.article-card, .comment-content')) {
+        initTransform = isMobile ? 'translateY(15px)' : 'translateX(-50%) translateY(15px)';
+      }
+      el.style.transform = initTransform;
     }
-    el.style.transform = initTransform;
   });
 
   void document.body.offsetWidth;
