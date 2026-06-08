@@ -63,10 +63,19 @@ function playEnterAnimation(selectors) {
   if (!elements.length) return;
 
   elements.forEach(el => {
-    el.classList.remove('fade-out');
+    // 1. 清除可能残留的动画类
+    el.classList.remove('fade-out', 'fade-in');
+    // 2. 设置初始向下偏移 15px（此时元素透明度为 0，所以看不见）
+    el.style.transform = 'translateY(15px)';
+  });
+
+  // 强制重排，确保初始样式生效
+  void document.body.offsetWidth;
+
+  elements.forEach(el => {
+    // 3. 添加 fade-in 类，触发过渡：opacity 0→1, transform 15px→0
     el.classList.add('fade-in');
   });
-  // 不再需要 setTimeout 清理
 }
 
 /* =========================
