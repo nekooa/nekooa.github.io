@@ -59,8 +59,8 @@ function playEnterAnimation(selectors) {
 
   elements.forEach(el => {
     // 3. 清理内联样式，交给 CSS 控制，添加入场类名
-    el.style.transition = '';
-    el.style.opacity = '';
+    el。style.transition = '';
+    el。style.opacity = '';
     el.style.transform = '';
     el.classList.add('fade-in');
   });
@@ -162,6 +162,7 @@ async function loadPage(url) {
         addRippleEffect();
         bindSettingsTrigger();
         Calendar.init();
+        initGiscus();
       }, 200); 
     }
 
@@ -235,7 +236,7 @@ function initCodeBoxes() {
       const textToCopy = codeElement.textContent;
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(textToCopy).then(() => {
-          copyBtn.textContent = '已复制';
+          copyBtn。textContent = '已复制';
           setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
         });
       } else {
@@ -250,10 +251,10 @@ function initCodeBoxes() {
 function fallbackCopyText(text, copyBtn) {
   const textArea = document.createElement('textarea');
   textArea.value = text;
-  textArea.style.position = 'fixed';
+  textArea。style.position = 'fixed';
   textArea.style.opacity = '0';
   document.body.appendChild(textArea);
-  textArea.select();
+  textArea。select();
   try {
     const successful = document.execCommand('copy');
     if (successful) {
@@ -261,10 +262,46 @@ function fallbackCopyText(text, copyBtn) {
       setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
     }
   } catch (err) {
-    copyBtn.textContent = '复制失败';
+    copyBtn。textContent = '复制失败';
     setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
   }
   document.body.removeChild(textArea);
+}
+
+/* =========================
+   Giscus 评论系统 (SPA 动态加载)
+========================= */
+function initGiscus() {
+  const container = document.querySelector('.giscus');
+  if (!container) return; // 当前页面没有评论区容器，直接跳过
+
+  // 移除已有的 Giscus 脚本（避免重复加载）
+  const oldScript = document.querySelector('script[data-giscus]');
+  if (oldScript) oldScript.remove();
+
+  // 创建新的 Giscus 脚本，沿用你原来的所有配置
+  const script = document.createElement('script');
+  script。src = 'https://giscus.app/client.js';
+  script。setAttribute('data-repo', 'sagiriworld/sagiriworld.github.io');
+  script.setAttribute('data-repo-id', 'R_kgDORzOqxQ');
+  script.setAttribute('data-category', 'Announcements');
+  script.setAttribute('data-category-id', 'DIC_kwDORzOqxc4C-uzR');
+  script.setAttribute('data-mapping', 'pathname');
+  script.setAttribute('data-strict', '0');
+  script.setAttribute('data-reactions-enabled', '1');
+  script。setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'bottom');
+  script.setAttribute('data-theme', 'custom'); // 关键：使用自定义 CSS 变量
+  script。setAttribute('data-lang', 'zh-CN');
+  script.setAttribute('crossorigin', 'anonymous');
+  script。async = true;
+
+  // 用于标记该脚本，便于后续移除
+  script。dataset.giscus = 'true';
+
+  // 清空容器并注入脚本，Giscus 会自动渲染到 .giscus 内
+  container.innerHTML = '';
+  container.appendChild(script);
 }
 
 /* =========================
@@ -295,14 +332,14 @@ function addRippleEffect() {
       const radius = diameter / 2;
 
       circle.classList.add('ripple');
-      circle.style.width = circle.style.height = `${diameter}px`;
-      circle.style.left = `${e.clientX - rect.left - radius}px`;
+      circle。style.width = circle.style.height = `${diameter}px`;
+      circle。style.left = `${e.clientX - rect.left - radius}px`;
       circle.style.top = `${e.clientY - rect.top - radius}px`;
 
       const old = element.querySelector('.ripple');
       if (old) old.remove();
 
-      element.appendChild(circle);
+      element。appendChild(circle);
       setTimeout(() => circle.remove(), 600);
     });
   });
@@ -341,7 +378,7 @@ function applyHitokoto(data) {
   }
 
   // 移除加载状态，触发 CSS 淡入动画
-  mainText.classList.remove('loading');
+  mainText。classList。remove('loading');
   if (mainFrom) mainFrom.classList.remove('loading');
 }
 
@@ -359,7 +396,7 @@ function applyFallback() {
   mainText.textContent = fallback;
 
   // 同样移除 loading 状态，正常显示
-  mainText.classList.remove('loading');
+  mainText。classList.remove('loading');
   const mainFrom = document.getElementById('hitokoto_from');
   if (mainFrom) {
     mainFrom.textContent = '';
@@ -511,15 +548,15 @@ function createSettingsDialog() {
   document.getElementById('clearCacheBtn').addEventListener('click', () => {
     if (confirm('确定清除所有缓存数据吗？')) {
       localStorage.clear();
-      ThemeManager.setTheme('auto');
+      ThemeManager。setTheme('auto');
       themeSelect.value = 'auto';
       animationToggle.checked = true;
       alert('缓存已清除');
     }
   });
 
-  themeSelect.addEventListener('change', () => {
-    ThemeManager.setTheme(themeSelect.value);
+  themeSelect。addEventListener('change', () => {
+    ThemeManager。setTheme(themeSelect.value);
   });
 
   window.addEventListener('popstate', closeDialog);
@@ -620,12 +657,12 @@ const Calendar = {
     const next = container.querySelector('.cal-next');
 
     prev.onclick = () => {
-      this.current.setMonth(this.current.getMonth() - 1);
+      this。current.setMonth(this.current.getMonth() - 1);
       this.render();
-      this.bindEvents();
+      this。bindEvents();
     };
 
-    next.onclick = () => {
+    下一处。onclick = () => {
       this.current.setMonth(this.current.getMonth() + 1);
       this.render();
       this.bindEvents();
@@ -642,6 +679,7 @@ function initAll() {
   initHitokoto();
   bindSettingsTrigger();
   Calendar.init();
+  initGiscus();
   
   // 初次加载时，触发页面内所有核心组件和卡片的入场动画
   playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .footer');
