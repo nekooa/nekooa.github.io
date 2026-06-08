@@ -75,7 +75,7 @@ function playEnterAnimation(selectors) {
 }
 
 /* =========================
-   SPA 页面加载（修复评论容器重复）
+   SPA 页面加载（无主内容容器兼容）
 ========================= */
 async function loadPage(url) {
   try {
@@ -84,7 +84,8 @@ async function loadPage(url) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
 
-    const newContent = doc.querySelector('.home-content') || doc.querySelector('.content');
+    // 获取新页面中的各个区块
+    let newContent = doc.querySelector('.home-content') || doc.querySelector('.content');
     const newLogo = doc.querySelector('.logo');
     const newHeaderContainer = doc.querySelector('.header-container');
     const newHeader = doc.querySelector('.article-header');
@@ -92,109 +93,150 @@ async function loadPage(url) {
     const newFooter = doc.querySelector('.footer');
     let newCommentContent = doc.querySelector('.comment-content');
 
-    // 关键修复：若评论区容器原本在主内容内部，先提取并从文档片段中移除，避免 innerHTML 重复
-    if (newCommentContent) {
+    // 如果评论区在新页面主内容内部，先提取出来避免 innerHTML 重复
+    if (newCommentContent && newContent && newContent.contains(newCommentContent)) {
       newCommentContent.remove();
     }
 
-    const currentContent = document.querySelector('.home-content') || document.querySelector('.content');
+    // 当前页面已有区块
     const currentLogo = document.querySelector('.logo');
+    let currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     let currentHeaderContainer = document.querySelector('.header-container');
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-    if (newContent && currentContent) {
-      const newContentClasses = newContent.className;
+    // 1. 退场动画
+    const outElements = [
+      currentContent,
+      currentLogo,
+      currentHeaderContainer,
+      currentHeader,
+      currentArticleCard,
+      currentFooter,
+      currentCommentContent,
+    ].filter(Boolean);
+    outElements.forEach(el => el.classList.add('fade-out'));
 
-      // 1. 退场动画
-      const outElements = [
-        currentContent,
-        currentLogo,
-        currentHeaderContainer,
-        currentHeader,
-        currentArticleCard,
-        currentFooter,
-        currentCommentContent,
-      ].filter(Boolean);
-      outElements.forEach(el => el.classList.add('fade-out'));
+    // 2. 等待退场动画结束再替换 DOM
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'auto' });
 
-      // 2. DOM 替换
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'auto' });
-
-        // 头图容器
-        if (newHeaderContainer) {
-          if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
-          else document.body.insertBefore(newHeaderContainer, currentContent);
-        } else if (currentHeaderContainer) currentHeaderContainer.remove();
-
-        // 文章头图
-        if (newHeader) {
-          if (currentHeader) currentHeader.replaceWith(newHeader);
-          else document.body.insertBefore(newHeader, currentContent);
-        } else if (currentHeader) currentHeader.remove();
-
-        // 主内容（此时 innerHTML 中已不含 .comment-content）
+      // --- 处理主内容容器 ---
+      if (newContent && currentContent) {
+        // 两边都有：替换内部内容
         currentContent.innerHTML = newContent.innerHTML;
-        currentContent.className = newContentClasses;
-
-        // Logo
-        if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
-
-        // 文章卡片
-        if (newArticleCard) {
-          if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
-          else document.body.insertBefore(newArticleCard, currentContent);
-        } else if (currentArticleCard) currentArticleCard.remove();
-
-        // 评论区容器（手动插入到主内容之后、footer 之前）
-        if (newCommentContent) {
-          if (currentCommentContent) {
-            currentCommentContent.replaceWith(newCommentContent);
-          } else {
-            if (currentFooter) {
-              document.body.insertBefore(newCommentContent, currentFooter);
-            } else {
-              document.body.appendChild(newCommentContent);
-            }
-          }
-        } else if (currentCommentContent) {
-          currentCommentContent.remove();
+        currentContent.className = newContent.className;
+      } else if (newContent && !currentContent) {
+        // 新页面有，当前没有：插入到 body 中（放在 header 之后）
+        const ref = currentHeaderContainer || currentHeader || currentArticleCard || currentFooter;
+        if (ref) {
+          ref.parentNode.insertBefore(newContent, ref.nextSibling);
+        } else {
+          document.body.appendChild(newContent);
         }
+        currentContent = newContent; // 更新引用，方便后续插入
+      } else if (!newContent && currentContent) {
+        // 新页面没有，当前有：移除容器
+        currentContent.remove();
+        currentContent = null;
+      }
 
-        // Footer
-        if (newFooter) {
-          if (currentFooter) {
-            currentFooter.replaceWith(newFooter);
-          } else {
-            document.body.appendChild(newFooter);
-          }
-        } else if (currentFooter) {
-          currentFooter.remove();
+      // --- 头图容器 ---
+      if (newHeaderContainer) {
+        if (currentHeaderContainer) {
+          currentHeaderContainer.replaceWith(newHeaderContainer);
+        } else {
+          document.body.insertBefore(newHeaderContainer, document.body.firstChild);
         }
+        currentHeaderContainer = newHeaderContainer;
+      } else if (currentHeaderContainer) {
+        currentHeaderContainer.remove();
+        currentHeaderContainer = null;
+      }
 
-        // 重新初始化各模块
-        initCodeBoxes();
-        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer, .comment-content');
-        initHitokoto(true);
-        bindLinks();
-        addRippleEffect();
-        bindSettingsTrigger();
-        Calendar.init();
-        initGiscus();
-      }, 200);
-    }
+      // --- 文章头图 ---
+      if (newHeader) {
+        if (currentHeader) {
+          currentHeader.replaceWith(newHeader);
+        } else {
+          document.body.insertBefore(newHeader, currentContent || currentFooter);
+        }
+        currentHeader = newHeader;
+      } else if (currentHeader) {
+        currentHeader.remove();
+        currentHeader = null;
+      }
 
+      // --- Logo 内容更新（保留容器，只改文字） ---
+      if (newLogo && currentLogo) {
+        currentLogo.innerHTML = newLogo.innerHTML;
+      }
+
+      // --- 文章卡片 ---
+      if (newArticleCard) {
+        if (currentArticleCard) {
+          currentArticleCard.replaceWith(newArticleCard);
+        } else {
+          document.body.insertBefore(newArticleCard, currentContent || currentFooter);
+        }
+        currentArticleCard = newArticleCard;
+      } else if (currentArticleCard) {
+        currentArticleCard.remove();
+        currentArticleCard = null;
+      }
+
+      // --- 评论区容器 ---
+      if (newCommentContent) {
+        if (currentCommentContent) {
+          currentCommentContent.replaceWith(newCommentContent);
+        } else {
+          const insertAfter = currentArticleCard || currentContent || currentHeader;
+          if (insertAfter && insertAfter.parentNode) {
+            insertAfter.parentNode.insertBefore(newCommentContent, insertAfter.nextSibling);
+          } else {
+            document.body.appendChild(newCommentContent);
+          }
+        }
+        currentCommentContent = newCommentContent;
+      } else if (currentCommentContent) {
+        currentCommentContent.remove();
+        currentCommentContent = null;
+      }
+
+      // --- Footer ---
+      if (newFooter) {
+        if (currentFooter) {
+          currentFooter.replaceWith(newFooter);
+        } else {
+          document.body.appendChild(newFooter);
+        }
+        currentFooter = newFooter;
+      } else if (currentFooter) {
+        currentFooter.remove();
+        currentFooter = null;
+      }
+
+      // 3. 重新初始化各模块
+      initCodeBoxes();
+      playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer, .comment-content');
+      initHitokoto(true);
+      bindLinks();
+      addRippleEffect();
+      bindSettingsTrigger();
+      Calendar.init();
+      initGiscus();
+    }, 200);
+
+    // 更新浏览器地址栏与侧栏高亮
     history.pushState(null, '', url);
-
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
       if (a.getAttribute('href') === url) a.classList.add('active');
     });
   } catch (err) {
-    console.error('加载失败:', err);
+    console.error('页面加载失败:', err);
   }
 }
 
