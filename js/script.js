@@ -291,7 +291,7 @@ function initGiscus() {
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', 'custom'); // 使用自定义 CSS 变量，与你的亮/暗主题完美融合
+  script.setAttribute('data-theme', 'light_tritanopia');
   script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
   script.async = true;
