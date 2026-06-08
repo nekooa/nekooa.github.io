@@ -293,8 +293,8 @@ function initGiscus() {
 
   // 指定对应的主题 CSS 文件
   const themeUrl = isDark
-    ? '/styles/giscus-dark.css'
-    : '/styles/giscus-light.css';
+    ? 'https://neneneko.pages.dev/styles/giscus-dark.css'
+    : 'https://neneneko.pages.dev/styles/giscus-light.css';
 
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
