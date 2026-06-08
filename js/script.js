@@ -59,8 +59,8 @@ function playEnterAnimation(selectors) {
 
   elements.forEach(el => {
     // 3. 清理内联样式，交给 CSS 控制，添加入场类名
-    el。style.transition = '';
-    el。style.opacity = '';
+    el.style.transition = '';
+    el.style.opacity = '';
     el.style.transform = '';
     el.classList.add('fade-in');
   });
@@ -162,7 +162,7 @@ async function loadPage(url) {
         addRippleEffect();
         bindSettingsTrigger();
         Calendar.init();
-        initGiscus();
+        initGiscus();  // ← 每次页面切换后重新加载评论区
       }, 200); 
     }
 
@@ -236,7 +236,7 @@ function initCodeBoxes() {
       const textToCopy = codeElement.textContent;
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(textToCopy).then(() => {
-          copyBtn。textContent = '已复制';
+          copyBtn.textContent = '已复制';
           setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
         });
       } else {
@@ -251,10 +251,10 @@ function initCodeBoxes() {
 function fallbackCopyText(text, copyBtn) {
   const textArea = document.createElement('textarea');
   textArea.value = text;
-  textArea。style.position = 'fixed';
+  textArea.style.position = 'fixed';
   textArea.style.opacity = '0';
   document.body.appendChild(textArea);
-  textArea。select();
+  textArea.select();
   try {
     const successful = document.execCommand('copy');
     if (successful) {
@@ -262,7 +262,7 @@ function fallbackCopyText(text, copyBtn) {
       setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
     }
   } catch (err) {
-    copyBtn。textContent = '复制失败';
+    copyBtn.textContent = '复制失败';
     setTimeout(() => { copyBtn.textContent = '复制'; }, 2000);
   }
   document.body.removeChild(textArea);
@@ -281,23 +281,23 @@ function initGiscus() {
 
   // 创建新的 Giscus 脚本，沿用你原来的所有配置
   const script = document.createElement('script');
-  script。src = 'https://giscus.app/client.js';
-  script。setAttribute('data-repo', 'sagiriworld/sagiriworld.github.io');
+  script.src = 'https://giscus.app/client.js';
+  script.setAttribute('data-repo', 'sagiriworld/sagiriworld.github.io');
   script.setAttribute('data-repo-id', 'R_kgDORzOqxQ');
   script.setAttribute('data-category', 'Announcements');
   script.setAttribute('data-category-id', 'DIC_kwDORzOqxc4C-uzR');
   script.setAttribute('data-mapping', 'pathname');
   script.setAttribute('data-strict', '0');
   script.setAttribute('data-reactions-enabled', '1');
-  script。setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', 'custom'); // 关键：使用自定义 CSS 变量
-  script。setAttribute('data-lang', 'zh-CN');
+  script.setAttribute('data-theme', 'custom'); // 使用自定义 CSS 变量，与你的亮/暗主题完美融合
+  script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
-  script。async = true;
+  script.async = true;
 
   // 用于标记该脚本，便于后续移除
-  script。dataset.giscus = 'true';
+  script.dataset.giscus = 'true';
 
   // 清空容器并注入脚本，Giscus 会自动渲染到 .giscus 内
   container.innerHTML = '';
@@ -332,14 +332,14 @@ function addRippleEffect() {
       const radius = diameter / 2;
 
       circle.classList.add('ripple');
-      circle。style.width = circle.style.height = `${diameter}px`;
-      circle。style.left = `${e.clientX - rect.left - radius}px`;
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${e.clientX - rect.left - radius}px`;
       circle.style.top = `${e.clientY - rect.top - radius}px`;
 
       const old = element.querySelector('.ripple');
       if (old) old.remove();
 
-      element。appendChild(circle);
+      element.appendChild(circle);
       setTimeout(() => circle.remove(), 600);
     });
   });
@@ -352,10 +352,6 @@ let hitokotoCache = null;
 let hitokotoCacheTime = 0;
 const HITOKOTO_CACHE_DURATION = 5 * 60 * 1000; // 5 分钟缓存
 
-/**
- * 将一言数据渲染到页面
- * @param {Object} data - 一言 API 返回的数据
- */
 function applyHitokoto(data) {
   const mainText = document.getElementById('hitokoto_text');
   const mainFrom = document.getElementById('hitokoto_from');
@@ -365,11 +361,9 @@ function applyHitokoto(data) {
   const sentence = data.hitokoto;
   const source = data.from ? `—— ${data.from}` : '';
 
-  // 避免相同句子重复渲染
   if (mainText.dataset.current === sentence) return;
   mainText.dataset.current = sentence;
 
-  // 填充内容
   mainText.textContent = sentence;
   mainText.href = `https://hitokoto.cn/?uuid=${data.uuid}`;
 
@@ -377,14 +371,11 @@ function applyHitokoto(data) {
     mainFrom.textContent = source;
   }
 
-  // 移除加载状态，触发 CSS 淡入动画
-  mainText。classList。remove('loading');
+  // 移除 loading 状态，触发 CSS 淡入动画
+  mainText.classList.remove('loading');
   if (mainFrom) mainFrom.classList.remove('loading');
 }
 
-/**
- * 应用兜底文案（网络异常或超时时使用）
- */
 function applyFallback() {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
@@ -395,8 +386,7 @@ function applyFallback() {
   mainText.dataset.current = fallback;
   mainText.textContent = fallback;
 
-  // 同样移除 loading 状态，正常显示
-  mainText。classList.remove('loading');
+  mainText.classList.remove('loading');
   const mainFrom = document.getElementById('hitokoto_from');
   if (mainFrom) {
     mainFrom.textContent = '';
@@ -404,21 +394,15 @@ function applyFallback() {
   }
 }
 
-/**
- * 初始化一言（获取并显示）
- * @param {boolean} delay - 是否延迟加载（SPA 切换时使用）
- */
 async function initHitokoto(delay = false) {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
 
-  // 如果要求延迟，则 350ms 后再执行（避免与页面动画冲突）
   if (delay) {
     setTimeout(() => initHitokoto(false), 350);
     return;
   }
 
-  // 缓存有效时直接使用
   if (hitokotoCache && (Date.now() - hitokotoCacheTime) < HITOKOTO_CACHE_DURATION) {
     applyHitokoto(hitokotoCache);
     return;
@@ -426,7 +410,7 @@ async function initHitokoto(delay = false) {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 秒超时
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
 
     const res = await fetch('https://v1.hitokoto.cn/', {
       signal: controller.signal
@@ -441,7 +425,6 @@ async function initHitokoto(delay = false) {
     applyHitokoto(data);
   } catch (e) {
     console.warn('一言获取失败', e);
-    // 有缓存但已过期时仍可使用旧数据
     if (hitokotoCache) {
       applyHitokoto(hitokotoCache);
     } else {
@@ -548,15 +531,15 @@ function createSettingsDialog() {
   document.getElementById('clearCacheBtn').addEventListener('click', () => {
     if (confirm('确定清除所有缓存数据吗？')) {
       localStorage.clear();
-      ThemeManager。setTheme('auto');
+      ThemeManager.setTheme('auto');
       themeSelect.value = 'auto';
       animationToggle.checked = true;
       alert('缓存已清除');
     }
   });
 
-  themeSelect。addEventListener('change', () => {
-    ThemeManager。setTheme(themeSelect.value);
+  themeSelect.addEventListener('change', () => {
+    ThemeManager.setTheme(themeSelect.value);
   });
 
   window.addEventListener('popstate', closeDialog);
@@ -657,12 +640,12 @@ const Calendar = {
     const next = container.querySelector('.cal-next');
 
     prev.onclick = () => {
-      this。current.setMonth(this.current.getMonth() - 1);
+      this.current.setMonth(this.current.getMonth() - 1);
       this.render();
-      this。bindEvents();
+      this.bindEvents();
     };
 
-    下一处。onclick = () => {
+    next.onclick = () => {
       this.current.setMonth(this.current.getMonth() + 1);
       this.render();
       this.bindEvents();
@@ -679,7 +662,7 @@ function initAll() {
   initHitokoto();
   bindSettingsTrigger();
   Calendar.init();
-  initGiscus();
+  initGiscus();  // ← 初次加载也渲染评论区
   
   // 初次加载时，触发页面内所有核心组件和卡片的入场动画
   playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .footer');
