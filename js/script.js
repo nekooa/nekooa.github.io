@@ -134,22 +134,7 @@ async function loadPage(url) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-    // ---------- 1. 头图专属退场动画（如果有）----------
-    const headerOutPromise = currentHeaderContainer
-      ? new Promise(resolve => {
-          currentHeaderContainer.classList.remove('fade-in', 'fade-out');
-          currentHeaderContainer.classList.add('hero-fade-out');
-          const onEnd = () => {
-            currentHeaderContainer.removeEventListener('animationend', onEnd);
-            currentHeaderContainer.classList.remove('hero-fade-out');
-            resolve();
-          };
-          currentHeaderContainer.addEventListener('animationend', onEnd, { once: true });
-          setTimeout(resolve, 500); // 超时保护
-        })
-      : Promise.resolve();
-
-    // ---------- 2. 其他元素退场 ----------
+    // ---------- 1. 其他元素通用退场 ----------
     const outElements = [
       currentContent,
       currentLogo,
@@ -164,11 +149,42 @@ async function loadPage(url) {
       el.classList.add('fade-out');
     });
 
-    // ---------- 3. 等待头图动画完成，并且至少等待 250ms 以确保其他元素动画完成 ----------
-    await headerOutPromise;
-    if (!currentHeaderContainer) {
-      await new Promise(resolve => setTimeout(resolve, 250));
+    // ---------- 2. 头图专属退场动画（JS 直接控制）----------
+    let heroAnimations = [];
+    if (currentHeaderContainer) {
+      // 容器淡出 + 轻微缩放
+      const containerAnim = currentHeaderContainer.animate(
+        [
+          { opacity: 1, transform: 'scale(1)' },
+          { opacity: 0, transform: 'scale(0.95)' }
+        ],
+        { duration: 400, easing: 'ease', fill: 'forwards' }
+      );
+
+      // 内部图片缩放（从 1.2 到 1.0）
+      const homeHeader = currentHeaderContainer.querySelector('.home-header');
+      const imgAnim = homeHeader
+        ? homeHeader.animate(
+            [
+              { transform: 'scale(1.2)' },
+              { transform: 'scale(1.0)' }
+            ],
+            { duration: 400, easing: 'ease', fill: 'forwards' }
+          )
+        : null;
+
+      heroAnimations = [containerAnim];
+      if (imgAnim) heroAnimations.push(imgAnim);
     }
+
+    // 3. 等待所有退场动画结束
+    const allAnimFinished = Promise.all([
+      ...heroAnimations.map(a => a.finished),
+      // 其他元素动画时长 0.2s，额外等待确保完成
+      new Promise(resolve => setTimeout(resolve, 250))
+    ]);
+
+    await allAnimFinished;
 
     // ---------- 4. DOM 替换 ----------
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -187,7 +203,7 @@ async function loadPage(url) {
       currentContent = null;
     }
 
-    // --- 头图容器（此时动画已结束，可直接替换）---
+    // --- 头图容器 ---
     if (newHeaderContainer) {
       if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
       else document.body.insertBefore(newHeaderContainer, document.body.firstChild);
