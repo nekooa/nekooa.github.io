@@ -443,8 +443,8 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 #preloader {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: var(--color-bg);          /* 跟随网站背景色 */
+  z-index: 1145141;
+  background: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -453,14 +453,12 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   visibility: visible;
 }
 
-/* 隐藏状态：透明、不可见、不阻挡点击 */
 #preloader.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-/* 内部的加载动画容器（你 JS 里生成的） */
 .loader-inner {
   display: flex;
   flex-direction: column;
@@ -471,9 +469,15 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   opacity: 0.8;
 }
 
-.loader-spin {
-  animation: spin 1.5s linear infinite;
-  color: var(--color-pink);
+.loader-ring {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 179, 207, 0.2);
+  border-top-color: var(--color-pink);
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 @keyframes spin {
