@@ -63,28 +63,15 @@ function playEnterAnimation(selectors) {
   if (!elements.length) return;
 
   elements.forEach(el => {
-    // 1. 禁用过渡，瞬间将元素下沉并隐藏
-    el.style.transition = 'none';
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(15px)';
-    el.classList.remove('fade-out', 'fade-in');
-  });
-
-  // 2. 强制触发浏览器重排
-  void document.body.offsetWidth;
-
-  elements.forEach(el => {
-    // 3. 清理内联样式，交给 CSS 控制，添加入场类名
-    el.style.transition = '';
-    el.style.opacity = '';
-    el.style.transform = '';
+    // 移除可能残留的退出类，然后添加入场类
+    el.classList.remove('fade-out');
     el.classList.add('fade-in');
   });
 
-  // 4. 动画结束后清理多余类名，防止影响后续交互
+  // 动画结束后清理类名，避免影响后续样式覆盖或交互
   setTimeout(() => {
     elements.forEach(el => el.classList.remove('fade-in'));
-  }, 400); 
+  }, 400); // 与 CSS 过渡时间一致
 }
 
 /* =========================
