@@ -10,6 +10,9 @@ const ThemeManager = {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(this.STORAGE_KEY, theme);
     this.updateMetaThemeColor();
+    if (document.querySelector('.giscus')) {
+      initGiscus();
+    }
   },
   updateMetaThemeColor() {
     let meta = document.querySelector('meta[name="theme-color"]');
@@ -273,13 +276,26 @@ function fallbackCopyText(text, copyBtn) {
 ========================= */
 function initGiscus() {
   const container = document.querySelector('.giscus');
-  if (!container) return; // 当前页面没有评论区容器，直接跳过
+  if (!container) return;
 
-  // 移除已有的 Giscus 脚本（避免重复加载）
+  // 移除旧的 Giscus 脚本
   const oldScript = document.querySelector('script[data-giscus]');
   if (oldScript) oldScript.remove();
 
-  // 创建新的 Giscus 脚本，沿用你原来的所有配置
+  // 判断当前实际主题（考虑 auto 时系统偏好）
+  const isDark = (() => {
+    const theme = ThemeManager.getTheme();
+    if (theme === 'dark') return true;
+    if (theme === 'light') return false;
+    // auto 模式：跟随系统
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  })();
+
+  // 指定对应的主题 CSS 文件
+  const themeUrl = isDark
+    ? '/styles/giscus-dark.css'
+    : '/styles/giscus-light.css';
+
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
   script.setAttribute('data-repo', 'sagiriworld/sagiriworld.github.io');
@@ -291,15 +307,12 @@ function initGiscus() {
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', 'https://neneneko.pages.dev/styles/giscus.css');
+  script.setAttribute('data-theme', themeUrl);    // 动态指定主题文件
   script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
   script.async = true;
-
-  // 用于标记该脚本，便于后续移除
   script.dataset.giscus = 'true';
 
-  // 清空容器并注入脚本，Giscus 会自动渲染到 .giscus 内
   container.innerHTML = '';
   container.appendChild(script);
 }
