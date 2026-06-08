@@ -107,9 +107,6 @@ function playEnterAnimation(selectors) {
 /* =========================
    SPA 页面加载
 ========================= */
-/* =========================
-   SPA 页面加载（完整版，支持头图退场动画）
-========================= */
 async function loadPage(url) {
   try {
     const res = await fetch(url);
@@ -316,7 +313,7 @@ function bindLinks() {
             a.classList.add('active');
           }
         });
-      }, 100);
+      }, 300);
 
       // 异步加载页面
       loadPage(url);
