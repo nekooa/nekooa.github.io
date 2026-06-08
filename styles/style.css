@@ -889,9 +889,11 @@ body {
 @keyframes heroOut {
   from {
     opacity: 1;
+    transform: scale(1);
   }
   to {
     opacity: 0;
+    transform: scale(0.9);
   }
 }
 /* 入场时从偏上位置滑入并淡入 */
@@ -1770,9 +1772,10 @@ code-box {
   transform: none;
 }
 .header-container.fade-out {
-  animation: heroOut 0.4s ease forwards;
-  opacity: 0;
-  transform: none;
+  animation: heroOut 0.4s ease forwards !important;
+  opacity: 0 !important;
+  transform: none !important;
+  transition: none !important;
 }
 .home-header {
   width: 100%;
