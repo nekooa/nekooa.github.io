@@ -134,50 +134,63 @@ async function loadPage(url) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-    // ---------- 1. 其他元素通用退场 ----------
-    const outElements = [
-      currentContent,
-      currentLogo,
-      currentHeader,
-      currentArticleCard,
-      currentFooter,
-      currentCommentContent,
-    ].filter(Boolean);
+// ---------- 2. 头图专属退场动画（JS 直接控制）----------
+let heroAnimations = [];
+if (currentHeaderContainer) {
+  // 容器淡出 + 轻微缩放
+  const containerAnim = currentHeaderContainer.animate(
+    [
+      { opacity: 1, transform: 'scale(1)' },
+      { opacity: 0, transform: 'scale(0.95)' }
+    ],
+    { duration: 400, easing: 'ease', fill: 'forwards' }
+  );
 
-    outElements.forEach(el => {
-      el.classList.remove('fade-in');
-      el.classList.add('fade-out');
-    });
-
-    // ---------- 2. 头图专属退场动画（JS 直接控制）----------
-    let heroAnimations = [];
-    if (currentHeaderContainer) {
-      // 容器淡出 + 轻微缩放
-      const containerAnim = currentHeaderContainer.animate(
+  // 内部图片缩放（从 1.2 到 1.0）
+  const homeHeader = currentHeaderContainer.querySelector('.home-header');
+  const imgAnim = homeHeader
+    ? homeHeader.animate(
         [
-          { opacity: 1, transform: 'scale(1)' },
-          { opacity: 0, transform: 'scale(0.95)' }
+          { transform: 'scale(1.2)' },
+          { transform: 'scale(1.0)' }
         ],
         { duration: 400, easing: 'ease', fill: 'forwards' }
-      );
+      )
+    : null;
 
-      // 内部图片缩放（从 1.2 到 1.0）
-      const homeHeader = currentHeaderContainer.querySelector('.home-header');
-      const imgAnim = homeHeader
-        ? homeHeader.animate(
-            [
-              { transform: 'scale(1.2)' },
-              { transform: 'scale(1.0)' }
-            ],
-            { duration: 400, easing: 'ease', fill: 'forwards' }
-          )
-        : null;
+  // hitokoto 文字退场：缩小 + 淡出
+  const hitokoto = currentHeaderContainer.querySelector('.hitokoto');
+  const hitokotoAnim = hitokoto
+    ? hitokoto.animate(
+        [
+          { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+          { opacity: 0, transform: 'translate(-50%, -50%) scale(0.8)' }
+        ],
+        { duration: 400, easing: 'ease', fill: 'forwards' }
+      )
+    : null;
 
-      heroAnimations = [containerAnim];
-      if (imgAnim) heroAnimations.push(imgAnim);
+  heroAnimations = [containerAnim];
+  if (imgAnim) heroAnimations.push(imgAnim);
+  if (hitokotoAnim) heroAnimations.push(hitokotoAnim);
+
+  // 动画结束后强制设置最终状态，确保透明度归零
+  Promise.all(heroAnimations.map(a => a.finished)).then(() => {
+    if (currentHeaderContainer) {
+      currentHeaderContainer.style.opacity = '0';
+      currentHeaderContainer.style.transform = 'scale(0.95)';
     }
+    if (homeHeader) {
+      homeHeader.style.transform = 'scale(1.0)';
+    }
+    if (hitokoto) {
+      hitokoto.style.opacity = '0';
+      hitokoto.style.transform = 'translate(-50%, -50%) scale(0.8)';
+    }
+  });
+}
 
-    // 3. 等待所有退场动画结束
+    // ---------- 3. 等待所有退场动画结束 ----------
     const allAnimFinished = Promise.all([
       ...heroAnimations.map(a => a.finished),
       // 其他元素动画时长 0.2s，额外等待确保完成
