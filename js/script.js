@@ -67,23 +67,34 @@ function playEnterAnimation(selectors) {
   elements.forEach(el => {
     el.classList.remove('fade-out', 'fade-in');
 
-    // 头图容器用自己的缩放动画，不设置初始 translate
-    if (!el.matches('.header-container')) {
-      let initTransform = 'translateY(15px)';
-      if (el.matches('.article-card, .comment-content')) {
-        initTransform = isMobile ? 'translateY(15px)' : 'translateX(-50%) translateY(15px)';
-      }
-      el.style.transform = initTransform;
+    // 跳过 header-container，它有自己的 keyframe
+    if (el.matches('.header-container')) return;
+
+    // 计算初始 transform（保留现有水平偏移）
+    let currentTransform = window.getComputedStyle(el).transform;
+    if (currentTransform === 'none') currentTransform = '';
+
+    if (el.matches('.article-card, .comment-content')) {
+      // 桌面端居中卡片：保留 translateX(-50%)，垂直下沉 15px
+      el.style.transform = isMobile
+        ? 'translateY(15px)'
+        : 'translateX(-50%) translateY(15px)';
+    } else {
+      el.style.transform = currentTransform
+        ? `${currentTransform} translateY(15px)`
+        : 'translateY(15px)';
     }
   });
 
+  // 强制重排，让浏览器记录初始样式
   void document.body.offsetWidth;
 
   elements.forEach(el => {
+    // 清空内联 transform，让 .fade-in 的规则起作用
+    el.style.transform = '';
     el.classList.add('fade-in');
   });
 }
-
 /* =========================
    SPA 页面加载
 ========================= */
