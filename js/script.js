@@ -134,6 +134,21 @@ async function loadPage(url) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
+// ---------- 1. 其他元素通用退场 ----------
+const outElements = [
+  currentContent,
+  currentLogo,
+  currentHeader,
+  currentArticleCard,
+  currentFooter,
+  currentCommentContent,
+].filter(Boolean);
+
+outElements.forEach(el => {
+  el.classList.remove('fade-in');
+  el.classList.add('fade-out');
+});
+    
 // ---------- 2. 头图专属退场动画（JS 直接控制）----------
 let heroAnimations = [];
 if (currentHeaderContainer) {
