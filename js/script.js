@@ -63,17 +63,23 @@ function playEnterAnimation(selectors) {
   if (!elements.length) return;
 
   elements.forEach(el => {
-    // 1. 清除可能残留的动画类
+    // 清除所有动画残留类
     el.classList.remove('fade-out', 'fade-in');
-    // 2. 设置初始向下偏移 15px（此时元素透明度为 0，所以看不见）
-    el.style.transform = 'translateY(15px)';
+
+    // 根据不同元素类型，设置初始 transform（瞬间生效，不可见）
+    let initTransform = 'translateY(15px)';
+    if (el.matches('.article-card, .comment-content')) {
+      // 保留水平偏移，仅增加垂直下沉
+      initTransform = 'translateX(-50%) translateY(15px)';
+    }
+    el.style.transform = initTransform;
   });
 
-  // 强制重排，确保初始样式生效
+  // 强制重排，使浏览器记录初始状态
   void document.body.offsetWidth;
 
   elements.forEach(el => {
-    // 3. 添加 fade-in 类，触发过渡：opacity 0→1, transform 15px→0
+    // 添加 .fade-in，触发过渡到最终状态
     el.classList.add('fade-in');
   });
 }
