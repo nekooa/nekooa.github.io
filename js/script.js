@@ -75,7 +75,7 @@ function playEnterAnimation(selectors) {
 }
 
 /* =========================
-   SPA 页面加载（评论区位置修正）
+   SPA 页面加载（评论区位置强制修正）
 ========================= */
 async function loadPage(url) {
   try {
@@ -182,22 +182,23 @@ async function loadPage(url) {
         currentArticleCard = null;
       }
 
-      // --- 评论区容器（修正位置：始终在 footer 之前） ---
-      if (newCommentContent) {
-        if (currentCommentContent) {
-          currentCommentContent.replaceWith(newCommentContent);
-        } else {
-          if (currentFooter && currentFooter.parentNode) {
-            currentFooter.parentNode.insertBefore(newCommentContent, currentFooter);
-          } else {
-            document.body.appendChild(newCommentContent);
-          }
-        }
-        currentCommentContent = newCommentContent;
-      } else if (currentCommentContent) {
+      // ========== 评论区容器（关键修复）==========
+      // 先移除旧的评论区（无论是否存在），避免保留错误位置
+      if (currentCommentContent) {
         currentCommentContent.remove();
         currentCommentContent = null;
       }
+
+      if (newCommentContent) {
+        // 始终插入到页脚之前，或 body 末尾
+        if (currentFooter && currentFooter.parentNode) {
+          currentFooter.parentNode.insertBefore(newCommentContent, currentFooter);
+        } else {
+          document.body.appendChild(newCommentContent);
+        }
+        currentCommentContent = newCommentContent;
+      }
+      // =========================================
 
       // --- Footer ---
       if (newFooter) {
