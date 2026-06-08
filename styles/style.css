@@ -670,7 +670,6 @@ body {
 /* =========================
    入场/退场动画通用规则
 ========================= */
-
 /* 默认隐藏，仅控制透明度 */
 .content,
 .home-content,
@@ -712,9 +711,33 @@ body {
   transition: none !important;
   animation: heroOut 0.4s ease forwards;
 }
-/* 头图专属退场动画 */
-.hero-fade-out {
-  animation: heroOut 0.4s ease forwards;
+/* 头图容器专属退场 */
+.header-container.hero-fade-out {
+  animation: heroContainerOut 0.4s ease forwards;
+  /* 防止通用 fade-out 或其他规则干扰 */
+  opacity: 0 !important;
+  transform: none !important;
+  transition: none !important;
+}
+@keyframes heroContainerOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);   /* 可微调，或直接 scale(1) 只淡出 */
+  }
+}
+/* 头图容器退场时，内部图片同步缩放 */
+.header-container.hero-fade-out .home-header {
+  animation: homeHeaderOut 0.4s ease forwards;
+}
+
+/* 您的关键帧保持不变 */
+@keyframes homeHeaderOut {
+  from { transform: scale(1.2); }
+  to   { transform: scale(1.0); }
 }
 /* 针对需要水平居中的元素，保留 translateX */
 .article-card.fade-in,
