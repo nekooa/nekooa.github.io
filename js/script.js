@@ -62,24 +62,22 @@ function playEnterAnimation(selectors) {
   const elements = document.querySelectorAll(selectors);
   if (!elements.length) return;
 
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
   elements.forEach(el => {
-    // 清除所有动画残留类
     el.classList.remove('fade-out', 'fade-in');
 
-    // 根据不同元素类型，设置初始 transform（瞬间生效，不可见）
     let initTransform = 'translateY(15px)';
+    // 需要水平居中的元素：桌面端附加 translateX(-50%)
     if (el.matches('.article-card, .comment-content')) {
-      // 保留水平偏移，仅增加垂直下沉
-      initTransform = 'translateX(-50%) translateY(15px)';
+      initTransform = isMobile ? 'translateY(15px)' : 'translateX(-50%) translateY(15px)';
     }
     el.style.transform = initTransform;
   });
 
-  // 强制重排，使浏览器记录初始状态
   void document.body.offsetWidth;
 
   elements.forEach(el => {
-    // 添加 .fade-in，触发过渡到最终状态
     el.classList.add('fade-in');
   });
 }
