@@ -90,7 +90,6 @@ async function loadPage(url) {
     const newHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
     const newFooter = doc.querySelector('.footer');
-    const newCommentContent = doc.querySelector('.comment-content');  // ← 新增
 
     const currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     const currentLogo = document.querySelector('.logo');
@@ -98,12 +97,11 @@ async function loadPage(url) {
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
     let currentFooter = document.querySelector('.footer');
-    let currentCommentContent = document.querySelector('.comment-content');  // ← 新增
 
     if (newContent && currentContent) {
       const newContentClasses = newContent.className;
 
-      // 1. 全局元素退场
+      // 1. 全局元素退场 (添加 fade-out，触发 0.2s 消失动画)
       const outElements = [
         currentContent,
         currentLogo,
@@ -111,56 +109,40 @@ async function loadPage(url) {
         currentHeader,
         currentArticleCard,
         currentFooter,
-        currentCommentContent,  // ← 加入退场动画
       ].filter(Boolean);
       outElements.forEach(el => el.classList.add('fade-out'));
-
-      // 2. 等待动画结束后替换 DOM
+       
+      // 2. 等待 0.2s 退场结束后，进行 DOM 替换
       setTimeout(() => {
+        // 让页面瞬间回到顶部
         window.scrollTo({ top: 0, behavior: 'auto' });
 
-        // --- 头图容器 ---
+        // 头图容器替换
         if (newHeaderContainer) {
           if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
           else document.body.insertBefore(newHeaderContainer, currentContent);
         } else if (currentHeaderContainer) currentHeaderContainer.remove();
 
-        // --- 文章头图 ---
+        // 文章头图替换
         if (newHeader) {
           if (currentHeader) currentHeader.replaceWith(newHeader);
           else document.body.insertBefore(newHeader, currentContent);
         } else if (currentHeader) currentHeader.remove();
 
-        // --- 主内容区 ---
+        // 主内容替换
         currentContent.innerHTML = newContent.innerHTML;
         currentContent.className = newContentClasses;
 
-        // --- Logo ---
+        // Logo 替换
         if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
 
-        // --- 文章卡片 ---
+        // 文章卡片替换
         if (newArticleCard) {
           if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
           else document.body.insertBefore(newArticleCard, currentContent);
         } else if (currentArticleCard) currentArticleCard.remove();
 
-        // --- 评论区容器 ---
-        if (newCommentContent) {
-          if (currentCommentContent) {
-            currentCommentContent.replaceWith(newCommentContent);
-          } else {
-            // 默认插入到主内容之后，footer 之前（若存在）
-            if (currentFooter) {
-              document.body.insertBefore(newCommentContent, currentFooter);
-            } else {
-              document.body.appendChild(newCommentContent);
-            }
-          }
-        } else if (currentCommentContent) {
-          currentCommentContent.remove();
-        }
-
-        // --- Footer ---
+        // footer 替换
         if (newFooter) {
           if (currentFooter) {
             currentFooter.replaceWith(newFooter);
@@ -171,20 +153,20 @@ async function loadPage(url) {
           currentFooter.remove();
         }
 
-        // 初始化新页面的组件
+        // 初始化新页面的代码框
         initCodeBoxes();
 
-        // 入场动画
-        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer, .comment-content');
+        // 3. 统一触发入场动画
+        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer');
 
-        // 重新初始化各模块
+        // 4. 重置新页面组件状态
         initHitokoto(true);
         bindLinks();
         addRippleEffect();
         bindSettingsTrigger();
         Calendar.init();
-        initGiscus();  // Giscus 会自动加载新的 .giscus 容器
-      }, 200);
+        initGiscus();  // ← 每次页面切换后重新加载评论区
+      }, 200); 
     }
 
     history.pushState(null, '', url);
@@ -296,20 +278,17 @@ function initGiscus() {
   const container = document.querySelector('.giscus');
   if (!container) return;
 
-  // 移除旧的 Giscus 脚本
   const oldScript = document.querySelector('script[data-giscus]');
   if (oldScript) oldScript.remove();
 
-  // 判断当前实际主题（考虑 auto 时系统偏好）
   const isDark = (() => {
     const theme = ThemeManager.getTheme();
     if (theme === 'dark') return true;
     if (theme === 'light') return false;
-    // auto 模式：跟随系统
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   })();
 
-  // 指定对应的主题 CSS 文件
+  // 使用绝对 URL，指向你的主题文件
   const themeUrl = isDark
     ? 'https://neneneko.pages.dev/styles/giscus-dark.css'
     : 'https://neneneko.pages.dev/styles/giscus-light.css';
@@ -325,7 +304,7 @@ function initGiscus() {
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', themeUrl);    // 动态指定主题文件
+  script.setAttribute('data-theme', themeUrl);   // 绝对 URL
   script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
   script.async = true;
