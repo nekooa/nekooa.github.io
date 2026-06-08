@@ -107,6 +107,9 @@ function playEnterAnimation(selectors) {
 /* =========================
    SPA 页面加载
 ========================= */
+/* =========================
+   SPA 页面加载（完整版，支持头图退场动画）
+========================= */
 async function loadPage(url) {
   try {
     const res = await fetch(url);
@@ -122,6 +125,7 @@ async function loadPage(url) {
     const newFooter = doc.querySelector('.footer');
     let newCommentContent = doc.querySelector('.comment-content');
 
+    // 避免评论区在主内容 innerHTML 中重复
     if (newCommentContent && newContent && newContent.contains(newCommentContent)) {
       newCommentContent.remove();
     }
@@ -134,87 +138,51 @@ async function loadPage(url) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-// ---------- 1. 其他元素通用退场 ----------
-const outElements = [
-  currentContent,
-  currentLogo,
-  currentHeader,
-  currentArticleCard,
-  currentFooter,
-  currentCommentContent,
-].filter(Boolean);
+    // ---------- 1. 其他元素通用退场 ----------
+    const outElements = [
+      currentContent,
+      currentLogo,
+      currentHeader,            // 文章头图（非首页容器）
+      currentArticleCard,
+      currentFooter,
+      currentCommentContent,
+    ].filter(Boolean);
 
-outElements.forEach(el => {
-  el.classList.remove('fade-in');
-  el.classList.add('fade-out');
-});
-    
-// ---------- 2. 头图专属退场动画（JS 直接控制）----------
-let heroAnimations = [];
-if (currentHeaderContainer) {
-  // 容器淡出 + 轻微缩放
-  const containerAnim = currentHeaderContainer.animate(
-    [
-      { opacity: 1, transform: 'scale(1)' },
-      { opacity: 0, transform: 'scale(0.95)' }
-    ],
-    { duration: 400, easing: 'ease', fill: 'forwards' }
-  );
+    outElements.forEach(el => {
+      el.classList.remove('fade-in');
+      el.classList.add('fade-out');
+    });
 
-  // 内部图片缩放（从 1.2 到 1.0）
-  const homeHeader = currentHeaderContainer.querySelector('.home-header');
-  const imgAnim = homeHeader
-    ? homeHeader.animate(
-        [
-          { transform: 'scale(1.2)' },
-          { transform: 'scale(1.0)' }
-        ],
-        { duration: 400, easing: 'ease', fill: 'forwards' }
-      )
-    : null;
+    // ---------- 2. 头图专属退场动画（使用 hero-out 类）----------
+    const heroOutPromise = new Promise(resolve => {
+      if (currentHeaderContainer) {
+        // 清除可能干扰的类，添加专属退场类
+        currentHeaderContainer.classList.remove('fade-in', 'fade-out');
+        currentHeaderContainer.classList.add('hero-out');
 
-  // hitokoto 文字退场：缩小 + 淡出
-  const hitokoto = currentHeaderContainer.querySelector('.hitokoto');
-  const hitokotoAnim = hitokoto
-    ? hitokoto.animate(
-        [
-          { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
-          { opacity: 0, transform: 'translate(-50%, -50%) scale(0.8)' }
-        ],
-        { duration: 400, easing: 'ease', fill: 'forwards' }
-      )
-    : null;
+        const onAnimationEnd = () => {
+          currentHeaderContainer.removeEventListener('animationend', onAnimationEnd);
+          currentHeaderContainer.classList.remove('hero-out');
+          resolve();
+        };
+        currentHeaderContainer.addEventListener('animationend', onAnimationEnd, { once: true });
 
-  heroAnimations = [containerAnim];
-  if (imgAnim) heroAnimations.push(imgAnim);
-  if (hitokotoAnim) heroAnimations.push(hitokotoAnim);
+        // 安全兜底：0.5 秒后强制继续（避免事件丢失）
+        setTimeout(resolve, 500);
+      } else {
+        resolve();
+      }
+    });
 
-  // 动画结束后强制设置最终状态，确保透明度归零
-  Promise.all(heroAnimations.map(a => a.finished)).then(() => {
-    if (currentHeaderContainer) {
-      currentHeaderContainer.style.opacity = '0';
-      currentHeaderContainer.style.transform = 'scale(0.95)';
+    // 等待头图动画结束（其他元素退场动画约 0.2s，此时也已结束）
+    await heroOutPromise;
+
+    // 如果没有头图，额外等待 250ms 确保其他元素退场完成
+    if (!currentHeaderContainer) {
+      await new Promise(resolve => setTimeout(resolve, 250));
     }
-    if (homeHeader) {
-      homeHeader.style.transform = 'scale(1.0)';
-    }
-    if (hitokoto) {
-      hitokoto.style.opacity = '0';
-      hitokoto.style.transform = 'translate(-50%, -50%) scale(0.8)';
-    }
-  });
-}
 
-    // ---------- 3. 等待所有退场动画结束 ----------
-    const allAnimFinished = Promise.all([
-      ...heroAnimations.map(a => a.finished),
-      // 其他元素动画时长 0.2s，额外等待确保完成
-      new Promise(resolve => setTimeout(resolve, 250))
-    ]);
-
-    await allAnimFinished;
-
-    // ---------- 4. DOM 替换 ----------
+    // ---------- 3. DOM 替换 ----------
     window.scrollTo({ top: 0, behavior: 'auto' });
 
     // --- 主内容容器 ---
@@ -223,8 +191,11 @@ if (currentHeaderContainer) {
       currentContent.className = newContent.className;
     } else if (newContent && !currentContent) {
       const ref = currentHeaderContainer || currentHeader || currentArticleCard || currentFooter;
-      if (ref) ref.parentNode.insertBefore(newContent, ref.nextSibling);
-      else document.body.appendChild(newContent);
+      if (ref) {
+        ref.parentNode.insertBefore(newContent, ref.nextSibling);
+      } else {
+        document.body.appendChild(newContent);
+      }
       currentContent = newContent;
     } else if (!newContent && currentContent) {
       currentContent.remove();
@@ -233,8 +204,11 @@ if (currentHeaderContainer) {
 
     // --- 头图容器 ---
     if (newHeaderContainer) {
-      if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
-      else document.body.insertBefore(newHeaderContainer, document.body.firstChild);
+      if (currentHeaderContainer) {
+        currentHeaderContainer.replaceWith(newHeaderContainer);
+      } else {
+        document.body.insertBefore(newHeaderContainer, document.body.firstChild);
+      }
       currentHeaderContainer = newHeaderContainer;
     } else if (currentHeaderContainer) {
       currentHeaderContainer.remove();
@@ -243,8 +217,11 @@ if (currentHeaderContainer) {
 
     // --- 文章头图 ---
     if (newHeader) {
-      if (currentHeader) currentHeader.replaceWith(newHeader);
-      else document.body.insertBefore(newHeader, currentContent || currentFooter);
+      if (currentHeader) {
+        currentHeader.replaceWith(newHeader);
+      } else {
+        document.body.insertBefore(newHeader, currentContent || currentFooter);
+      }
       currentHeader = newHeader;
     } else if (currentHeader) {
       currentHeader.remove();
@@ -252,12 +229,17 @@ if (currentHeaderContainer) {
     }
 
     // --- Logo ---
-    if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
+    if (newLogo && currentLogo) {
+      currentLogo.innerHTML = newLogo.innerHTML;
+    }
 
     // --- 文章卡片 ---
     if (newArticleCard) {
-      if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
-      else document.body.insertBefore(newArticleCard, currentContent || currentFooter);
+      if (currentArticleCard) {
+        currentArticleCard.replaceWith(newArticleCard);
+      } else {
+        document.body.insertBefore(newArticleCard, currentContent || currentFooter);
+      }
       currentArticleCard = newArticleCard;
     } else if (currentArticleCard) {
       currentArticleCard.remove();
@@ -280,15 +262,18 @@ if (currentHeaderContainer) {
 
     // --- Footer ---
     if (newFooter) {
-      if (currentFooter) currentFooter.replaceWith(newFooter);
-      else document.body.appendChild(newFooter);
+      if (currentFooter) {
+        currentFooter.replaceWith(newFooter);
+      } else {
+        document.body.appendChild(newFooter);
+      }
       currentFooter = newFooter;
     } else if (currentFooter) {
       currentFooter.remove();
       currentFooter = null;
     }
 
-    // --- 重新初始化 ---
+    // ---------- 4. 初始化新页面内容 ----------
     initCodeBoxes();
     playEnterAnimation(
       '.content, .home-content, .card, .home-link-card, .about-card, ' +
@@ -302,7 +287,7 @@ if (currentHeaderContainer) {
     Calendar.init();
     initGiscus();
 
-    // 更新地址栏和高亮
+    // 更新浏览器历史记录和侧边栏高亮
     history.pushState(null, '', url);
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
