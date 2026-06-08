@@ -90,6 +90,7 @@ async function loadPage(url) {
     const newHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
     const newFooter = doc.querySelector('.footer');
+    const newCommentContent = doc.querySelector('.comment-content');
 
     const currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     const currentLogo = document.querySelector('.logo');
@@ -97,6 +98,7 @@ async function loadPage(url) {
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
     let currentFooter = document.querySelector('.footer');
+    let currentCommentContent = document.querySelector('.comment-content');
 
     if (newContent && currentContent) {
       const newContentClasses = newContent.className;
@@ -109,6 +111,7 @@ async function loadPage(url) {
         currentHeader,
         currentArticleCard,
         currentFooter,
+        currentCommentContent,
       ].filter(Boolean);
       outElements.forEach(el => el.classList.add('fade-out'));
        
@@ -142,6 +145,12 @@ async function loadPage(url) {
           else document.body.insertBefore(newArticleCard, currentContent);
         } else if (currentArticleCard) currentArticleCard.remove();
 
+        // comment content
+        if (newCommentContent) {
+          if (currentCommentContent) currentCommentContent.replaceWith(newCommentContent);
+          else document.body.insertBefore(newCommentContent, currentCommentContent);
+        } else if (currentCommentContent) currentCommentContent.remove();
+         
         // footer 替换
         if (newFooter) {
           if (currentFooter) {
@@ -157,7 +166,7 @@ async function loadPage(url) {
         initCodeBoxes();
 
         // 3. 统一触发入场动画
-        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer');
+        playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer, .comment-content');
 
         // 4. 重置新页面组件状态
         initHitokoto(true);
