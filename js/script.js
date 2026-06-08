@@ -1,3 +1,20 @@
+// 动态插入全屏加载画面（避免手动修改每个页面）
+(function() {
+  var preloader = document.createElement('div');
+  preloader.id = 'preloader';
+  preloader.innerHTML = '\
+    <div class="loader-inner">\
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="loader-spin">\
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">\
+          <animate attributeName="stroke-dashoffset" values="32;0" dur="1.5s" repeatCount="indefinite" />\
+        </circle>\
+      </svg>\
+      <p>正在加载喵...</p>\
+    </div>\
+  ';
+  // 插入为 body 的第一个子元素（若 body 内已有其他元素，则位于它们之前）
+  document.body.insertBefore(preloader, document.body.firstChild);
+})();
 /* =========================
    全局变量与初始化 (主题管理)
 ========================= */
@@ -721,36 +738,41 @@ const Calendar = {
    初始化执行（增强首次入场动画）
 ========================= */
 function initAll() {
-  // 先执行不依赖布局的操作
   bindLinks();
   addRippleEffect();
   bindSettingsTrigger();
   Calendar.init();
   initGiscus();
 
-  // 等待 DOM 完全就绪后再触发入场动画
-  const ready = () => {
-    // 代码框需要先生成，否则没有内容可动画
-    initCodeBoxes();
-    // 一言会异步加载，但它的容器已经存在，动画会作用在容器上
-    initHitokoto();
-    // 统一播放入场动画（所有核心区块）
-    playEnterAnimation(
-      '.content, .home-content, .card, .home-link-card, .about-card, ' +
-      '.profile-card, .article-card, .header-container, .article-header, ' +
-      '.logo, .footer, .comment-content'
-    );
+  const hidePreloader = () => {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
+
+    // 先让加载画面淡出
+    preloader.classList.add('hidden');
+
+    // 等淡出动画结束后执行入场动画（避免两个动画重叠）
+    setTimeout(() => {
+      // 初始化代码框（生成 DOM）
+      initCodeBoxes();
+      // 初始化一言（内部控制自己的动画）
+      initHitokoto();
+      // 统一播放入场动画
+      playEnterAnimation(
+        '.content, .home-content, .card, .home-link-card, .about-card, ' +
+        '.profile-card, .article-card, .header-container, .article-header, ' +
+        '.logo, .footer, .comment-content'
+      );
+    }, 400); // 与 CSS 过渡时间一致
   };
 
+  // 确保在 DOM 和基本样式应用后执行
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    // DOM 已就绪，立即执行
-    setTimeout(ready, 0);
+    setTimeout(hidePreloader, 0);
   } else {
-    document.addEventListener('DOMContentLoaded', ready);
+    document.addEventListener('DOMContentLoaded', hidePreloader);
   }
 }
-
-initAll();
 
 // 监听 popstate
 window.addEventListener('popstate', () => {
