@@ -298,30 +298,36 @@ async function loadPage(url) {
    链接绑定
 ========================= */
 function bindLinks() {
+  let activeTimer = null; // 存储延迟定时器
+
   document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
     link.onclick = e => {
       e.preventDefault();
       const url = link.getAttribute('href');
 
-      // 1. 立刻切换所有侧边栏链接的 active 状态
-      document.querySelectorAll('.sidebar a').forEach(a => {
-        a.classList.remove('active');
-        if (a.getAttribute('href') === url) {
-          a.classList.add('active');
-        }
-      });
+      // 清除之前的定时器，防止快速点击导致状态混乱
+      clearTimeout(activeTimer);
 
-      // 2. 再异步加载页面内容
+      // 0.1 秒后更新高亮
+      activeTimer = setTimeout(() => {
+        document.querySelectorAll('.sidebar a').forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === url) {
+            a.classList.add('active');
+          }
+        });
+      }, 100);
+
+      // 异步加载页面
       loadPage(url);
     };
   });
 }
 
-// 监听浏览器前进/后退，同步 active 状态
+// 监听浏览器前进/后退时，立即更新 active（不需要延迟）
 window.addEventListener('popstate', () => {
   loadPage(location.pathname);
 
-  // 前进/后退时也需要立即更新侧边栏高亮
   document.querySelectorAll('.sidebar a').forEach(a => {
     a.classList.remove('active');
     if (a.getAttribute('href') === location.pathname) {
