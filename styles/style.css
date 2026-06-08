@@ -218,7 +218,7 @@ hr {
 
 
 /* =========================
-   手动主题覆盖（通过 data-theme）
+   手动主题覆盖
 ========================= */
 /* 强制深色模式 */
 [data-theme="dark"] {
@@ -348,7 +348,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   background: #2A2125 !important;
 }
 
-/* 强制浅色模式（覆盖系统深色） */
+/* 强制浅色模式 */
 [data-theme="light"] {
   --color-bg: #FFFBFF;
   --color-text: #3d3d3d;
@@ -679,7 +679,7 @@ body {
 .about-card,
 .profile-card,
 .article-card,
-
+.header-container,
 .article-header,
 .logo,
 .footer,
@@ -699,6 +699,18 @@ body {
   opacity: 0 !important;
   transform: translateY(15px) !important;
   transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+/* 头图容器不受通用动画影响，使用专属关键帧 */
+.header-container.fade-in {
+  transform: none !important;
+  transition: none !important;
+  animation: heroIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.header-container.fade-out {
+  transform: none !important;
+  transition: none !important;
+  animation: heroOut 0.4s ease forwards;
 }
 
 /* 针对需要水平居中的元素，保留 translateX */
