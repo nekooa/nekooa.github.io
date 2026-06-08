@@ -1,4 +1,11 @@
 /* Giscus 浅色主题 - 适配个人网站亮色模式 */
+@font-face {
+  font-family: 'MyFont';
+  src: url('https://neneneko.pages.dev/styles/font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* 提升渲染性能 */
+}
 main {
   --color-prettylights-syntax-comment: #8b7f84;
   --color-prettylights-syntax-constant: #d65d7a;
@@ -90,4 +97,5 @@ main {
 
   --color-social-reaction-bg-hover: var(--color-scale-gray-7);
   --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+  font-family: 'MyFont', sans-serif;
 }
