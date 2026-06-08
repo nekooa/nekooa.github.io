@@ -114,30 +114,26 @@ async function loadPage(url) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-    // ---------- 1. 头图专属退场动画（CSS 动画 + 监听结束） ----------
-    const headerOutPromise = new Promise(resolve => {
-      if (currentHeaderContainer) {
-        // 清除可能干扰的类
-        currentHeaderContainer.classList.remove('fade-in', 'fade-out');
-        // 添专属退场类
-        currentHeaderContainer.classList.add('hero-fade-out');
-        // 动画结束后 resolve
-        currentHeaderContainer.addEventListener('animationend', () => {
-          currentHeaderContainer.classList.remove('hero-fade-out');
-          resolve();
-        }, { once: true });
-        // 超时保护：如果 1 秒内未触发，强制 resolve
-        setTimeout(resolve, 500);
-      } else {
-        resolve();
-      }
-    });
+    // ---------- 1. 头图专属退场动画（如果有）----------
+    const headerOutPromise = currentHeaderContainer
+      ? new Promise(resolve => {
+          currentHeaderContainer.classList.remove('fade-in', 'fade-out');
+          currentHeaderContainer.classList.add('hero-fade-out');
+          const onEnd = () => {
+            currentHeaderContainer.removeEventListener('animationend', onEnd);
+            currentHeaderContainer.classList.remove('hero-fade-out');
+            resolve();
+          };
+          currentHeaderContainer.addEventListener('animationend', onEnd, { once: true });
+          setTimeout(resolve, 500); // 超时保护
+        })
+      : Promise.resolve();
 
-    // ---------- 2. 其他元素退场（使用通用 fade-out） ----------
+    // ---------- 2. 其他元素退场 ----------
     const outElements = [
       currentContent,
       currentLogo,
-      currentHeader,           // 文章头图，非首页容器
+      currentHeader,
       currentArticleCard,
       currentFooter,
       currentCommentContent,
@@ -148,8 +144,11 @@ async function loadPage(url) {
       el.classList.add('fade-out');
     });
 
-    // 3. 等待头图动画完成（其他元素动画时长较短，此时也基本结束）
+    // ---------- 3. 等待头图动画完成，并且至少等待 250ms 以确保其他元素动画完成 ----------
     await headerOutPromise;
+    if (!currentHeaderContainer) {
+      await new Promise(resolve => setTimeout(resolve, 250));
+    }
 
     // ---------- 4. DOM 替换 ----------
     window.scrollTo({ top: 0, behavior: 'auto' });
