@@ -114,18 +114,26 @@ async function loadPage(url) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-    // ---------- 1. 头图退场动画（使用 JS 动画确保完成） ----------
-    const headerOutAnimation = currentHeaderContainer
-      ? currentHeaderContainer.animate(
-          [
-            { opacity: 1, transform: 'scale(1)' },
-            { opacity: 0, transform: 'scale(0.9)' }
-          ],
-          { duration: 400, easing: 'ease', fill: 'forwards' }
-        )
-      : Promise.resolve();
+    // ---------- 1. 头图专属退场动画（CSS 动画 + 监听结束） ----------
+    const headerOutPromise = new Promise(resolve => {
+      if (currentHeaderContainer) {
+        // 清除可能干扰的类
+        currentHeaderContainer.classList.remove('fade-in', 'fade-out');
+        // 添专属退场类
+        currentHeaderContainer.classList.add('hero-fade-out');
+        // 动画结束后 resolve
+        currentHeaderContainer.addEventListener('animationend', () => {
+          currentHeaderContainer.classList.remove('hero-fade-out');
+          resolve();
+        }, { once: true });
+        // 超时保护：如果 1 秒内未触发，强制 resolve
+        setTimeout(resolve, 500);
+      } else {
+        resolve();
+      }
+    });
 
-    // ---------- 2. 其他元素退场动画（CSS 控制） ----------
+    // ---------- 2. 其他元素退场（使用通用 fade-out） ----------
     const outElements = [
       currentContent,
       currentLogo,
@@ -140,10 +148,8 @@ async function loadPage(url) {
       el.classList.add('fade-out');
     });
 
-    // 3. 等所有动画结束后（头图 400ms，其他 200ms 但取最长 400ms）
-    await headerOutAnimation.finished; // 等待头图动画完成
-    // 额外等待 50ms 确保其他元素动画也结束
-    await new Promise(resolve => setTimeout(resolve, 50));
+    // 3. 等待头图动画完成（其他元素动画时长较短，此时也基本结束）
+    await headerOutPromise;
 
     // ---------- 4. DOM 替换 ----------
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -162,7 +168,7 @@ async function loadPage(url) {
       currentContent = null;
     }
 
-    // --- 头图容器替换（此时动画已结束） ---
+    // --- 头图容器（此时动画已结束，可直接替换）---
     if (newHeaderContainer) {
       if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
       else document.body.insertBefore(newHeaderContainer, document.body.firstChild);
@@ -243,19 +249,6 @@ async function loadPage(url) {
     console.error('页面加载失败:', err);
   }
 }
-
-/* =========================
-   链接绑定
-========================= */
-function bindLinks() {
-  document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
-    link.onclick = e => {
-      e.preventDefault();
-      loadPage(link.getAttribute('href'));
-    };
-  });
-}
-
 /* =========================
    代码框组件
 ========================= */
