@@ -1,11 +1,9 @@
-/* =========================
-   Giscus 主题适配（跟随网站浅/深色模式）
-   基于 GitHub Dark Dimmed 结构重配色
-========================= */
+/*! MIT License
+ * Modified from GitHub's Dark Dimmed theme, adapted to match personal site style
+ */
 
-/* ---------- 浅色模式（默认） ---------- */
 main {
-  /* 语法高亮（柔和暖灰 + 粉紫调） */
+  /* 语法高亮 */
   --color-prettylights-syntax-comment: #8b7f84;
   --color-prettylights-syntax-constant: #d65d7a;
   --color-prettylights-syntax-entity: #b1507c;
@@ -40,10 +38,10 @@ main {
   /* 按钮 */
   --color-btn-text: #3d3d3d;
   --color-btn-bg: #f5eef1;
-  --color-btn-border: rgba(0, 0, 0, 0.08);
+  --color-btn-border: rgb(61 61 61 / 8%);
   --color-btn-shadow: 0 0 transparent;
   --color-btn-inset-shadow: 0 0 transparent;
-  --color-btn-hover-bg: #ffd8e7;          /* 粉色柔和 */
+  --color-btn-hover-bg: #ffd8e7;
   --color-btn-hover-border: #ffb3cf;
   --color-btn-active-bg: #f7ecf4;
   --color-btn-active-border: #d4a0b0;
@@ -51,20 +49,20 @@ main {
 
   --color-btn-primary-text: #ffffff;
   --color-btn-primary-bg: #ffb3cf;
-  --color-btn-primary-border: rgba(0, 0, 0, 0.08);
+  --color-btn-primary-border: rgb(61 61 61 / 8%);
   --color-btn-primary-shadow: 0 0 transparent;
   --color-btn-primary-inset-shadow: 0 0 transparent;
   --color-btn-primary-hover-bg: #ff9fc2;
-  --color-btn-primary-hover-border: rgba(0, 0, 0, 0.08);
+  --color-btn-primary-hover-border: rgb(61 61 61 / 8%);
   --color-btn-primary-selected-bg: #ffb3cf;
   --color-btn-primary-selected-shadow: 0 0 transparent;
-  --color-btn-primary-disabled-text: rgba(61, 61, 61, 0.5);
-  --color-btn-primary-disabled-bg: rgba(255, 179, 207, 0.6);
-  --color-btn-primary-disabled-border: rgba(0, 0, 0, 0.04);
+  --color-btn-primary-disabled-text: rgb(61 61 61 / 50%);
+  --color-btn-primary-disabled-bg: rgb(255 179 207 / 60%);
+  --color-btn-primary-disabled-border: rgb(61 61 61 / 4%);
 
-  --color-action-list-item-default-hover-bg: rgba(0, 0, 0, 0.03);
+  --color-action-list-item-default-hover-bg: rgb(0 0 0 / 3%);
 
-  --color-segmented-control-bg: rgba(0, 0, 0, 0.04);
+  --color-segmented-control-bg: rgb(0 0 0 / 4%);
   --color-segmented-control-button-bg: #ffffff;
   --color-segmented-control-button-selected-border: #8b7f84;
 
@@ -79,20 +77,20 @@ main {
 
   --color-border-default: #e0d5d9;
   --color-border-muted: #f0e4e8;
-  --color-neutral-muted: rgba(139, 127, 132, 0.4);
+  --color-neutral-muted: rgb(139 127 132 / 40%);
 
-  --color-accent-fg: #ff7aa2;             /* 稍深的粉，保证对比度 */
+  --color-accent-fg: #ff7aa2;
   --color-accent-emphasis: #ffb3cf;
-  --color-accent-muted: rgba(255, 179, 207, 0.4);
-  --color-accent-subtle: rgba(255, 179, 207, 0.15);
+  --color-accent-muted: rgb(255 179 207 / 40%);
+  --color-accent-subtle: rgb(255 179 207 / 15%);
 
   --color-success-fg: #4f8a6d;
   --color-attention-fg: #b3924a;
-  --color-attention-muted: rgba(179, 146, 74, 0.4);
-  --color-attention-subtle: rgba(179, 146, 74, 0.15);
+  --color-attention-muted: rgb(179 146 74 / 40%);
+  --color-attention-subtle: rgb(179 146 74 / 15%);
   --color-danger-fg: #c0392b;
-  --color-danger-muted: rgba(192, 57, 43, 0.4);
-  --color-danger-subtle: rgba(192, 57, 43, 0.15);
+  --color-danger-muted: rgb(192 57 43 / 40%);
+  --color-danger-subtle: rgb(192 57 43 / 15%);
 
   --color-primer-shadow-inset: 0 0 transparent;
   --color-scale-gray-7: #8b7f84;
@@ -102,113 +100,15 @@ main {
   --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
 }
 
-/* 浅色模式下的分页加载图（可换为浅色风格） */
 main .pagination-loader-container {
-  background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line.svg);
+  background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line.svg");
 }
 
-/* ---------- 深色模式 ---------- */
-[data-theme="dark"] main {
-  --color-prettylights-syntax-comment: #8b7f84;
-  --color-prettylights-syntax-constant: #ffb3cf;
-  --color-prettylights-syntax-entity: #dcbdfb;
-  --color-prettylights-syntax-storage-modifier-import: #e0d7da;
-  --color-prettylights-syntax-entity-tag: #8ddb8c;
-  --color-prettylights-syntax-keyword: #f47067;
-  --color-prettylights-syntax-string: #96d0ff;
-  --color-prettylights-syntax-variable: #f69d50;
-  --color-prettylights-syntax-brackethighlighter-unmatched: #e5534b;
-  --color-prettylights-syntax-invalid-illegal-text: #f5f5f5;
-  --color-prettylights-syntax-invalid-illegal-bg: #922323;
-  --color-prettylights-syntax-carriage-return-text: #f5f5f5;
-  --color-prettylights-syntax-carriage-return-bg: #ad2e2c;
-  --color-prettylights-syntax-string-regexp: #8ddb8c;
-  --color-prettylights-syntax-markup-list: #eac55f;
-  --color-prettylights-syntax-markup-heading: #316dca;
-  --color-prettylights-syntax-markup-italic: #e0d7da;
-  --color-prettylights-syntax-markup-bold: #e0d7da;
-  --color-prettylights-syntax-markup-deleted-text: #ffd8d3;
-  --color-prettylights-syntax-markup-deleted-bg: #78191b;
-  --color-prettylights-syntax-markup-inserted-text: #b4f1b4;
-  --color-prettylights-syntax-markup-inserted-bg: #1b4721;
-  --color-prettylights-syntax-markup-changed-text: #ffddb0;
-  --color-prettylights-syntax-markup-changed-bg: #682d0f;
-  --color-prettylights-syntax-markup-ignored-text: #e0d7da;
-  --color-prettylights-syntax-markup-ignored-bg: #255ab2;
-  --color-prettylights-syntax-meta-diff-range: #dcbdfb;
-  --color-prettylights-syntax-brackethighlighter-angle: #8b7f84;
-  --color-prettylights-syntax-sublimelinter-gutter-mark: #545d68;
-  --color-prettylights-syntax-constant-other-reference-link: #96d0ff;
-
-  --color-btn-text: #f5f5f5;
-  --color-btn-bg: #3a2f33;
-  --color-btn-border: rgba(255, 255, 255, 0.1);
-  --color-btn-shadow: 0 0 transparent;
-  --color-btn-inset-shadow: 0 0 transparent;
-  --color-btn-hover-bg: #4d3d42;
-  --color-btn-hover-border: #ffb3cf;
-  --color-btn-active-bg: #3a2f33;
-  --color-btn-active-border: #8b7f84;
-  --color-btn-selected-bg: #2A2125;
-
-  --color-btn-primary-text: #ffffff;
-  --color-btn-primary-bg: #ffb3cf;
-  --color-btn-primary-border: rgba(255, 255, 255, 0.1);
-  --color-btn-primary-shadow: 0 0 transparent;
-  --color-btn-primary-inset-shadow: 0 0 transparent;
-  --color-btn-primary-hover-bg: #ff9fc2;
-  --color-btn-primary-hover-border: rgba(255, 255, 255, 0.1);
-  --color-btn-primary-selected-bg: #ffb3cf;
-  --color-btn-primary-selected-shadow: 0 0 transparent;
-  --color-btn-primary-disabled-text: rgba(245, 245, 245, 0.5);
-  --color-btn-primary-disabled-bg: rgba(255, 179, 207, 0.6);
-  --color-btn-primary-disabled-border: rgba(255, 255, 255, 0.05);
-
-  --color-action-list-item-default-hover-bg: rgba(255, 255, 255, 0.04);
-
-  --color-segmented-control-bg: rgba(255, 255, 255, 0.06);
-  --color-segmented-control-button-bg: #2A2125;
-  --color-segmented-control-button-selected-border: #8b7f84;
-
-  --color-fg-default: #f5f5f5;
-  --color-fg-muted: #b0a0a8;
-  --color-fg-subtle: #7a6c72;
-  --color-canvas-default: #1F1A1C;
-  --color-canvas-overlay: #1F1A1C;
-  --color-canvas-inset: #2A2125;
-  --color-canvas-subtle: #2A2125;
-
-  --color-border-default: #44403c;
-  --color-border-muted: #3a2f33;
-  --color-neutral-muted: rgba(176, 160, 168, 0.4);
-
-  --color-accent-fg: #ffb3cf;
-  --color-accent-emphasis: #ffb3cf;
-  --color-accent-muted: rgba(255, 179, 207, 0.4);
-  --color-accent-subtle: rgba(255, 179, 207, 0.15);
-
-  --color-success-fg: #57ab5a;
-  --color-attention-fg: #c69026;
-  --color-attention-muted: rgba(198, 144, 38, 0.4);
-  --color-attention-subtle: rgba(198, 144, 38, 0.15);
-  --color-danger-fg: #e5534b;
-  --color-danger-muted: rgba(229, 83, 75, 0.4);
-  --color-danger-subtle: rgba(229, 83, 75, 0.15);
-
-  --color-primer-shadow-inset: 0 0 transparent;
-  --color-scale-gray-7: #3a2f33;
-  --color-scale-blue-8: #143d79;
-
-  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
-  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+main .gsc-loading-image {
+  background-image: url("https://github.githubassets.com/images/mona-loading-default.gif");
 }
 
-/* 深色模式下的分页加载图（保持官方暗色版） */
-[data-theme="dark"] main .pagination-loader-container {
-  background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg);
-}
-
-/* ---------- 自定义布局（保持不变） ---------- */
+/* 自定义布局 */
 .gsc-reactions-count {
   display: none;
 }
@@ -228,14 +128,111 @@ main .pagination-loader-container {
 .gsc-comments > .gsc-timeline {
   order: 3;
 }
-.gsc-homepage-bg {
-  background-color: #15202b; /* 浅色模式下会被 canvas-inset 覆盖，此处可保留或移除 */
-}
 
-/* 根据不同主题调整背景图片 */
-main .gsc-loading-image {
-  background-image: url(https://github.githubassets.com/images/mona-loading-default.gif);
-}
-[data-theme="dark"] main .gsc-loading-image {
-  background-image: url(https://github.githubassets.com/images/mona-loading-dimmed.gif);
+@media (prefers-color-scheme: dark) {
+  main {
+    /* 语法高亮 */
+    --color-prettylights-syntax-comment: #8b7f84;
+    --color-prettylights-syntax-constant: #ffb3cf;
+    --color-prettylights-syntax-entity: #dcbdfb;
+    --color-prettylights-syntax-storage-modifier-import: #e0d7da;
+    --color-prettylights-syntax-entity-tag: #8ddb8c;
+    --color-prettylights-syntax-keyword: #f47067;
+    --color-prettylights-syntax-string: #96d0ff;
+    --color-prettylights-syntax-variable: #f69d50;
+    --color-prettylights-syntax-brackethighlighter-unmatched: #e5534b;
+    --color-prettylights-syntax-invalid-illegal-text: #f5f5f5;
+    --color-prettylights-syntax-invalid-illegal-bg: #922323;
+    --color-prettylights-syntax-carriage-return-text: #f5f5f5;
+    --color-prettylights-syntax-carriage-return-bg: #ad2e2c;
+    --color-prettylights-syntax-string-regexp: #8ddb8c;
+    --color-prettylights-syntax-markup-list: #eac55f;
+    --color-prettylights-syntax-markup-heading: #316dca;
+    --color-prettylights-syntax-markup-italic: #e0d7da;
+    --color-prettylights-syntax-markup-bold: #e0d7da;
+    --color-prettylights-syntax-markup-deleted-text: #ffd8d3;
+    --color-prettylights-syntax-markup-deleted-bg: #78191b;
+    --color-prettylights-syntax-markup-inserted-text: #b4f1b4;
+    --color-prettylights-syntax-markup-inserted-bg: #1b4721;
+    --color-prettylights-syntax-markup-changed-text: #ffddb0;
+    --color-prettylights-syntax-markup-changed-bg: #682d0f;
+    --color-prettylights-syntax-markup-ignored-text: #e0d7da;
+    --color-prettylights-syntax-markup-ignored-bg: #255ab2;
+    --color-prettylights-syntax-meta-diff-range: #dcbdfb;
+    --color-prettylights-syntax-brackethighlighter-angle: #8b7f84;
+    --color-prettylights-syntax-sublimelinter-gutter-mark: #545d68;
+    --color-prettylights-syntax-constant-other-reference-link: #96d0ff;
+
+    /* 按钮 */
+    --color-btn-text: #f5f5f5;
+    --color-btn-bg: #3a2f33;
+    --color-btn-border: rgb(255 255 255 / 10%);
+    --color-btn-shadow: 0 0 transparent;
+    --color-btn-inset-shadow: 0 0 transparent;
+    --color-btn-hover-bg: #4d3d42;
+    --color-btn-hover-border: #ffb3cf;
+    --color-btn-active-bg: #3a2f33;
+    --color-btn-active-border: #8b7f84;
+    --color-btn-selected-bg: #2A2125;
+
+    --color-btn-primary-text: #ffffff;
+    --color-btn-primary-bg: #ffb3cf;
+    --color-btn-primary-border: rgb(255 255 255 / 10%);
+    --color-btn-primary-shadow: 0 0 transparent;
+    --color-btn-primary-inset-shadow: 0 0 transparent;
+    --color-btn-primary-hover-bg: #ff9fc2;
+    --color-btn-primary-hover-border: rgb(255 255 255 / 10%);
+    --color-btn-primary-selected-bg: #ffb3cf;
+    --color-btn-primary-selected-shadow: 0 0 transparent;
+    --color-btn-primary-disabled-text: rgb(245 245 245 / 50%);
+    --color-btn-primary-disabled-bg: rgb(255 179 207 / 60%);
+    --color-btn-primary-disabled-border: rgb(255 255 255 / 5%);
+
+    --color-action-list-item-default-hover-bg: rgb(255 255 255 / 4%);
+
+    --color-segmented-control-bg: rgb(255 255 255 / 6%);
+    --color-segmented-control-button-bg: #2A2125;
+    --color-segmented-control-button-selected-border: #8b7f84;
+
+    /* 前景 / 背景 */
+    --color-fg-default: #f5f5f5;
+    --color-fg-muted: #b0a0a8;
+    --color-fg-subtle: #7a6c72;
+    --color-canvas-default: #1F1A1C;
+    --color-canvas-overlay: #1F1A1C;
+    --color-canvas-inset: #2A2125;
+    --color-canvas-subtle: #2A2125;
+
+    --color-border-default: #44403c;
+    --color-border-muted: #3a2f33;
+    --color-neutral-muted: rgb(176 160 168 / 40%);
+
+    --color-accent-fg: #ffb3cf;
+    --color-accent-emphasis: #ffb3cf;
+    --color-accent-muted: rgb(255 179 207 / 40%);
+    --color-accent-subtle: rgb(255 179 207 / 15%);
+
+    --color-success-fg: #57ab5a;
+    --color-attention-fg: #c69026;
+    --color-attention-muted: rgb(198 144 38 / 40%);
+    --color-attention-subtle: rgb(198 144 38 / 15%);
+    --color-danger-fg: #e5534b;
+    --color-danger-muted: rgb(229 83 75 / 40%);
+    --color-danger-subtle: rgb(229 83 75 / 15%);
+
+    --color-primer-shadow-inset: 0 0 transparent;
+    --color-scale-gray-7: #3a2f33;
+    --color-scale-blue-8: #143d79;
+
+    --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+    --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+  }
+
+  main .pagination-loader-container {
+    background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
+  }
+
+  main .gsc-loading-image {
+    background-image: url("https://github.githubassets.com/images/mona-loading-dimmed.gif");
+  }
 }
