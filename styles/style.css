@@ -475,12 +475,11 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   border: 3px solid rgba(255, 179, 207, 0.2);
   border-top-color: var(--color-pink);
   border-radius: 50%;
-  animation: spin 1.2s linear infinite;
-  transform: translateZ(0);
-  will-change: transform;
+  animation: ring-spin 1.2s linear infinite;
 }
 
-@keyframes spin {
+@keyframes ring-spin {
+  0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
