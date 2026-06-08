@@ -75,7 +75,7 @@ function playEnterAnimation(selectors) {
 }
 
 /* =========================
-   SPA 页面加载（无主内容容器兼容）
+   SPA 页面加载（评论区位置修正）
 ========================= */
 async function loadPage(url) {
   try {
@@ -84,7 +84,6 @@ async function loadPage(url) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
 
-    // 获取新页面中的各个区块
     let newContent = doc.querySelector('.home-content') || doc.querySelector('.content');
     const newLogo = doc.querySelector('.logo');
     const newHeaderContainer = doc.querySelector('.header-container');
@@ -93,12 +92,11 @@ async function loadPage(url) {
     const newFooter = doc.querySelector('.footer');
     let newCommentContent = doc.querySelector('.comment-content');
 
-    // 如果评论区在新页面主内容内部，先提取出来避免 innerHTML 重复
+    // 避免评论区在主内容 innerHTML 中重复
     if (newCommentContent && newContent && newContent.contains(newCommentContent)) {
       newCommentContent.remove();
     }
 
-    // 当前页面已有区块
     const currentLogo = document.querySelector('.logo');
     let currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     let currentHeaderContainer = document.querySelector('.header-container');
@@ -119,26 +117,23 @@ async function loadPage(url) {
     ].filter(Boolean);
     outElements.forEach(el => el.classList.add('fade-out'));
 
-    // 2. 等待退场动画结束再替换 DOM
+    // 2. DOM 替换
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'auto' });
 
-      // --- 处理主内容容器 ---
+      // --- 主内容容器 ---
       if (newContent && currentContent) {
-        // 两边都有：替换内部内容
         currentContent.innerHTML = newContent.innerHTML;
         currentContent.className = newContent.className;
       } else if (newContent && !currentContent) {
-        // 新页面有，当前没有：插入到 body 中（放在 header 之后）
         const ref = currentHeaderContainer || currentHeader || currentArticleCard || currentFooter;
         if (ref) {
           ref.parentNode.insertBefore(newContent, ref.nextSibling);
         } else {
           document.body.appendChild(newContent);
         }
-        currentContent = newContent; // 更新引用，方便后续插入
+        currentContent = newContent;
       } else if (!newContent && currentContent) {
-        // 新页面没有，当前有：移除容器
         currentContent.remove();
         currentContent = null;
       }
@@ -169,7 +164,7 @@ async function loadPage(url) {
         currentHeader = null;
       }
 
-      // --- Logo 内容更新（保留容器，只改文字） ---
+      // --- Logo ---
       if (newLogo && currentLogo) {
         currentLogo.innerHTML = newLogo.innerHTML;
       }
@@ -187,14 +182,13 @@ async function loadPage(url) {
         currentArticleCard = null;
       }
 
-      // --- 评论区容器 ---
+      // --- 评论区容器（修正位置：始终在 footer 之前） ---
       if (newCommentContent) {
         if (currentCommentContent) {
           currentCommentContent.replaceWith(newCommentContent);
         } else {
-          const insertAfter = currentArticleCard || currentContent || currentHeader;
-          if (insertAfter && insertAfter.parentNode) {
-            insertAfter.parentNode.insertBefore(newCommentContent, insertAfter.nextSibling);
+          if (currentFooter && currentFooter.parentNode) {
+            currentFooter.parentNode.insertBefore(newCommentContent, currentFooter);
           } else {
             document.body.appendChild(newCommentContent);
           }
@@ -218,7 +212,7 @@ async function loadPage(url) {
         currentFooter = null;
       }
 
-      // 3. 重新初始化各模块
+      // 重新初始化
       initCodeBoxes();
       playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer, .comment-content');
       initHitokoto(true);
@@ -229,7 +223,6 @@ async function loadPage(url) {
       initGiscus();
     }, 200);
 
-    // 更新浏览器地址栏与侧栏高亮
     history.pushState(null, '', url);
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
