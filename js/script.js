@@ -249,6 +249,19 @@ async function loadPage(url) {
     console.error('页面加载失败:', err);
   }
 }
+
+/* =========================
+   链接绑定
+========================= */
+function bindLinks() {
+  document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
+    link.onclick = e => {
+      e.preventDefault();
+      loadPage(link.getAttribute('href'));
+    };
+  });
+}
+
 /* =========================
    代码框组件
 ========================= */
