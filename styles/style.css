@@ -667,7 +667,11 @@ body {
 
 
 
-/* 参与入场动画的元素默认透明 */
+/* =========================
+   入场/退场动画通用规则
+========================= */
+
+/* 默认隐藏，仅控制透明度 */
 .content,
 .home-content,
 .card,
@@ -681,19 +685,32 @@ body {
 .footer,
 .comment-content {
   opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-/* 入场最终状态：完全显示 + 归位 */
+/* 通用入场最终状态 */
 .fade-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
 }
 
-/* 退场状态（SPA 切换用） */
+/* 通用退场状态 */
 .fade-out {
   opacity: 0 !important;
   transform: translateY(15px) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+/* 针对需要水平居中的元素，保留 translateX */
+.article-card.fade-in,
+.comment-content.fade-in {
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+/* 同样为它们的退场保留水平偏移 */
+.article-card.fade-out,
+.comment-content.fade-out {
+  transform: translateX(-50%) translateY(15px) !important;
 }
 
 
@@ -733,19 +750,6 @@ body {
     flex-direction: column;
     justify-content: center;
   }
-}
-
-/* 动画 */
-.fade-out {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.2s ease;
-}
-
-.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.4s ease;
 }
 
 
