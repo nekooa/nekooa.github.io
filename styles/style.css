@@ -690,8 +690,8 @@ body {
 /* 通用入场最终状态 */
 .fade-in {
   opacity: 1 !important;
-  transform: translateY(0);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translateY(0) !important;
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
 }
 
 /* 通用退场状态 */
@@ -719,7 +719,7 @@ body {
 /* 针对需要水平居中的元素，保留 translateX */
 .article-card.fade-in,
 .comment-content.fade-in {
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(0) !important;
 }
 
 /* 同样为它们的退场保留水平偏移 */
