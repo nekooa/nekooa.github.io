@@ -777,7 +777,7 @@ body {
 @media (min-width: 769px) {
   .content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 两列布局 */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     justify-items: center;
     gap: 40px 20px !important;
   }
@@ -2482,6 +2482,13 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     flex-direction: column;
   }
 
+  .spa-link {
+    width: 100%;
+    max-width: 400px;          /* 限制最大宽度，避免卡片过宽 */
+    margin-left: auto;
+    margin-right: auto;
+  }
+	
   .footer {
     margin-left: 0;
     width: 100%;
