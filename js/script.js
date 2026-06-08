@@ -1,4 +1,5 @@
-// 动态插入全屏加载画面（避免手动修改每个页面）
+var pageLoadStart = Date.now();   // 记录脚本开始执行的时刻
+// 动态插入全屏加载画面
 (function() {
   var preloader = document.createElement('div');
   preloader.id = 'preloader';
@@ -744,29 +745,38 @@ function initAll() {
   Calendar.init();
   initGiscus();
 
+  const MIN_LOAD_TIME = 3000;   // 最短停留 3 秒
+
   const hidePreloader = () => {
     const preloader = document.getElementById('preloader');
     if (!preloader) return;
 
-    // 先让加载画面淡出
-    preloader.classList.add('hidden');
+    const elapsed = Date.now() - pageLoadStart;        // 已经过去的时间
+    const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);  // 还需等待的时间（最少0）
 
-    // 等淡出动画结束后执行入场动画（避免两个动画重叠）
-    setTimeout(() => {
-      // 初始化代码框（生成 DOM）
-      initCodeBoxes();
-      // 初始化一言（内部控制自己的动画）
-      initHitokoto();
-      // 统一播放入场动画
-      playEnterAnimation(
-        '.content, .home-content, .card, .home-link-card, .about-card, ' +
-        '.profile-card, .article-card, .header-container, .article-header, ' +
-        '.logo, .footer, .comment-content'
-      );
-    }, 400); // 与 CSS 过渡时间一致
+    const doHide = () => {
+      preloader.classList.add('hidden');
+
+      // 等淡出动画结束后再执行内容入场动画
+      setTimeout(() => {
+        initCodeBoxes();
+        initHitokoto();
+        playEnterAnimation(
+          '.content, .home-content, .card, .home-link-card, .about-card, ' +
+          '.profile-card, .article-card, .header-container, .article-header, ' +
+          '.logo, .footer, .comment-content'
+        );
+      }, 400); // 与 CSS 的 opacity 过渡时间一致
+    };
+
+    if (remaining > 0) {
+      setTimeout(doHide, remaining);
+    } else {
+      doHide();
+    }
   };
 
-  // 确保在 DOM 和基本样式应用后执行
+  // 等待 DOM 就绪后执行
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     setTimeout(hidePreloader, 0);
   } else {
