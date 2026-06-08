@@ -2234,7 +2234,12 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     grid-template-columns: 1fr;
     justify-items: center;   /* 子元素居中 */
   }
-
+  .comment-content {
+	transform: none;
+    width: calc(100% - 30px) !important; /* 左右各 10px */
+    left: 15px !important;
+	max-width: none;
+  }
   .article-header {
 	height: 70vh;
     width: 100%;
