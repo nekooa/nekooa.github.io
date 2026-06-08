@@ -112,49 +112,6 @@ hr {
 
 
 /* =========================
-   全屏加载画面
-========================= */
-#preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: var(--color-bg);           /* 自动适配主题背景色 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-  opacity: 1;
-  visibility: visible;
-}
-
-#preloader.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.loader-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  color: var(--color-text);
-  font-size: 0.95rem;
-  opacity: 0.8;
-}
-
-.loader-spin {
-  animation: spin 1.5s linear infinite;
-  color: var(--color-pink);
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-
-
-
-/* =========================
    深色模式
 ========================= */
 @media (prefers-color-scheme: dark) {
@@ -477,6 +434,53 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 [data-theme="light"] .content-card {
   background: rgb(250, 242, 248) !important;
 }
+
+
+
+/* =========================
+   全屏加载画面
+========================= */
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-bg);          /* 跟随网站背景色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 隐藏状态：透明、不可见、不阻挡点击 */
+#preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 内部的加载动画容器（你 JS 里生成的） */
+.loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.loader-spin {
+  animation: spin 1.5s linear infinite;
+  color: var(--color-pink);
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+
 
 /* =========================
    基础布局
