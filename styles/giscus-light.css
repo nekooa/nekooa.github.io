@@ -37,7 +37,6 @@ main {
   --color-prettylights-syntax-brackethighlighter-angle: #8b7f84;
   --color-prettylights-syntax-sublimelinter-gutter-mark: #8b7f84;
   --color-prettylights-syntax-constant-other-reference-link: #5e7d8c;
-
   --color-btn-text: #3d3d3d;
   --color-btn-bg: #f5eef1;
   --color-btn-border: rgba(61, 61, 61, 0.08);
@@ -48,7 +47,6 @@ main {
   --color-btn-active-bg: #f7ecf4;
   --color-btn-active-border: #d4a0b0;
   --color-btn-selected-bg: #f7ecf4;
-
   --color-btn-primary-text: #ffffff;
   --color-btn-primary-bg: #ffb3cf;
   --color-btn-primary-border: rgba(61, 61, 61, 0.08);
@@ -61,12 +59,10 @@ main {
   --color-btn-primary-disabled-text: rgba(61, 61, 61, 0.5);
   --color-btn-primary-disabled-bg: rgba(255, 179, 207, 0.6);
   --color-btn-primary-disabled-border: rgba(61, 61, 61, 0.04);
-
   --color-action-list-item-default-hover-bg: rgba(0, 0, 0, 0.03);
   --color-segmented-control-bg: rgba(0, 0, 0, 0.04);
   --color-segmented-control-button-bg: #ffffff;
   --color-segmented-control-button-selected-border: #8b7f84;
-
   --color-fg-default: #3d3d3d;
   --color-fg-muted: #8b7f84;
   --color-fg-subtle: #a69a9f;
@@ -77,12 +73,10 @@ main {
   --color-border-default: #e0d5d9;
   --color-border-muted: #f0e4e8;
   --color-neutral-muted: rgba(139, 127, 132, 0.4);
-
   --color-accent-fg: #ff7aa2;
   --color-accent-emphasis: #ffb3cf;
   --color-accent-muted: rgba(255, 179, 207, 0.4);
   --color-accent-subtle: rgba(255, 179, 207, 0.15);
-
   --color-success-fg: #4f8a6d;
   --color-attention-fg: #b3924a;
   --color-attention-muted: rgba(179, 146, 74, 0.4);
@@ -90,11 +84,9 @@ main {
   --color-danger-fg: #c0392b;
   --color-danger-muted: rgba(192, 57, 43, 0.4);
   --color-danger-subtle: rgba(192, 57, 43, 0.15);
-
   --color-primer-shadow-inset: 0 0 transparent;
   --color-scale-gray-7: #8b7f84;
   --color-scale-blue-8: #5e7d8c;
-
   --color-social-reaction-bg-hover: var(--color-scale-gray-7);
   --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
   font-family: 'MyFont', sans-serif;
