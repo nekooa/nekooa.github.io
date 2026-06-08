@@ -75,7 +75,7 @@ function playEnterAnimation(selectors) {
 }
 
 /* =========================
-   SPA 页面加载
+   SPA 页面加载（修复评论容器重复）
 ========================= */
 async function loadPage(url) {
   try {
@@ -90,7 +90,12 @@ async function loadPage(url) {
     const newHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
     const newFooter = doc.querySelector('.footer');
-    const newCommentContent = doc.querySelector('.comment-content');
+    let newCommentContent = doc.querySelector('.comment-content');
+
+    // 关键修复：若评论区容器原本在主内容内部，先提取并从文档片段中移除，避免 innerHTML 重复
+    if (newCommentContent) {
+      newCommentContent.remove();
+    }
 
     const currentContent = document.querySelector('.home-content') || document.querySelector('.content');
     const currentLogo = document.querySelector('.logo');
@@ -103,7 +108,7 @@ async function loadPage(url) {
     if (newContent && currentContent) {
       const newContentClasses = newContent.className;
 
-      // 1. 全局元素退场 (添加 fade-out，触发 0.2s 消失动画)
+      // 1. 退场动画
       const outElements = [
         currentContent,
         currentLogo,
@@ -114,44 +119,52 @@ async function loadPage(url) {
         currentCommentContent,
       ].filter(Boolean);
       outElements.forEach(el => el.classList.add('fade-out'));
-       
-      // 2. 等待 0.2s 退场结束后，进行 DOM 替换
+
+      // 2. DOM 替换
       setTimeout(() => {
-        // 让页面瞬间回到顶部
         window.scrollTo({ top: 0, behavior: 'auto' });
 
-        // 头图容器替换
+        // 头图容器
         if (newHeaderContainer) {
           if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
           else document.body.insertBefore(newHeaderContainer, currentContent);
         } else if (currentHeaderContainer) currentHeaderContainer.remove();
 
-        // 文章头图替换
+        // 文章头图
         if (newHeader) {
           if (currentHeader) currentHeader.replaceWith(newHeader);
           else document.body.insertBefore(newHeader, currentContent);
         } else if (currentHeader) currentHeader.remove();
 
-        // 主内容替换
+        // 主内容（此时 innerHTML 中已不含 .comment-content）
         currentContent.innerHTML = newContent.innerHTML;
         currentContent.className = newContentClasses;
 
-        // Logo 替换
+        // Logo
         if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
 
-        // 文章卡片替换
+        // 文章卡片
         if (newArticleCard) {
           if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
           else document.body.insertBefore(newArticleCard, currentContent);
         } else if (currentArticleCard) currentArticleCard.remove();
 
-        // comment content
+        // 评论区容器（手动插入到主内容之后、footer 之前）
         if (newCommentContent) {
-          if (currentCommentContent) currentCommentContent.replaceWith(newCommentContent);
-          else document.body.insertBefore(newCommentContent, currentCommentContent);
-        } else if (currentCommentContent) currentCommentContent.remove();
-         
-        // footer 替换
+          if (currentCommentContent) {
+            currentCommentContent.replaceWith(newCommentContent);
+          } else {
+            if (currentFooter) {
+              document.body.insertBefore(newCommentContent, currentFooter);
+            } else {
+              document.body.appendChild(newCommentContent);
+            }
+          }
+        } else if (currentCommentContent) {
+          currentCommentContent.remove();
+        }
+
+        // Footer
         if (newFooter) {
           if (currentFooter) {
             currentFooter.replaceWith(newFooter);
@@ -162,20 +175,16 @@ async function loadPage(url) {
           currentFooter.remove();
         }
 
-        // 初始化新页面的代码框
+        // 重新初始化各模块
         initCodeBoxes();
-
-        // 3. 统一触发入场动画
         playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer, .comment-content');
-
-        // 4. 重置新页面组件状态
         initHitokoto(true);
         bindLinks();
         addRippleEffect();
         bindSettingsTrigger();
         Calendar.init();
-        initGiscus();  // ← 每次页面切换后重新加载评论区
-      }, 200); 
+        initGiscus();
+      }, 200);
     }
 
     history.pushState(null, '', url);
