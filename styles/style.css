@@ -2319,12 +2319,20 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     grid-template-columns: 1fr;
     justify-items: center;   /* 子元素居中 */
   }
+	
   .comment-content {
 	transform: none;
     width: calc(100% - 30px) !important; /* 左右各 10px */
     left: 15px !important;
 	max-width: none;
   }
+  .comment-content.fade-in {
+    transform: translateY(0) !important;
+  }
+  .comment-content.fade-out {
+    transform: translateY(15px) !important;
+  }
+	
   .article-header {
 	height: 70vh;
     width: 100%;
@@ -2338,7 +2346,13 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     left: 15px !important;
 	max-width: none;
   }
-
+   .article-card.fade-in {
+     transform: translateY(0) !important;
+  }
+   .article-card.fade-out {
+     transform: translateY(15px) !important;
+  }
+	
   .profile-card {
     width: 100%;
     max-width: 600px;
