@@ -667,6 +667,32 @@ body {
 
 
 
+/* 参与入场动画的元素默认不可见，且略微下沉 */
+.content,
+.home-content,
+.card,
+.home-link-card,
+.about-card,
+.profile-card,
+.article-card,
+.header-container,
+.article-header,
+.logo,
+.footer,
+.comment-content {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* 动画触发类，覆盖默认隐藏状态 */
+.fade-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+
+
 /* =========================
    content
 ========================= */
