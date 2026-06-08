@@ -196,7 +196,6 @@ async function loadPage(url) {
       }
 
       // ========== 评论区容器（关键修复）==========
-      // 先移除旧的评论区（无论是否存在），避免保留错误位置
       if (currentCommentContent) {
         currentCommentContent.remove();
         currentCommentContent = null;
@@ -211,7 +210,6 @@ async function loadPage(url) {
         }
         currentCommentContent = newCommentContent;
       }
-      // =========================================
 
       // --- Footer ---
       if (newFooter) {
@@ -235,7 +233,7 @@ async function loadPage(url) {
       bindSettingsTrigger();
       Calendar.init();
       initGiscus();
-    }, 200);
+    }, 400);
 
     history.pushState(null, '', url);
     document.querySelectorAll('.sidebar a').forEach(a => {
