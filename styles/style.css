@@ -667,7 +667,7 @@ body {
 
 
 
-/* 参与入场/退场的元素默认隐藏 */
+/* 参与入场动画的元素默认透明 */
 .content,
 .home-content,
 .card,
@@ -681,17 +681,16 @@ body {
 .footer,
 .comment-content {
   opacity: 0;
-  transform: translateY(15px);
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-/* 入场最终状态 */
+/* 入场最终状态：完全显示 + 归位 */
 .fade-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
 }
 
-/* 退场动画（与入场相反） */
+/* 退场状态（SPA 切换用） */
 .fade-out {
   opacity: 0 !important;
   transform: translateY(15px) !important;
