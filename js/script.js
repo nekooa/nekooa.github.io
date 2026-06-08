@@ -5,15 +5,10 @@ var pageLoadStart = Date.now();   // 记录脚本开始执行的时刻
   preloader.id = 'preloader';
   preloader.innerHTML = '\
     <div class="loader-inner">\
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="loader-spin">\
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="32" stroke-dashoffset="32">\
-          <animate attributeName="stroke-dashoffset" values="32;0" dur="1.5s" repeatCount="indefinite" />\
-        </circle>\
-      </svg>\
+      <div class="loader-ring"></div>\
       <p>正在加载喵...</p>\
     </div>\
   ';
-  // 插入为 body 的第一个子元素（若 body 内已有其他元素，则位于它们之前）
   document.body.insertBefore(preloader, document.body.firstChild);
 })();
 /* =========================
