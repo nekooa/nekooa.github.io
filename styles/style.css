@@ -1786,17 +1786,75 @@ code-box {
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
 }
+
+/* ---------- 入场动画 ---------- */
 .header-container.fade-in {
   animation: heroIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   opacity: 1;
   transform: none;
 }
-.header-container.fade-out {
-  animation: heroOut 0.4s ease forwards !important;
-  opacity: 0 !important;
-  transform: none !important;
-  transition: none !important;
+
+/* 入场时，内部图片联动缩放 */
+.header-container.fade-in .home-header {
+  animation: homeHeaderIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
+
+/* ---------- 退场动画（独立类 hero-out） ---------- */
+.header-container.hero-out {
+  animation: heroContainerOut 0.4s ease forwards;
+  /* 保证动画结束后透明，不被覆盖 */
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* 退场时，内部图片缩放 */
+.header-container.hero-out .home-header {
+  animation: homeHeaderOut 0.4s ease forwards;
+}
+
+/* 退场时，一言文字缩小 + 淡出 */
+.header-container.hero-out .hitokoto {
+  animation: heroTextOut 0.4s ease forwards;
+}
+
+/* ---------- 关键帧 ---------- */
+/* 容器整体淡入 */
+@keyframes heroIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* 容器整体淡出 + 轻微缩放 */
+@keyframes heroContainerOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.95); }
+}
+
+/* 图片入场缩放 */
+@keyframes homeHeaderIn {
+  from { transform: scale(1.8); }
+  to   { transform: scale(1.2); }
+}
+
+/* 图片退场缩放 */
+@keyframes homeHeaderOut {
+  from { transform: scale(1.2); }
+  to   { transform: scale(1.0); }
+}
+
+/* 一言退场 */
+@keyframes heroTextOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+/* ---------- 其他元素（不变） ---------- */
 .home-header {
   width: 100%;
   margin: auto;
@@ -1810,6 +1868,7 @@ code-box {
   height: 55vh;
   transform: scale(1.2); 
 }
+
 .header-overlay {
   position: absolute;
   width: 100%;
@@ -1821,29 +1880,6 @@ code-box {
   background: rgba(255, 255, 255, 0.5);
   pointer-events: none;
   height: 55vh;
-}
-/* 当父容器触发 fade-in / fade-out 时，联动图片播放缩放动画 */
-.header-container.fade-in .home-header {
-  animation: homeHeaderIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-.header-container.fade-out .home-header {
-  animation: homeHeaderOut 0.4s ease forwards;
-}
-@keyframes homeHeaderIn {
-  from {
-    transform: scale(1.8); /* 进场时从 1. 倍开始收缩 */
-  }
-  to {
-    transform: scale(1.2); /* 停留在 1.2 倍的基准状态 */
-  }
-}
-@keyframes homeHeaderOut {
-  from {
-    transform: scale(1.2); /* 离场时从 1.2 倍基准开始 */
-  }
-  to {
-    transform: scale(1.0); /* 快速缩小 */
-  }
 }
 
 
