@@ -291,7 +291,7 @@ function initGiscus() {
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', 'light_tritanopia');
+  script.setAttribute('data-theme', 'https://neneneko.pages.dev/styles/giscus.css');
   script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
   script.async = true;
