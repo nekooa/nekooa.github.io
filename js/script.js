@@ -12,7 +12,7 @@ var pageLoadStart = Date.now();   // 记录脚本开始执行的时刻
   document.body.insertBefore(preloader, document.body.firstChild);
 })();
 /* =========================
-   全局变量与初始化 (主题管理)
+   全局变量与初始化
 ========================= */
 const ThemeManager = {
   STORAGE_KEY: 'site-theme',
@@ -85,7 +85,7 @@ function playEnterAnimation(selectors) {
 }
 
 /* =========================
-   SPA 页面加载（评论区位置强制修正）
+   SPA 页面加载
 ========================= */
 async function loadPage(url) {
   try {
@@ -102,7 +102,6 @@ async function loadPage(url) {
     const newFooter = doc.querySelector('.footer');
     let newCommentContent = doc.querySelector('.comment-content');
 
-    // 避免评论区在主内容 innerHTML 中重复
     if (newCommentContent && newContent && newContent.contains(newCommentContent)) {
       newCommentContent.remove();
     }
@@ -115,126 +114,126 @@ async function loadPage(url) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-    // 1. 退场动画
+    // ---------- 1. 头图退场动画（使用 JS 动画确保完成） ----------
+    const headerOutAnimation = currentHeaderContainer
+      ? currentHeaderContainer.animate(
+          [
+            { opacity: 1, transform: 'scale(1)' },
+            { opacity: 0, transform: 'scale(0.9)' }
+          ],
+          { duration: 400, easing: 'ease', fill: 'forwards' }
+        )
+      : Promise.resolve();
+
+    // ---------- 2. 其他元素退场动画（CSS 控制） ----------
     const outElements = [
       currentContent,
       currentLogo,
-      currentHeaderContainer,
-      currentHeader,
+      currentHeader,           // 文章头图，非首页容器
       currentArticleCard,
       currentFooter,
       currentCommentContent,
     ].filter(Boolean);
+
     outElements.forEach(el => {
-      el.classList.remove('fade-in');   // 先移除入场状态
-      el.classList.add('fade-out');     // 再添加退场类
+      el.classList.remove('fade-in');
+      el.classList.add('fade-out');
     });
 
-    // 2. DOM 替换
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'auto' });
+    // 3. 等所有动画结束后（头图 400ms，其他 200ms 但取最长 400ms）
+    await headerOutAnimation.finished; // 等待头图动画完成
+    // 额外等待 50ms 确保其他元素动画也结束
+    await new Promise(resolve => setTimeout(resolve, 50));
 
-      // --- 主内容容器 ---
-      if (newContent && currentContent) {
-        currentContent.innerHTML = newContent.innerHTML;
-        currentContent.className = newContent.className;
-      } else if (newContent && !currentContent) {
-        const ref = currentHeaderContainer || currentHeader || currentArticleCard || currentFooter;
-        if (ref) {
-          ref.parentNode.insertBefore(newContent, ref.nextSibling);
-        } else {
-          document.body.appendChild(newContent);
-        }
-        currentContent = newContent;
-      } else if (!newContent && currentContent) {
-        currentContent.remove();
-        currentContent = null;
+    // ---------- 4. DOM 替换 ----------
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    // --- 主内容容器 ---
+    if (newContent && currentContent) {
+      currentContent.innerHTML = newContent.innerHTML;
+      currentContent.className = newContent.className;
+    } else if (newContent && !currentContent) {
+      const ref = currentHeaderContainer || currentHeader || currentArticleCard || currentFooter;
+      if (ref) ref.parentNode.insertBefore(newContent, ref.nextSibling);
+      else document.body.appendChild(newContent);
+      currentContent = newContent;
+    } else if (!newContent && currentContent) {
+      currentContent.remove();
+      currentContent = null;
+    }
+
+    // --- 头图容器替换（此时动画已结束） ---
+    if (newHeaderContainer) {
+      if (currentHeaderContainer) currentHeaderContainer.replaceWith(newHeaderContainer);
+      else document.body.insertBefore(newHeaderContainer, document.body.firstChild);
+      currentHeaderContainer = newHeaderContainer;
+    } else if (currentHeaderContainer) {
+      currentHeaderContainer.remove();
+      currentHeaderContainer = null;
+    }
+
+    // --- 文章头图 ---
+    if (newHeader) {
+      if (currentHeader) currentHeader.replaceWith(newHeader);
+      else document.body.insertBefore(newHeader, currentContent || currentFooter);
+      currentHeader = newHeader;
+    } else if (currentHeader) {
+      currentHeader.remove();
+      currentHeader = null;
+    }
+
+    // --- Logo ---
+    if (newLogo && currentLogo) currentLogo.innerHTML = newLogo.innerHTML;
+
+    // --- 文章卡片 ---
+    if (newArticleCard) {
+      if (currentArticleCard) currentArticleCard.replaceWith(newArticleCard);
+      else document.body.insertBefore(newArticleCard, currentContent || currentFooter);
+      currentArticleCard = newArticleCard;
+    } else if (currentArticleCard) {
+      currentArticleCard.remove();
+      currentArticleCard = null;
+    }
+
+    // --- 评论区 ---
+    if (currentCommentContent) {
+      currentCommentContent.remove();
+      currentCommentContent = null;
+    }
+    if (newCommentContent) {
+      if (currentFooter && currentFooter.parentNode) {
+        currentFooter.parentNode.insertBefore(newCommentContent, currentFooter);
+      } else {
+        document.body.appendChild(newCommentContent);
       }
+      currentCommentContent = newCommentContent;
+    }
 
-      // --- 头图容器 ---
-      if (newHeaderContainer) {
-        if (currentHeaderContainer) {
-          currentHeaderContainer.replaceWith(newHeaderContainer);
-        } else {
-          document.body.insertBefore(newHeaderContainer, document.body.firstChild);
-        }
-        currentHeaderContainer = newHeaderContainer;
-      } else if (currentHeaderContainer) {
-        currentHeaderContainer.remove();
-        currentHeaderContainer = null;
-      }
+    // --- Footer ---
+    if (newFooter) {
+      if (currentFooter) currentFooter.replaceWith(newFooter);
+      else document.body.appendChild(newFooter);
+      currentFooter = newFooter;
+    } else if (currentFooter) {
+      currentFooter.remove();
+      currentFooter = null;
+    }
 
-      // --- 文章头图 ---
-      if (newHeader) {
-        if (currentHeader) {
-          currentHeader.replaceWith(newHeader);
-        } else {
-          document.body.insertBefore(newHeader, currentContent || currentFooter);
-        }
-        currentHeader = newHeader;
-      } else if (currentHeader) {
-        currentHeader.remove();
-        currentHeader = null;
-      }
+    // --- 重新初始化 ---
+    initCodeBoxes();
+    playEnterAnimation(
+      '.content, .home-content, .card, .home-link-card, .about-card, ' +
+      '.profile-card, .article-card, .header-container, .article-header, ' +
+      '.logo, .footer, .comment-content'
+    );
+    initHitokoto(true);
+    bindLinks();
+    addRippleEffect();
+    bindSettingsTrigger();
+    Calendar.init();
+    initGiscus();
 
-      // --- Logo ---
-      if (newLogo && currentLogo) {
-        currentLogo.innerHTML = newLogo.innerHTML;
-      }
-
-      // --- 文章卡片 ---
-      if (newArticleCard) {
-        if (currentArticleCard) {
-          currentArticleCard.replaceWith(newArticleCard);
-        } else {
-          document.body.insertBefore(newArticleCard, currentContent || currentFooter);
-        }
-        currentArticleCard = newArticleCard;
-      } else if (currentArticleCard) {
-        currentArticleCard.remove();
-        currentArticleCard = null;
-      }
-
-      // ========== 评论区容器（关键修复）==========
-      if (currentCommentContent) {
-        currentCommentContent.remove();
-        currentCommentContent = null;
-      }
-
-      if (newCommentContent) {
-        // 始终插入到页脚之前，或 body 末尾
-        if (currentFooter && currentFooter.parentNode) {
-          currentFooter.parentNode.insertBefore(newCommentContent, currentFooter);
-        } else {
-          document.body.appendChild(newCommentContent);
-        }
-        currentCommentContent = newCommentContent;
-      }
-
-      // --- Footer ---
-      if (newFooter) {
-        if (currentFooter) {
-          currentFooter.replaceWith(newFooter);
-        } else {
-          document.body.appendChild(newFooter);
-        }
-        currentFooter = newFooter;
-      } else if (currentFooter) {
-        currentFooter.remove();
-        currentFooter = null;
-      }
-
-      // 重新初始化
-      initCodeBoxes();
-      playEnterAnimation('.content, .home-content, .card, .home-link-card, .about-card, .profile-card, .article-card, .header-container, .article-header, .logo, .footer, .comment-content');
-      initHitokoto(true);
-      bindLinks();
-      addRippleEffect();
-      bindSettingsTrigger();
-      Calendar.init();
-      initGiscus();
-    }, 400);
-
+    // 更新地址栏和高亮
     history.pushState(null, '', url);
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
