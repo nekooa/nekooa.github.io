@@ -778,3 +778,5 @@ function initAll() {
 window.addEventListener('popstate', () => {
   loadPage(location.pathname);
 });
+
+initAll();
