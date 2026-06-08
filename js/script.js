@@ -287,12 +287,8 @@ async function loadPage(url) {
     Calendar.init();
     initGiscus();
 
-    // 更新浏览器历史记录和侧边栏高亮
+    // 更新浏览器历史记录
     history.pushState(null, '', url);
-    document.querySelectorAll('.sidebar a').forEach(a => {
-      a.classList.remove('active');
-      if (a.getAttribute('href') === url) a.classList.add('active');
-    });
   } catch (err) {
     console.error('页面加载失败:', err);
   }
@@ -305,10 +301,34 @@ function bindLinks() {
   document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
     link.onclick = e => {
       e.preventDefault();
-      loadPage(link.getAttribute('href'));
+      const url = link.getAttribute('href');
+
+      // 1. 立刻切换所有侧边栏链接的 active 状态
+      document.querySelectorAll('.sidebar a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === url) {
+          a.classList.add('active');
+        }
+      });
+
+      // 2. 再异步加载页面内容
+      loadPage(url);
     };
   });
 }
+
+// 监听浏览器前进/后退，同步 active 状态
+window.addEventListener('popstate', () => {
+  loadPage(location.pathname);
+
+  // 前进/后退时也需要立即更新侧边栏高亮
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === location.pathname) {
+      a.classList.add('active');
+    }
+  });
+});
 
 /* =========================
    代码框组件
