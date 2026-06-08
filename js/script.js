@@ -64,37 +64,46 @@ function playEnterAnimation(selectors) {
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
+  // 第一步：清除旧类，设置内联初始状态
   elements.forEach(el => {
     el.classList.remove('fade-out', 'fade-in');
 
-    // 跳过 header-container，它有自己的 keyframe
+    // 头图容器有自己的关键帧动画，跳过内联控制
     if (el.matches('.header-container')) return;
 
-    // 计算初始 transform（保留现有水平偏移）
-    let currentTransform = window.getComputedStyle(el).transform;
-    if (currentTransform === 'none') currentTransform = '';
+    // 强制透明，覆盖任何静态 opacity: 1
+    el.style.opacity = '0';
 
+    // 设置初始 transform（下沉 15px，居中元素保留水平偏移）
     if (el.matches('.article-card, .comment-content')) {
-      // 桌面端居中卡片：保留 translateX(-50%)，垂直下沉 15px
       el.style.transform = isMobile
         ? 'translateY(15px)'
         : 'translateX(-50%) translateY(15px)';
     } else {
-      el.style.transform = currentTransform
-        ? `${currentTransform} translateY(15px)`
-        : 'translateY(15px)';
+      el.style.transform = 'translateY(15px)';
     }
   });
 
-  // 强制重排，让浏览器记录初始样式
+  // 第二步：强制重排，让浏览器记录内联样式
   void document.body.offsetWidth;
 
+  // 第三步：移除内联样式并添加 .fade-in，触发过渡
   elements.forEach(el => {
-    // 清空内联 transform，让 .fade-in 的规则起作用
+    if (el.matches('.header-container')) {
+      // 头图直接加类，走自己的 CSS 动画
+      el.classList.add('fade-in');
+      return;
+    }
+
+    // 清除内联 opacity 和 transform，让 .fade-in 的规则接管
+    el.style.opacity = '';
     el.style.transform = '';
+
+    // 添加入场类
     el.classList.add('fade-in');
   });
 }
+
 /* =========================
    SPA 页面加载
 ========================= */
