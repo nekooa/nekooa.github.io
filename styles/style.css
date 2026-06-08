@@ -667,7 +667,7 @@ body {
 
 
 
-/* 参与入场动画的元素默认不可见，且略微下沉 */
+/* 参与入场/退场的元素默认隐藏 */
 .content,
 .home-content,
 .card,
@@ -685,10 +685,16 @@ body {
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-/* 动画触发类，覆盖默认隐藏状态 */
+/* 入场最终状态 */
 .fade-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
+}
+
+/* 退场动画（与入场相反） */
+.fade-out {
+  opacity: 0 !important;
+  transform: translateY(15px) !important;
 }
 
 
