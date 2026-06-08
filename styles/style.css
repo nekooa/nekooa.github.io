@@ -708,7 +708,7 @@ body {
 }
 .header-container.fade-out {
   transition: none !important;
-  animation: heroOut 0.4s ease forwards;  animation: heroContainerOut 0.4s ease forwards !important;
+  animation: heroContainerOut 0.4s ease forwards !important;
   transform: none !important;
 }
 /* 头图容器专属退场 */
