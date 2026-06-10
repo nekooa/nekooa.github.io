@@ -1299,10 +1299,11 @@ body {
 
 .article-card img {
   display: block;
-  width: 95%;
+  margin: 0 auto !important;
+  max-width: 600px;
   max-height: 400px;
   object-fit: cover;
-  border-radius: 16px;
+  border-radius: 10px !important;
   background-color: #e0e0e0;
 }
 
