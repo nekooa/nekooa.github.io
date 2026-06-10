@@ -45,7 +45,7 @@ button, .sidebar a, .nav-link, .md3-list-item {
 }
 
 a {
-  color: var(--color-text);
+  color: var(--color-pink);
   position: relative;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
@@ -87,6 +87,10 @@ hr {
   background: var(--color-pink);
   margin: 20px 0;
   max-width: 500px;
+}
+
+p {
+  line-height: 1.5;
 }
 
 .divider {
