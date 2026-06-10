@@ -1359,9 +1359,7 @@ body {
 }
 
 hr.divider {
-  border: none;
-  height: 8px; 
-  background: radial-gradient(circle, var(--color-pink) 30%, transparent 30%) repeat-x center / 20px 8px;
+  border-top: 3px dotted  var(--color-pink);
   margin: 2em 0;
   opacity: 0.8;
   max-width: 500px;
