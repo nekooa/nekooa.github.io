@@ -2412,10 +2412,10 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 
   .article-card {
 	transform: none;
-    width: calc(100% - 30px) !important; /* 左右各 10px */
-    margin-top: -80px 10px 20px !important;   /* 上与头图重叠，下 20px */
-    left: 15px !important;
-	padding: 10px !important;
+    width: calc(100% - 12px) !important;
+    margin-top: -80px 5px 20px !important;
+    left: 6px !important;
+	padding: 25px !important;
 	max-width: none;
   }
    .article-card.fade-in {
