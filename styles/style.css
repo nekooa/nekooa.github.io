@@ -86,7 +86,7 @@ hr {
   height: 1px;
   background: var(--color-pink);
   margin: 20px 0;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 .divider {
@@ -1359,13 +1359,12 @@ body {
 }
 
 hr.divider {
-  border: none !important;
-  height: 0 !important;
-  border-top: 2px dashed var(--color-pink) !important;
-  background: transparent !important;
+  border: none;
+  height: 8px; 
+  background: radial-gradient(circle, var(--color-pink) 30%, transparent 30%) repeat-x center / 20px 8px;
   margin: 2em 0;
-  opacity: 0.7;
-  max-width: 400px;
+  opacity: 0.8;
+  max-width: 500px;
 }
 
 .to-be-continued {
