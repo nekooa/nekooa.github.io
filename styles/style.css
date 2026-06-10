@@ -84,7 +84,7 @@ html, body {
 hr {
   border: none;
   height: 1px;
-  background: var(--color-text);
+  background: var(--color-pink);
   margin: 20px 0;
 }
 
@@ -333,13 +333,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   border-color: #455a64 !important;
 }
 [data-theme="dark"] hr.divider {
-  background: linear-gradient(
-    to right,
-    transparent,
-    #f06292,
-    transparent
-  ) !important;
-  opacity: 0.5 !important;
+  opacity: 0.6;
 }
 [data-theme="dark"] .to-be-continued {
   color: #bc9aa8 !important;
@@ -420,13 +414,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   border-color: #b0bec5 !important;
 }
 [data-theme="light"] hr.divider {
-  background: linear-gradient(
-    to right,
-    transparent,
-    #f48fb1,
-    transparent
-  ) !important;
-  opacity: 0.6 !important;
+  opacity: 0.7;
 }
 [data-theme="light"] .to-be-continued {
   color: #b0a0a8 !important;
@@ -1371,10 +1359,10 @@ body {
 
 hr.divider {
   border: none;
-  height: 1px;
-  background: linear-gradient(to right, transparent, #f48fb1, transparent);
+  height: 0;
+  border-top: 2px dashed var(--color-pink);
   margin: 2em 0;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .to-be-continued {
@@ -1402,16 +1390,6 @@ hr.divider {
     color: #b0bec5;
     background: #1c2529;
     border-color: #455a64;
-  }
-
-  hr.divider {
-    background: linear-gradient(
-      to right,
-      transparent,
-      #f06292,
-      transparent
-    );
-    opacity: 0.5;
   }
 
   .to-be-continued {
