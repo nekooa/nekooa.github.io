@@ -1300,7 +1300,7 @@ body {
 .article-card img {
   display: block;
   margin: 0 auto !important;
-  max-width: 600px;
+  max-width: 95%;
   max-height: 400px;
   object-fit: cover;
   border-radius: 10px !important;
