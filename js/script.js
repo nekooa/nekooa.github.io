@@ -278,6 +278,7 @@ async function loadPage(url) {
       '.logo, .footer, .comment-content'
     );
     initHitokoto(true);
+    initImageViewer();
     bindLinks();
     addRippleEffect();
     bindSettingsTrigger();
@@ -728,6 +729,56 @@ function bindSettingsTrigger() {
 }
 
 /* =========================
+   Viewer.js 图片查看器初始化
+========================= */
+function initImageViewer() {
+  // 选择需要添加查看器的图片容器
+  const containers = document.querySelectorAll('.article-card');
+  containers.forEach(container => {
+    // 避免对同一容器重复初始化
+    if (container.dataset.viewer === 'true') return;
+    container.dataset.viewer = 'true';
+
+    // 实例化 Viewer，options 可定制
+    new Viewer(container, {
+      toolbar: {
+        zoomIn: 1,
+        zoomOut: 1,
+        oneToOne: 1,
+        reset: 1,
+        prev: 1,
+        play: 0,          // 不需要幻灯片播放
+        next: 1,
+        rotateLeft: 1,
+        rotateRight: 1,
+        flipHorizontal: 1,
+        flipVertical: 1,
+      },
+      navbar: false,      // 如果图片少，可以隐藏缩略图导航
+      title: false,       // 不显示图片标题（用 alt 替代）
+      toolbar: {
+        // 自定义工具栏，保留常用功能
+        zoomIn: true,
+        zoomOut: true,
+        reset: true,
+        prev: true,
+        next: true,
+        rotateLeft: true,
+        rotateRight: true,
+      },
+      keyboard: true,
+      tooltip: true,
+      movable: true,
+      zoomable: true,
+      rotatable: true,
+      scalable: true,
+      transition: true,
+      fullscreen: true,
+    });
+  });
+}
+
+/* =========================
    日历组件
 ========================= */
 const Calendar = {
@@ -805,7 +856,7 @@ const Calendar = {
 };
 
 /* =========================
-   初始化执行（增强首次入场动画）
+   初始化执行
 ========================= */
 function initAll() {
   bindLinks();
@@ -821,7 +872,7 @@ function initAll() {
     if (!preloader) return;
 
     const elapsed = Date.now() - pageLoadStart;        // 已经过去的时间
-    const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);  // 还需等待的时间（最少0）
+    const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);  // 还需等待的时间
 
     const doHide = () => {
       preloader.classList.add('hidden');
@@ -835,6 +886,7 @@ function initAll() {
           '.profile-card, .article-card, .header-container, .article-header, ' +
           '.logo, .footer, .comment-content'
         );
+        initImageViewer();
       }, 400); // 与 CSS 的 opacity 过渡时间一致
     };
 
