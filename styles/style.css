@@ -1297,7 +1297,7 @@ body {
   margin-top: -120px;
   margin-bottom: 40px;
   width: calc(100% - 40px);
-  max-width: 600px;
+  max-width: 900px;
   padding: 30px;
   border-radius: 20px;
   background: #F7ECF4;
@@ -2410,11 +2410,12 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
     margin: 46px 0 0 0px;
   }
 
-   .article-card {
+  .article-card {
 	transform: none;
     width: calc(100% - 30px) !important; /* 左右各 10px */
     margin-top: -80px 10px 20px !important;   /* 上与头图重叠，下 20px */
     left: 15px !important;
+	padding: 10px !important;
 	max-width: none;
   }
    .article-card.fade-in {
