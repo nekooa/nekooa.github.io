@@ -686,21 +686,21 @@ body {
   opacity: 0;
 }
 
-/* 通用入场最终状态 */
+/* 通用入场 */
 .fade-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
   transition: opacity 0.4s ease, transform 0.4s ease !important;
 }
 
-/* 通用退场状态 */
+/* 通用退场 */
 .fade-out {
   opacity: 0 !important;
   transform: translateY(15px) !important;
   transition: opacity 0.2s ease, transform 0.2s ease !important;
 }
 
-/* 头图容器不受通用动画影响，使用专属关键帧 */
+/* 头图容器专属关键帧 */
 .header-container.fade-in {
   transform: none !important;
   transition: none !important;
@@ -726,7 +726,7 @@ body {
   }
   to {
     opacity: 0;
-    transform: scale(0.95);   /* 可微调，或直接 scale(1) 只淡出 */
+    transform: scale(1);
   }
 }
 /* 头图容器退场时，内部图片同步缩放 */
@@ -734,18 +734,18 @@ body {
   animation: homeHeaderOut 0.4s ease forwards;
 }
 
-/* 您的关键帧保持不变 */
+/* 关键帧不变 */
 @keyframes homeHeaderOut {
   from { transform: scale(1.2); }
   to   { transform: scale(1.0); }
 }
-/* 针对需要水平居中的元素，保留 translateX */
+/* 针对要水平居中的元素保留 translateX */
 .article-card.fade-in,
 .comment-content.fade-in {
   transform: translateX(-50%) translateY(0) !important;
 }
 
-/* 同样为它们的退场保留水平偏移 */
+/* 保留水平偏移 */
 .article-card.fade-out,
 .comment-content.fade-out {
   transform: translateX(-50%) translateY(15px) !important;
@@ -1270,8 +1270,8 @@ body {
     头图
 ========================= */
 .article-header {
-  width: calc(100% - var(--sidebar-width) ); /* 左边留 sidebar */
-  margin: 0 0 0 var(--sidebar-width); /* 左侧留 sidebar */
+  width: calc(100% - var(--sidebar-width) );
+  margin: 0 0 0 var(--sidebar-width);
   display: block;
   object-fit: cover;
   object-position: center;
@@ -1282,7 +1282,7 @@ body {
   filter: brightness(0.9);
   mask-image: linear-gradient(to bottom, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
-  height: 65vh;
+  height: 80vh;
 }
 
 
