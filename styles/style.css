@@ -1358,9 +1358,10 @@ body {
 }
 
 hr.divider {
-  border: none;
-  height: 0;
-  border-top: 2px dashed var(--color-pink);
+  border: none !important;
+  height: 0 !important;
+  border-top: 2px dashed var(--color-pink) !important;
+  background: transparent !important;
   margin: 2em 0;
   opacity: 0.7;
 }
