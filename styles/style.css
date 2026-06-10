@@ -1359,9 +1359,9 @@ body {
 }
 
 hr.divider {
-  border-top: 3px dotted  var(--color-pink);
-  margin: 2em 0;
-  opacity: 0.8;
+  border-top: 3px dotted  var(--color-pink) !important;
+  margin: 2em 0 !important;
+  opacity: 0.8 !important;
   max-width: 500px;
 }
 
