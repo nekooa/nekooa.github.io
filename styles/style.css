@@ -45,7 +45,7 @@ button, .sidebar a, .nav-link, .md3-list-item {
 }
 
 a {
-  color: var(--color-pink);
+  color: var(--color-text);
   position: relative;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
