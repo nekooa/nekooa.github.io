@@ -45,20 +45,20 @@
 <p>说人话就是一个白嫖 CloudFlare 的边缘计算来搭建梯子订阅的项目，支持 VLESS Trojan Shadowsocks 三种协议</p>
 <hr>
 <h3>一、准备工作</h3>
-<h4>1. 注册并登录 CloudFlare 账号</h4>
+<div class="divider"><span>1. 注册并登录 CloudFlare 账号</span></div>
 <p>就算没有听说过 CloudFlare，你也肯定见过下面这个东西：</p>
 <img src="cf.jpg">
 <p>这就是 CloudFlare 提供的人机验证服务，但 CloudFlare 提供的服务可远不止于此，CF还提供CDN、安全防护等服务。我们今天便要用到其中的 CloudFlare Pages 和 CloudFlare Workers。</p>
 <p>打开<a href="https://dash.cloudflare.com" class="a"> CloudFlare 官网</a>，注册并登录。</p>
 <hr class="dot">
-<h4>2. 注册并登录 ClouDNS 账号</h4>
+<div class="divider"><span>2. 注册并登录 ClouDNS 账号</span></div>
 <p>ClouDNS 是一家专业DNS托管服务提供商，它的核心业务就是管理域名系统（DNS），我们等会需要用它免费注册一个<strong>CNAME域名</strong>来用。</p>
 <a href="https://www.cloudns.net/" class="a">ClouDNS 官网</a>
 <br>
 <hr>
 <br>
 <h3>二、开始部署！</h3>
-<h4>1. 创建 Pages 应用程序</h4>
+<div class="divider"><span>1. 创建 Pages 应用程序</span></div>
 <p>① 点击 <a href="https://pages.cloudflare.com/direct-upload-demo.zip" class="a">direct-upload-demo.zip</a> 下载 Cloudflare Pages 演示项目压缩包备用；</p>
 <p>② 进入 <a href="https://dash.cloudflare.com" class="a">CloudFlare 官网</a>，点击侧边栏中 <strong>计算</strong> > <strong>Workers 和 Pages</strong> > <strong>创建应用程序</strong> ；</p>
 <img src="cfpages.png">
@@ -79,7 +79,7 @@
 <p>⑥ 点击 <strong>部署站点</strong>，等待部署完成；</p>
 <p>⑦ 提示成功，代表初始化部署完成！</p>
 <hr class="dot">
-<h4>2. 设置管理员变量</h4>
+<div class="divider"><span>2. 设置管理员变量</span></div>
 <p>① 进入项目设置页面，点击 <strong>设置</strong> 选项卡，添加变量和密钥：</p>
 <img src="pages4.png">
 <br>
@@ -88,7 +88,7 @@
 <br>
 <p>③ 变量即可设置完成，如忘记密码可返回此页面查看</p>
 <hr class="dot">
-<h4>3. 绑定 KV 命名空间</h4>
+<div class="divider"><span>3. 绑定 KV 命名空间</span></div>
 <p>① 点击侧边栏中 <strong>存储和数据库</strong> > <Strong>Workers KV</Strong> > <strong>+Create Instance</strong> 创建一个命名空间；</p>
 <img src="pages6.png">
 <br>
@@ -99,7 +99,7 @@
 <p>④ 变量名称必须填写大写 KV ，命名空间选择刚刚创建的 <strong>EDT2</strong>，点击 <strong>保存</strong> 完成绑定；</p>
 <p>⑤ 返回项目设置页面，确认绑定成功；</p>
 <hr class="dot">
-<h4>4. 重试部署，使其变量生效！</h4>
+<div class="divider"><span>4. 重试部署，使其变量生效！</span></div>
 <p>① 点击 <a href="https://github.com/cmliu/edgetunnel/archive/refs/heads/main.zip" class="a">edgetunnel-main.zip</a> 下载最新版本项目压缩包备用；</p>
 <p>② 点击右上角 <strong>创建部署</strong> ，上传上一步刚刚下载的 <strong>edgetunnel-main.zip</strong> 压缩包；</p>
 <img src="pages8.png">
@@ -110,7 +110,7 @@
 <p>④ 点击 保存并部署，等待部署完成；</p>
 <p class="thoughts"><strong class="a">注意！</strong>如需修改管理员密码，修改完变量之后必须重新上传部署，否则变量无法生效！</p>
 <hr class="dot">
-<h4>5. 注册 自定义域名</h4>
+<div class="divider"><span>5. 注册 自定义域名</span></div>
 <p>① 我们在 <strong>一、准备工作</strong> 中已经登录好了 ClouDNS 账号，现在进入 <a href="https://www.cloudns.net/" class="a">ClouDNS 官网</a></p>
 <p>② 选择 <strong>创建区域</strong> > <strong>免费区域</strong></p>
 <img src="dns.png">
@@ -127,7 +127,7 @@
 <br>
 <p>⑥ 点击 <strong>更新</strong> ，几分钟后，解析就会自动生效！</p>
 <hr class="dot">
-<h4>6. 绑定 自定义域名</h4>
+<div class="divider"><span>6. 绑定 自定义域名</span></div>
 <p>① 进入 Pages 应用程序，点击 <strong>自定义域</strong> 选项卡，点击 <strong>设置自定义域</strong> ；</p>
 <img src="pages10.png">
 <br>
