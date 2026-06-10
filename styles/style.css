@@ -86,6 +86,7 @@ hr {
   height: 1px;
   background: var(--color-pink);
   margin: 20px 0;
+  max-width: 400px;
 }
 
 .divider {
@@ -1364,6 +1365,7 @@ hr.divider {
   background: transparent !important;
   margin: 2em 0;
   opacity: 0.7;
+  max-width: 400px;
 }
 
 .to-be-continued {
