@@ -333,7 +333,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   background: #1c2529 !important;
   border-color: #455a64 !important;
 }
-[data-theme="dark"] hr.divider {
+[data-theme="dark"] hr.dot {
   opacity: 0.6;
 }
 [data-theme="dark"] .to-be-continued {
@@ -414,7 +414,7 @@ background: no-repeat center / contain url("data:image/svg+xml;utf8,\
   background: #f0f3f5 !important;
   border-color: #b0bec5 !important;
 }
-[data-theme="light"] hr.divider {
+[data-theme="light"] hr.dot {
   opacity: 0.7;
 }
 [data-theme="light"] .to-be-continued {
@@ -1358,7 +1358,7 @@ body {
   letter-spacing: 0.02em;
 }
 
-hr.divider {
+hr.dot {
   border-top: 3px dotted  var(--color-pink) !important;
   background: none !important;
   margin: 2em 0 !important;
