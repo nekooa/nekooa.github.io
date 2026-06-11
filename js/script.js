@@ -284,7 +284,7 @@ async function loadPage(url) {
     playEnterAnimation(
       '.content, .home-content, .card, .home-link-card, .about-card, ' +
       '.profile-card, .article-card, .header-container, .article-header, ' +
-      '.logo, .footer, .comment-content'
+      '.logo, .settings-button-m, .footer, .comment-content'
     );
     initHitokoto(true);
     initImageViewer();
@@ -893,7 +893,7 @@ function initAll() {
         playEnterAnimation(
           '.content, .home-content, .card, .home-link-card, .about-card, ' +
           '.profile-card, .article-card, .header-container, .article-header, ' +
-          '.logo, .footer, .comment-content'
+          '.logo, .settings-button-m, .footer, .comment-content'
         );
         initImageViewer();
       }, 400); // 与 CSS 的 opacity 过渡时间一致
