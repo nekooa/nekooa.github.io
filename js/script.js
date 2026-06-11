@@ -498,11 +498,11 @@ function addRippleEffect() {
 }
 
 /* =========================
-   一言 API（修复闪烁版）
+   一言 API
 ========================= */
 let hitokotoCache = null;
 let hitokotoCacheTime = 0;
-const HITOKOTO_CACHE_DURATION = 5 * 60 * 1000; // 5 分钟缓存
+const HITOKOTO_CACHE_DURATION = 3 * 1000; // 30 秒缓存
 
 function applyHitokoto(data) {
   const mainText = document.getElementById('hitokoto_text');
