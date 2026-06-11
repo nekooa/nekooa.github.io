@@ -11,6 +11,7 @@ var pageLoadStart = Date.now();   // 记录脚本开始执行的时刻
   ';
   document.body.insertBefore(preloader, document.body.firstChild);
 })();
+
 /* =========================
    全局变量与初始化
 ========================= */
@@ -74,12 +75,17 @@ function playEnterAnimation(selectors) {
     // 强制透明，覆盖任何静态 opacity: 1
     el.style.opacity = '0';
 
-    // 设置初始 transform（下沉 15px，居中元素保留水平偏移）
-    if (el.matches('.article-card, .comment-content')) {
+    // 设置初始 transform
+    if (el.matches('.logo')) {
+      // logo 从左侧滑入
+      el.style.transform = 'translateX(-20px)';
+    } else if (el.matches('.article-card, .comment-content')) {
+      // 文章卡片和评论区保持水平居中并下沉
       el.style.transform = isMobile
         ? 'translateY(15px)'
         : 'translateX(-50%) translateY(15px)';
     } else {
+      // 其他元素统一下沉
       el.style.transform = 'translateY(15px)';
     }
   });
