@@ -81,7 +81,7 @@ function playEnterAnimation(selectors) {
       el.style.transform = 'translateX(-20px)';
     } else if (el.matches('.settings-button-m')) {
       // 右侧滑入（方向相反）
-      el.style.transform = 'translateX(30px)';
+      el.style.transform = 'translateX(20px)';
     } else if (el.matches('.article-card, .comment-content')) {
       // 文章卡片和评论区保持水平居中并下沉
       el.style.transform = isMobile
