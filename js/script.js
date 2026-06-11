@@ -125,6 +125,7 @@ async function loadPage(url) {
 
     let newContent = doc.querySelector('.home-content') || doc.querySelector('.content');
     const newLogo = doc.querySelector('.logo');
+    const newSettingsBtn = doc.querySelector('.settings-button-m');
     const newHeaderContainer = doc.querySelector('.header-container');
     const newHeader = doc.querySelector('.article-header');
     const newArticleCard = doc.querySelector('.article-card');
@@ -241,6 +242,20 @@ async function loadPage(url) {
       currentLogo.innerHTML = newLogo.innerHTML;
     }
 
+    // --- 设置按钮 ---
+    if (newSettingsBtn) {
+      if (currentSettingsBtn) {
+        currentSettingsBtn.replaceWith(newSettingsBtn);
+      } else {
+        const navbar = document.querySelector('.navbar');
+        if (navbar) navbar.appendChild(newSettingsBtn);
+      }
+      currentSettingsBtn = newSettingsBtn; // 更新引用
+    } else if (currentSettingsBtn) {
+      currentSettingsBtn.remove();
+      currentSettingsBtn = null;
+    }
+    
     // --- 文章卡片 ---
     if (newArticleCard) {
       if (currentArticleCard) {
