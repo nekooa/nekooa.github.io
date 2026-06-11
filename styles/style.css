@@ -8,7 +8,6 @@
   --sidebar-gap: 18px;
   --blur: blur(20px);
   --transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-  /* 颜色 */
   --color-bg: #FFFBFF;
   --color-text: #3d3d3d;
   --color-white: #ffffff;
@@ -751,6 +750,20 @@ body {
 /* logo 专属退场 */
 .logo.fade-out {
   transform: translateX(-20px) !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+/* 设置按钮：从右侧滑入 + 淡入 */
+.settings-button-m.fade-in {
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
+}
+
+/* 设置按钮：向右滑出 + 淡出 */
+.settings-button-m.fade-out {
+  transform: translateX(20px) !important;
   opacity: 0 !important;
   transition: opacity 0.2s ease, transform 0.2s ease !important;
 }
