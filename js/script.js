@@ -149,6 +149,7 @@ async function loadPage(url) {
     const outElements = [
       currentContent,
       currentLogo,
+      currentSettingsBtn,
       currentHeader,
       currentArticleCard,
       currentFooter,
