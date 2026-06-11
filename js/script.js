@@ -57,7 +57,7 @@ const ThemeManager = {
 ThemeManager.init();
 
 /* =========================
-   统一动画执行
+   动画执行
 ========================= */
 function playEnterAnimation(selectors) {
   const elements = document.querySelectorAll(selectors);
@@ -77,8 +77,11 @@ function playEnterAnimation(selectors) {
 
     // 设置初始 transform
     if (el.matches('.logo')) {
-      // logo 从左侧滑入
-      el.style.transform = 'translateX(-20px)';
+      // 左侧滑入
+      el.style.transform = 'translateX(-30px)';
+    } else if (el.matches('.settings-button-m')) {
+      // 右侧滑入（方向相反）
+      el.style.transform = 'translateX(30px)';
     } else if (el.matches('.article-card, .comment-content')) {
       // 文章卡片和评论区保持水平居中并下沉
       el.style.transform = isMobile
