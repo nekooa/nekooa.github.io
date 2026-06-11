@@ -138,6 +138,7 @@ async function loadPage(url) {
 
     const currentLogo = document.querySelector('.logo');
     let currentContent = document.querySelector('.home-content') || document.querySelector('.content');
+    const currentSettingsBtn = document.querySelector('.settings-button-m');
     let currentHeaderContainer = document.querySelector('.header-container');
     let currentHeader = document.querySelector('.article-header');
     let currentArticleCard = document.querySelector('.article-card');
@@ -148,7 +149,8 @@ async function loadPage(url) {
     const outElements = [
       currentContent,
       currentLogo,
-      currentHeader,            // 文章头图（非首页容器）
+      currentSettingsBtn,  
+      currentHeader,
       currentArticleCard,
       currentFooter,
       currentCommentContent,
