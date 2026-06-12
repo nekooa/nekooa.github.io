@@ -298,6 +298,14 @@ async function loadPage(url) {
 
     // 更新浏览器历史记录
     history.pushState(null, '', url);
+    
+    // 更新侧边栏 active 状态
+    document.querySelectorAll('.sidebar a').forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === url) {
+        a.classList.add('active');
+      }
+    });
   } catch (err) {
     console.error('页面加载失败:', err);
   }
@@ -916,7 +924,7 @@ function initAll() {
   }
 }
 
-// 监听 popstate
+// 监听浏览器前进/后退，交给 loadPage 内部更新 active
 window.addEventListener('popstate', () => {
   loadPage(location.pathname);
 });
