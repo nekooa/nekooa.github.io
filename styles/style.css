@@ -2145,71 +2145,38 @@ code-box {
     flex-direction: row;
     justify-content: center;
     backdrop-filter: var(--blur);
-    -webkit-backdrop-filter: var(--blur);
     background: var(--sidebar-bg-mobile);
     box-shadow: var(--sidebar-shadow-mobile);
   }
 
-  .sidebar a:hover {
-    background: transparent;
-  }
-
-  .sidebar ul {
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
-    align-items: stretch;      /* 保证 li 高度一致 */
-    margin: 0;
-    padding: 0;
-  }
-
-  .sidebar ul li {
-    position: relative;        /* 为文本绝对定位提供参考 */
-    flex: 1;                   /* 等分宽度 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;   /* 图标上下居中 */
-    gap: 0 !important;         /* 移除多余间隙，由绝对定位文本自行控制 */
-  }
-
+  .sidebar a:hover { background: transparent; }
+  .sidebar ul { flex-direction: row; width: 100%; justify-content: space-around; }
+  .sidebar ul li { gap: 4px 10px !important; }
   .sidebar a {
-    flex: none;                /* 不再撑开，图标按内容大小显示 */
-    position: relative;
-    z-index: 1;
-    transition: transform 0.3s ease;
-    /* 重置桌面端尺寸 */
-    width: auto;
-    height: auto;
-    min-height: unset;
-    border-radius: 22px;       /* 保持涟漪背景 */
+    flex: 1;
+    transition: transform 0.3s ease; /* 为图标上移动画做准备 */
   }
 
   /* 选中图标上移 4px */
   .sidebar a.active {
     transform: translateY(-4px);
   }
-
-  /* 文本默认：绝对定位，不占空间，透明，居中对齐 */
+	
+ /* 文本默认隐藏（透明 + 不可见），保留占位空间 */
   .sidebar-text {
-    position: absolute;
-    bottom: 2px;               /* 距离底部导航栏边缘的距离，可微调 */
-    left: 50%;
-    transform: translateX(-50%) translateY(4px);
     opacity: 0;
+    transform: translateY(4px);
     transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-    white-space: nowrap;
-    font-size: 0.7rem;         /* 与桌面端字号一致 */
-    color: var(--color-svg);
+    pointer-events: none;          /* 避免透明时误触 */
+    margin-top: 2px;               /* 微调间距，可根据需要增减 */
   }
 
-  /* 选中项文本渐显并上浮归位 */
+  /* 选中项文本渐显并回到原位 */
   .sidebar a.active + .sidebar-text {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
     pointer-events: auto;
-    font-weight: bold;
+    font-weight: bold;             /* 可选，增强选中状态 */
   }
 	
   .content {
