@@ -2154,6 +2154,13 @@ code-box {
   .sidebar ul li { gap: 4px 10px !important; }
   .sidebar a { flex: 1; }
 
+.sidebar-text {
+  display: none;
+}
+.sidebar a.active + .sidebar-text {
+  display: block;
+}
+	
   .content {
     padding-left: 20px;
     padding-right: 20px;
