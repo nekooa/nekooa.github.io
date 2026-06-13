@@ -2160,33 +2160,32 @@ code-box {
   }
 
   .sidebar ul li {
-    position: relative;          /* 为文本绝对定位提供参考 */
-    flex: 1;                    /* 使每个导航项等宽 */
+    position: relative;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;    /* 垂直居中 */
+    justify-content: center;
   }
 
   .sidebar a {
-    flex: none;                 /* 不再让链接撑开，改为内容高度 */
+    flex: none;
 	height: 20px;
     transition: transform 0.3s ease;
     position: relative;
-    z-index: 1;                 /* 确保图标在文本上方 */
+    z-index: 1;
   }
 
-  /* 选中时图标上移 */
+  /* 选中图标上移 */
   .sidebar a.active {
-    transform: translateY(-6px);
+    transform: translateY(-8px);
   }
 
-  /* 文本默认：绝对定位，不占空间，透明 */
   .sidebar-text {
     position: absolute;
-    bottom: -12px;              /* 向下偏移，避免与图标重叠 */
+    bottom: -12px;
     left: 50%;
-    transform: translateX(-50%) translateY(6px);
+    transform: translateX(-50%) translateY(8px);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
@@ -2194,7 +2193,6 @@ code-box {
     font-size: 0.7rem;
   }
 
-  /* 选中时文本渐显并上浮归位 */
   .sidebar a.active + .sidebar-text {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
