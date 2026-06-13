@@ -2170,6 +2170,7 @@ code-box {
 
   .sidebar a {
     flex: none;                 /* 不再让链接撑开，改为内容高度 */
+	height: 20px;
     transition: transform 0.3s ease;
     position: relative;
     z-index: 1;                 /* 确保图标在文本上方 */
