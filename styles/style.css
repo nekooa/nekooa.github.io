@@ -2152,14 +2152,32 @@ code-box {
   .sidebar a:hover { background: transparent; }
   .sidebar ul { flex-direction: row; width: 100%; justify-content: space-around; }
   .sidebar ul li { gap: 4px 10px !important; }
-  .sidebar a { flex: 1; }
+  .sidebar a {
+    flex: 1;
+    transition: transform 0.3s ease; /* 为图标上移动画做准备 */
+  }
 
-.sidebar-text {
-  display: none;
-}
-.sidebar a.active + .sidebar-text {
-  display: block;
-}
+  /* 选中图标上移 4px */
+  .sidebar a.active {
+    transform: translateY(-4px);
+  }
+	
+ /* 文本默认隐藏（透明 + 不可见），保留占位空间 */
+  .sidebar-text {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;          /* 避免透明时误触 */
+    margin-top: 2px;               /* 微调间距，可根据需要增减 */
+  }
+
+  /* 选中项文本渐显并回到原位 */
+  .sidebar a.active + .sidebar-text {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    font-weight: bold;             /* 可选，增强选中状态 */
+  }
 	
   .content {
     padding-left: 20px;
