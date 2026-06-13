@@ -794,6 +794,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+	overflow: hidden;
   }
 }
 
@@ -1398,6 +1399,7 @@ hr.dot {
   margin: 0 auto 30px auto;
   max-width: 800px;
   transition: 0.4s;
+  overflow: hidden; 
 }
 
 .profile-card.fade-in {
@@ -1528,6 +1530,7 @@ hr.dot {
   flex-direction: column;
   justify-content: center;
   transition: var(--transition);
+  overflow: hidden; 
 }
 
 .card-title {
@@ -2248,6 +2251,7 @@ code-box {
     margin: 0 auto 0 auto;
     box-sizing: border-box;
     padding: 12px 12px;
+	overflow: hidden; 
   }
 
   .header-container {
