@@ -2145,28 +2145,50 @@ code-box {
     flex-direction: row;
     justify-content: center;
     backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
     background: var(--sidebar-bg-mobile);
     box-shadow: var(--sidebar-shadow-mobile);
   }
 
-  .sidebar a:hover { background: transparent; }
-  .sidebar ul { flex-direction: row; width: 100%; justify-content: space-around; }
+  .sidebar a:hover {
+    background: transparent;
+  }
+
+  .sidebar ul {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+  }
+
   .sidebar ul li {
-    position: relative;          /* 为文本绝对定位提供参考 */
-    flex: 1;                    /* 使每个导航项等宽 */
+    position: relative;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;    /* 垂直居中 */
-  }
-  .sidebar a {
-    flex: none;                 /* 不再让链接撑开，改为内容高度 */
-    transition: transform 0.3s ease;
-    position: relative;
-    z-index: 1;                 /* 确保图标在文本上方 */
+    justify-content: center;
+    gap: 0 !important;
+    overflow: visible;
   }
 
-  /* 选中时图标上移 */
+  .sidebar a {
+    flex: none;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+    width: auto;
+    height: auto;
+    min-height: unset;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 选中图标上移 4px */
   .sidebar a.active {
     transform: translateY(-4px);
   }
@@ -2174,14 +2196,15 @@ code-box {
   /* 文本默认：绝对定位，不占空间，透明 */
   .sidebar-text {
     position: absolute;
-    bottom: 2px;                /* 可根据设计调整文本距离底部的距离 */
+    bottom: -2px;                /* 微调：让文字完全位于底部导航栏边缘下方，不被遮挡 */
     left: 50%;
     transform: translateX(-50%) translateY(4px);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
-    white-space: nowrap;        /* 防止文本换行 */
-    font-size: 0.7rem;          /* 与你的现有字号一致 */
+    white-space: nowrap;
+    font-size: 0.65rem;          /* 稍微缩小，避免重叠 */
+    color: var(--color-svg);
   }
 
   /* 选中时文本渐显并上浮归位 */
@@ -2190,7 +2213,6 @@ code-box {
     transform: translateX(-50%) translateY(0);
     pointer-events: auto;
     font-weight: bold;
-    /* 这里可保留之前的加粗效果 */
   }
 	
   .content {
