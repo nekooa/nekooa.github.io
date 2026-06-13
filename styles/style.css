@@ -2177,7 +2177,7 @@ code-box {
 
   /* 选中时图标上移 */
   .sidebar a.active {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
   }
 
   /* 文本默认：绝对定位，不占空间，透明 */
@@ -2185,7 +2185,7 @@ code-box {
     position: absolute;
     bottom: -12px;              /* 向下偏移，避免与图标重叠 */
     left: 50%;
-    transform: translateX(-50%) translateY(4px);
+    transform: translateX(-50%) translateY(6px);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
