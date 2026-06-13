@@ -2194,7 +2194,7 @@ code-box {
   .article-card {
     transform: none;
     width: calc(100% - 12px) !important;
-    margin: -80px 5px 20px !important;
+    margin-top: -80px !important;
     left: 6px !important;
     padding: 25px !important;
     max-width: none;
