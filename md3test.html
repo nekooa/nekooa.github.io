@@ -41,28 +41,6 @@
   <mdui-checkbox>Checkbox</mdui-checkbox>
   <mdui-chip icon="search">Icon</mdui-chip>
   <mdui-chip end-icon="arrow_forward">End Icon</mdui-chip>
-  <mdui-chip>
-    Slot
-    <mdui-icon slot="icon" name="downloading"></mdui-icon>
-    <mdui-icon slot="end-icon" name="attach_file"></mdui-icon>
-  </mdui-chip>
-  <mdui-circular-progress></mdui-circular-progress>
-  <mdui-list>
-    <mdui-collapse accordion>
-      <mdui-collapse-item>
-        <mdui-list-item slot="header" icon="near_me">Item 1</mdui-list-item>
-        <div style="margin-left: 2.5rem">
-         <mdui-list-item>Item 1 - subitem</mdui-list-item>
-        </div>
-      </mdui-collapse-item>
-      <mdui-collapse-item>
-        <mdui-list-item slot="header" icon="near_me">Item 2</mdui-list-item>
-        <div style="margin-left: 2.5rem">
-          <mdui-list-item>Item 2 - subitem</mdui-list-item>
-        </div>
-      </mdui-collapse-item>
-    </mdui-collapse>
-  </mdui-list>
   <mdui-dialog
     icon="restart_alt"
     close-on-overlay-click
@@ -84,6 +62,12 @@
     </mdui-menu>
   </mdui-dropdown>
   <mdui-linear-progress></mdui-linear-progress>
+  <mdui-navigation-bar value="item-1" style="position: relative">
+  <mdui-navigation-bar-item icon="place" value="item-1">Item 1</mdui-navigation-bar-item>
+  <mdui-navigation-bar-item icon="commute" value="item-2">Item 2</mdui-navigation-bar-item>
+  <mdui-navigation-bar-item icon="directions_railway" value="item-3">Item 3</mdui-navigation-bar-item>
+  <mdui-navigation-bar-item icon="people" value="item-4">Item 4</mdui-navigation-bar-item>
+</mdui-navigation-bar>
 </div>
 
 
