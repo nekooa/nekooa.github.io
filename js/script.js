@@ -113,10 +113,7 @@ function playEnterAnimation(selectors) {
   });
 }
 
-/* =========================
-   SPA 页面加载
-========================= */
-async function loadPage(url) {
+async function loadPage(url, addToHistory = true) {
   try {
     const res = await fetch(url);
     const text = await res.text();
@@ -161,10 +158,9 @@ async function loadPage(url) {
       el.classList.add('fade-out');
     });
 
-    // ---------- 2. 头图专属退场动画（使用 hero-out 类）----------
+    // ---------- 2. 头图专属退场动画 ----------
     const heroOutPromise = new Promise(resolve => {
       if (currentHeaderContainer) {
-        // 清除可能干扰的类，添加专属退场类
         currentHeaderContainer.classList.remove('fade-in', 'fade-out');
         currentHeaderContainer.classList.add('hero-out');
 
@@ -175,17 +171,13 @@ async function loadPage(url) {
         };
         currentHeaderContainer.addEventListener('animationend', onAnimationEnd, { once: true });
 
-        // 安全兜底：0.5 秒后强制继续（避免事件丢失）
-        setTimeout(resolve, 500);
+        setTimeout(resolve, 500); // 安全兜底
       } else {
         resolve();
       }
     });
 
-    // 等待头图动画结束（其他元素退场动画约 0.2s，此时也已结束）
     await heroOutPromise;
-
-    // 如果没有头图，额外等待 250ms 确保其他元素退场完成
     if (!currentHeaderContainer) {
       await new Promise(resolve => setTimeout(resolve, 250));
     }
@@ -199,7 +191,7 @@ async function loadPage(url) {
       currentContent.className = newContent.className;
     } else if (newContent && !currentContent) {
       const ref = currentHeaderContainer || currentHeader || currentArticleCard || currentFooter;
-      if (ref) {
+      if (ref && ref.parentNode) {
         ref.parentNode.insertBefore(newContent, ref.nextSibling);
       } else {
         document.body.appendChild(newContent);
@@ -210,17 +202,22 @@ async function loadPage(url) {
       currentContent = null;
     }
 
-    // --- 头图容器 ---
-    if (newHeaderContainer) {
+    // --- 头图容器（避免重复：先清除旧头图，再插入新头图）---
+    if (currentHeaderContainer && !newHeaderContainer) {
+      currentHeaderContainer.remove();
+      currentHeaderContainer = null;
+    } else if (newHeaderContainer) {
+      // 确保页面中只有一个头图容器
+      const oldHeader = document.querySelector('.header-container');
+      if (oldHeader && oldHeader !== currentHeaderContainer) {
+        oldHeader.remove();
+      }
       if (currentHeaderContainer) {
         currentHeaderContainer.replaceWith(newHeaderContainer);
       } else {
         document.body.insertBefore(newHeaderContainer, document.body.firstChild);
       }
       currentHeaderContainer = newHeaderContainer;
-    } else if (currentHeaderContainer) {
-      currentHeaderContainer.remove();
-      currentHeaderContainer = null;
     }
 
     // --- 文章头图 ---
@@ -240,7 +237,7 @@ async function loadPage(url) {
     if (newLogo && currentLogo) {
       currentLogo.innerHTML = newLogo.innerHTML;
     }
-    
+
     // --- 文章卡片 ---
     if (newArticleCard) {
       if (currentArticleCard) {
@@ -296,13 +293,20 @@ async function loadPage(url) {
     Calendar.init();
     initGiscus();
 
-    // 更新浏览器历史记录
-    history.pushState(null, '', url);
-    
+    if (addToHistory) {
+      history.pushState(null, '', url);
+    }
+
     // 更新侧边栏 active 状态
+    const currentPath = location.pathname;
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
-      if (a.getAttribute('href') === url) {
+      const href = a.getAttribute('href');
+      if (
+        href === currentPath ||
+        href === currentPath.replace(/^\//, '') ||
+        (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html'))
+      ) {
         a.classList.add('active');
       }
     });
@@ -315,17 +319,28 @@ async function loadPage(url) {
    链接绑定
 ========================= */
 function bindLinks() {
-  let activeTimer = null; // 存储延迟定时器
+  let activeTimer = null;
+
+  // 辅助函数：判断两个路径是否指向同一页面
+  const isSamePage = (url1, url2) => {
+    const normalize = (path) => {
+      if (path === '/' || path === '/index.html') return 'index.html';
+      return path.replace(/^\//, ''); // 去掉开头的 /
+    };
+    return normalize(url1) === normalize(url2);
+  };
 
   document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
     link.onclick = e => {
       e.preventDefault();
       const url = link.getAttribute('href');
 
-      // 清除之前的定时器，防止快速点击导致状态混乱
-      clearTimeout(activeTimer);
+      // 如果目标页面就是当前页面，不做任何操作
+      if (isSamePage(url, location.pathname)) {
+        return;
+      }
 
-      // 0.1 秒后更新高亮
+      clearTimeout(activeTimer);
       activeTimer = setTimeout(() => {
         document.querySelectorAll('.sidebar a').forEach(a => {
           a.classList.remove('active');
@@ -335,23 +350,10 @@ function bindLinks() {
         });
       }, 300);
 
-      // 异步加载页面
       loadPage(url);
     };
   });
 }
-
-// 监听浏览器前进/后退时，立即更新 active（不需要延迟）
-window.addEventListener('popstate', () => {
-  loadPage(location.pathname);
-
-  document.querySelectorAll('.sidebar a').forEach(a => {
-    a.classList.remove('active');
-    if (a.getAttribute('href') === location.pathname) {
-      a.classList.add('active');
-    }
-  });
-});
 
 /* =========================
    代码框组件
@@ -926,7 +928,7 @@ function initAll() {
 
 // 监听浏览器前进/后退，交给 loadPage 内部更新 active
 window.addEventListener('popstate', () => {
-  loadPage(location.pathname);
+  loadPage(location.pathname, false);   // ← 传入 false 避免重复 pushState
 });
 
 initAll();
