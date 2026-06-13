@@ -1862,7 +1862,7 @@ code-box {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  /* 使用变量或 data URI 仍按主题切换 */
+
   background: no-repeat center / contain url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23352f31' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'>\
 <polyline points='9 6 15 12 9 18'/>\
@@ -1891,7 +1891,6 @@ code-box {
   font-size: 0.95rem;
 }
 
-/* 深色箭头（仍保留硬编码 data URI） */
 @media (prefers-color-scheme: dark) {
   .home-link-card::after {
     background: no-repeat center / contain url("data:image/svg+xml;utf8,\
@@ -1930,7 +1929,7 @@ code-box {
     color: var(--color-text);
     background-color: var(--color-bg);
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    border-radius: 18px;
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
     position: relative;
@@ -1957,15 +1956,15 @@ code-box {
     -webkit-mask-size: 12px 8px;
   }
 
-  .ui-select:open { border-color: var(--color-pink); border-radius: 8px 8px 0 0; }
-  .ui-select.reverse:open { border-radius: 0 0 8px 8px; }
+  .ui-select:open { border-color: var(--color-pink); border-radius: 18px 18px 0 0; }
+  .ui-select.reverse:open { border-radius: 0 0 18px 18px; }
 
   .ui-select::picker(select) {
     padding: 8px 0;
     background: var(--color-bg);
     border: 1px solid var(--color-pink);
     border-top: none;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 18px 18px;
     box-shadow: var(--shadow);
     max-height: 306px;
     overflow: auto;
@@ -1984,7 +1983,7 @@ code-box {
     bottom: calc(anchor(top) - 1px);
     border-top: 1px solid var(--color-pink);
     border-bottom: none;
-    border-radius: 8px 8px 0 0;
+    border-radius: 18px 18px 0 0;
     transform-origin: bottom center;
   }
 
