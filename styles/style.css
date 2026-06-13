@@ -1396,7 +1396,7 @@ hr.dot {
   background: var(--profile-card-bg);
   border-radius: 16px;
   padding: 20px;
-  margin: 0 auto 30px auto;
+  margin: 0 auto 0 auto;
   max-width: 800px;
   transition: 0.4s;
   overflow: hidden; 
@@ -1820,18 +1820,16 @@ code-box {
    右侧链接卡片
 ========================= */
 .home-right-cards {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
   gap: 20px;
-  height: 100%;
   min-width: 200px;
   max-width: 300px;
+  align-self: stretch;
 }
 
 .home-link-card {
-  position: relative;
   display: flex;
-  flex: 1 1 0;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
