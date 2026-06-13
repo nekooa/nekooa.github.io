@@ -2151,32 +2151,46 @@ code-box {
 
   .sidebar a:hover { background: transparent; }
   .sidebar ul { flex-direction: row; width: 100%; justify-content: space-around; }
-  .sidebar ul li { gap: 4px 10px !important; }
+  .sidebar ul li {
+    position: relative;          /* 为文本绝对定位提供参考 */
+    flex: 1;                    /* 使每个导航项等宽 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;    /* 垂直居中 */
+  }
   .sidebar a {
-    flex: 1;
-    transition: transform 0.3s ease; /* 为图标上移动画做准备 */
+    flex: none;                 /* 不再让链接撑开，改为内容高度 */
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;                 /* 确保图标在文本上方 */
   }
 
-  /* 选中图标上移 4px */
+  /* 选中时图标上移 */
   .sidebar a.active {
     transform: translateY(-4px);
   }
-	
- /* 文本默认隐藏（透明 + 不可见），保留占位空间 */
+
+  /* 文本默认：绝对定位，不占空间，透明 */
   .sidebar-text {
+    position: absolute;
+    bottom: 2px;                /* 可根据设计调整文本距离底部的距离 */
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
     opacity: 0;
-    transform: translateY(4px);
     transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;          /* 避免透明时误触 */
-    margin-top: 2px;               /* 微调间距，可根据需要增减 */
+    pointer-events: none;
+    white-space: nowrap;        /* 防止文本换行 */
+    font-size: 0.7rem;          /* 与你的现有字号一致 */
   }
 
-  /* 选中项文本渐显并回到原位 */
+  /* 选中时文本渐显并上浮归位 */
   .sidebar a.active + .sidebar-text {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
     pointer-events: auto;
-    font-weight: bold;             /* 可选，增强选中状态 */
+    font-weight: bold;
+    /* 这里可保留之前的加粗效果 */
   }
 	
   .content {
