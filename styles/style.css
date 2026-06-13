@@ -22,7 +22,7 @@
   --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.1);
 
   /* 卡片背景 */
-  --card-bg: #F7ECF4;                /* 文章卡片默认背景 */
+  --card-bg: #F7ECF4;
   --content-card-bg: rgb(250, 242, 248);
   --profile-card-bg: rgb(250, 242, 248);
   --about-card-bg: rgb(250, 242, 248);
@@ -78,7 +78,7 @@
   /* 图片占位背景 */
   --img-placeholder-bg: #e0e0e0;
 
-  /* 链接卡片箭头 SVG 颜色（硬编码 data URI，后续仍按主题覆盖） */
+  /* 链接卡片箭头 SVG 颜色 */
   --arrow-color-light: '%23352f31';
   --arrow-color-dark: '%23fed9e6';
 
@@ -89,9 +89,6 @@
 
   /* 日历 */
   --calendar-bg: var(--sidebar-bg);
-
-  /* 深色模式下的特殊覆盖（将通过变量值改变） */
-  /* 这些变量在浅色模式下已经是最终值，深色模式时重定义即可 */
 }
 
 /* =========================
@@ -189,7 +186,7 @@ p {
 }
 
 /* =========================
-   深色模式（自动跟随系统）
+   深色模式
 ========================= */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -219,7 +216,7 @@ p {
     --time-badge-bg: rgba(255, 179, 207, 0.2);
     --time-badge-color: #f5f5f5;
     --li-a-hover-bg: rgba(255, 179, 207, 0.35);
-    --li-a-bg: rgba(255,179,207,0.25);  /* 与 --color-pink-soft 同值，但单独保留 */
+    --li-a-bg: rgba(255,179,207,0.25);
 
     /* 导航 */
     --navbar-bg: rgba(0, 0, 0, 0.2);
@@ -267,7 +264,7 @@ p {
     --calendar-bg: var(--sidebar-bg);
   }
 
-  /* 深色模式下隐藏滚动条（原代码保留） */
+
   body {
    overflow: auto;
    -ms-overflow-style: none;
@@ -277,7 +274,7 @@ p {
    display: none;
   }
 
-  /* 图片占位背景（全局应用） */
+  /* 图片占位背景 */
   img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
     background-color: var(--img-placeholder-bg) !important;
   }
@@ -286,7 +283,7 @@ p {
 /* =========================
    手动主题覆盖
 ========================= */
-/* 强制深色模式 - 仅重定义变量，不再逐组件覆盖 */
+/* 强制深色模式 */
 [data-theme="dark"] {
   --color-bg: #1F1A1C;
   --color-text: #f5f5f5;
@@ -378,7 +375,7 @@ p {
   color: var(--to-be-continued-color) !important;
 }
 
-/* 强制浅色模式 - 变量覆盖 */
+/* 强制浅色模式 */
 [data-theme="light"] {
   --color-bg: #FFFBFF;
   --color-text: #3d3d3d;
@@ -554,11 +551,6 @@ body {
   background: var(--nav-time-bg);
   color: var(--nav-time-color);
   line-height: 1;
-}
-
-/* 深色模式下背景已通过变量控制，无需额外媒体查询，但为保险保留原结构（变量已含） */
-@media (prefers-color-scheme: dark) {
-  /* 变量已在 :root 中覆盖，此处可留空或仅保留特殊样式 */
 }
 
 .logo {
@@ -866,11 +858,11 @@ body {
 .hitokoto .hitokoto-from {
   align-self: flex-end;
   margin-top: 6px;
-  color: #666; /* 保留硬编码，或提取变量？但原主题中浅色 #666，深色 #c9c9c9。将其变量化 */
+  color: #666;
   font-size: 1rem;
   text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
-/* 将 .hitokoto-from 颜色变量化 */
+/* .hitokoto-from 颜色变量化 */
 :root {
   --hitokoto-from-color: #666;
 }
@@ -1195,7 +1187,7 @@ body {
   background: var(--sidebar-a);
 }
 
-/* 主题色选择器（保留，因涉及具体色值，仍用原色） */
+/* 主题色选择器 */
 .theme-picker-item {
   cursor: default !important;
 }
