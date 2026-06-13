@@ -2219,24 +2219,19 @@ code-box {
   .comment-content.fade-in { transform: translateY(0) !important; }
   .comment-content.fade-out { transform: translateY(15px) !important; }
 
-  /* 将文章卡片链接设为块级并填满网格单元格宽度 */
   .spa-link {
     display: block;
     width: 100%;
   }
 
-  /* 限制卡片最大宽度，并水平居中 */
   .card {
-    max-width: 400px;        /* 可根据实际效果微调，或直接使用 auto */
+    max-width: 300px;
     margin-left: auto;
     margin-right: auto;
   }
 
-  /* 确保卡片内的图片不会撑破布局 */
   .card img {
     width: 100% !important;
-    height: auto !important;
-    min-height: unset !important;
   }
 	
   .article-header {
