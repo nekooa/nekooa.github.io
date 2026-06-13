@@ -171,7 +171,7 @@ async function loadPage(url, addToHistory = true) {
         };
         currentHeaderContainer.addEventListener('animationend', onAnimationEnd, { once: true });
 
-        setTimeout(resolve, 500); // 安全兜底
+        setTimeout(resolve, 500);
       } else {
         resolve();
       }
@@ -202,12 +202,11 @@ async function loadPage(url, addToHistory = true) {
       currentContent = null;
     }
 
-    // --- 头图容器（避免重复：先清除旧头图，再插入新头图）---
+    // --- 头图容器 ---
     if (currentHeaderContainer && !newHeaderContainer) {
       currentHeaderContainer.remove();
       currentHeaderContainer = null;
     } else if (newHeaderContainer) {
-      // 确保页面中只有一个头图容器
       const oldHeader = document.querySelector('.header-container');
       if (oldHeader && oldHeader !== currentHeaderContainer) {
         oldHeader.remove();
@@ -321,11 +320,11 @@ async function loadPage(url, addToHistory = true) {
 function bindLinks() {
   let activeTimer = null;
 
-  // 辅助函数：判断两个路径是否指向同一页面
+  // 判断两个路径是否指向同一页面
   const isSamePage = (url1, url2) => {
     const normalize = (path) => {
       if (path === '/' || path === '/index.html') return 'index.html';
-      return path.replace(/^\//, ''); // 去掉开头的 /
+      return path.replace(/^\//, '');
     };
     return normalize(url1) === normalize(url2);
   };
@@ -435,7 +434,7 @@ function fallbackCopyText(text, copyBtn) {
 }
 
 /* =========================
-   Giscus 评论系统 (SPA 动态加载)
+   Giscus
 ========================= */
 function initGiscus() {
   const container = document.querySelector('.giscus');
@@ -451,7 +450,6 @@ function initGiscus() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   })();
 
-  // 使用绝对 URL，指向你的主题文件
   const themeUrl = isDark
     ? 'https://neneneko.pages.dev/styles/giscus-dark.css'
     : 'https://neneneko.pages.dev/styles/giscus-light.css';
@@ -467,7 +465,7 @@ function initGiscus() {
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', themeUrl);   // 绝对 URL
+  script.setAttribute('data-theme', themeUrl);
   script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
   script.async = true;
@@ -484,6 +482,10 @@ function addRippleEffect() {
   const rippleElements = document.querySelectorAll(`
     .sidebar a, 
     .li-a,
+    .card,
+    .home-link-card,
+    .profile-card,
+    .about-card,
     .settings-button-m,
     .close-button, 
     .md3-button, 
@@ -523,7 +525,7 @@ function addRippleEffect() {
 ========================= */
 let hitokotoCache = null;
 let hitokotoCacheTime = 0;
-const HITOKOTO_CACHE_DURATION = 3 * 1000; // 30 秒缓存
+const HITOKOTO_CACHE_DURATION = 3 * 1000; //缓存
 
 function applyHitokoto(data) {
   const mainText = document.getElementById('hitokoto_text');
@@ -544,7 +546,6 @@ function applyHitokoto(data) {
     mainFrom.textContent = source;
   }
 
-  // 移除 loading 状态，触发 CSS 淡入动画
   mainText.classList.remove('loading');
   if (mainFrom) mainFrom.classList.remove('loading');
 }
@@ -639,7 +640,7 @@ function createSettingsDialog() {
           <label class="md3-list-item">
             <span>
               <div class="item-label">动画效果</div>
-              <div class="item-supporting">启用页面切换动画</div>
+              <div class="item-supporting">启用页面切换动画（目前只是个摆设）</div>
             </span>
             <span class="md3-switch">
               <input type="checkbox" id="animationToggle" checked>
