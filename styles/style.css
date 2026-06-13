@@ -1838,6 +1838,7 @@ code-box {
   text-decoration: none;
   color: var(--color-text);
   transition: var(--transition);
+  overflow: hidden;
 }
 
 .card-content {
@@ -1866,10 +1867,6 @@ code-box {
 .home-link-card:hover::after {
   transform: translateY(-50%) translateX(6px);
   opacity: 1;
-}
-
-.home-link-card:hover {
-  background: var(--color-pink-soft);
 }
 
 .home-link-card h3 {
@@ -1956,7 +1953,7 @@ code-box {
     background: var(--color-bg);
     border: 1px solid var(--color-pink);
     border-top: none;
-    border-radius: 0 0 30px 30px;
+    border-radius: 0 0 20px 20px;
     box-shadow: var(--shadow);
     max-height: 306px;
     overflow: auto;
