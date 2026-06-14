@@ -1,5 +1,7 @@
+/* =========================
+   加载屏
+========================= */
 var pageLoadStart = Date.now();   // 记录脚本开始执行的时刻
-// 动态插入全屏加载画面
 (function() {
   var preloader = document.createElement('div');
   preloader.id = 'preloader';
@@ -65,50 +67,37 @@ function playEnterAnimation(selectors) {
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-  // 第一步：清除旧类，设置内联初始状态
+  // 一：清除旧类，设置内联初始状态
   elements.forEach(el => {
     el.classList.remove('fade-out', 'fade-in');
-
-    // 头图容器有自己的关键帧动画，跳过内联控制
     if (el.matches('.header-container')) return;
-
-    // 强制透明，覆盖任何静态 opacity: 1
     el.style.opacity = '0';
-
-    // 设置初始 transform
     if (el.matches('.logo')) {
       // 左侧滑入
       el.style.transform = 'translateX(-20px)';
     } else if (el.matches('.settings-button-m')) {
-      // 右侧滑入（方向相反）
+      // 右侧滑入
       el.style.transform = 'translateX(20px)';
     } else if (el.matches('.article-card, .comment-content')) {
-      // 文章卡片和评论区保持水平居中并下沉
       el.style.transform = isMobile
         ? 'translateY(15px)'
         : 'translateX(-50%) translateY(15px)';
     } else {
-      // 其他元素统一下沉
       el.style.transform = 'translateY(15px)';
     }
   });
 
-  // 第二步：强制重排，让浏览器记录内联样式
+  // 二：强制重排，让浏览器记录内联样式
   void document.body.offsetWidth;
 
-  // 第三步：移除内联样式并添加 .fade-in，触发过渡
+  // 三：移除内联样式并添加 .fade-in，触发过渡
   elements.forEach(el => {
     if (el.matches('.header-container')) {
-      // 头图直接加类，走自己的 CSS 动画
       el.classList.add('fade-in');
       return;
     }
-
-    // 清除内联 opacity 和 transform，让 .fade-in 的规则接管
     el.style.opacity = '';
     el.style.transform = '';
-
-    // 添加入场类
     el.classList.add('fade-in');
   });
 }
@@ -127,8 +116,6 @@ async function loadPage(url, addToHistory = true) {
     const newArticleCard = doc.querySelector('.article-card');
     const newFooter = doc.querySelector('.footer');
     let newCommentContent = doc.querySelector('.comment-content');
-
-    // 避免评论区在主内容 innerHTML 中重复
     if (newCommentContent && newContent && newContent.contains(newCommentContent)) {
       newCommentContent.remove();
     }
@@ -334,7 +321,6 @@ function bindLinks() {
       e.preventDefault();
       const url = link.getAttribute('href');
 
-      // 如果目标页面就是当前页面，不做任何操作
       if (isSamePage(url, location.pathname)) {
         return;
       }
@@ -484,8 +470,6 @@ function addRippleEffect() {
     .li-a,
     .card,
     .home-link-card,
-    .profile-card,
-    .about-card,
     .settings-button-m,
     .close-button, 
     .md3-button, 
