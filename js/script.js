@@ -61,17 +61,21 @@ const ThemeManager = {
 };
 
 /* =========================
-   主题颜色管理器（扩展版）
+   主题颜色管理器（全覆盖版）
 ========================= */
 const ColorThemeManager = {
   STORAGE_KEY: 'site-color-theme',
 
+  // 每种颜色的浅色 / 深色值（完整变量）
   themes: {
-    // ---------- pink (默认) ----------
     pink: {
       light: {
         '--color-pink': '#ff95bc',
         '--color-pink-soft': 'rgba(255,216,231,0.7)',
+        '--color-svg': '#352f31',
+        '--sidebar-bg': 'rgba(240,240,240)',
+        '--sidebar-a': 'rgba(106,106,106,0.2)',
+        '--sidebar-bg-mobile': 'rgba(247,236,244,0.8)',
         '--card-bg': '#F7ECF4',
         '--content-card-bg': 'rgb(250,242,248)',
         '--profile-card-bg': 'rgb(250,242,248)',
@@ -93,6 +97,10 @@ const ColorThemeManager = {
       dark: {
         '--color-pink': '#ffb3cf',
         '--color-pink-soft': 'rgba(255,179,207,0.25)',
+        '--color-svg': '#fed9e6',
+        '--sidebar-bg': 'rgba(30,30,30)',
+        '--sidebar-a': 'rgba(106,106,106,0.6)',
+        '--sidebar-bg-mobile': 'rgba(49,38,42,0.8)',
         '--card-bg': '#2A2125',
         '--content-card-bg': '#2A2125',
         '--profile-card-bg': '#2A2125',
@@ -112,11 +120,15 @@ const ColorThemeManager = {
         '--nav-time-bg': 'rgba(255,179,207,0.2)'
       }
     },
-    // ---------- blue ----------
+
     blue: {
       light: {
         '--color-pink': '#7fb4e0',
         '--color-pink-soft': 'rgba(127,180,224,0.35)',
+        '--color-svg': '#2f4554',
+        '--sidebar-bg': 'rgba(230,240,250)',
+        '--sidebar-a': 'rgba(70,100,130,0.15)',
+        '--sidebar-bg-mobile': 'rgba(220,235,250,0.85)',
         '--card-bg': '#EBF2F9',
         '--content-card-bg': 'rgb(245,248,252)',
         '--profile-card-bg': 'rgb(245,248,252)',
@@ -138,6 +150,10 @@ const ColorThemeManager = {
       dark: {
         '--color-pink': '#91c0f0',
         '--color-pink-soft': 'rgba(145,192,240,0.25)',
+        '--color-svg': '#c8ddf0',
+        '--sidebar-bg': 'rgba(20,28,36)',
+        '--sidebar-a': 'rgba(100,130,160,0.5)',
+        '--sidebar-bg-mobile': 'rgba(25,35,45,0.85)',
         '--card-bg': '#1c2a33',
         '--content-card-bg': '#1c2a33',
         '--profile-card-bg': '#1c2a33',
@@ -157,11 +173,15 @@ const ColorThemeManager = {
         '--nav-time-bg': 'rgba(145,192,240,0.2)'
       }
     },
-    // ---------- green ----------
+
     green: {
       light: {
         '--color-pink': '#8fceb4',
         '--color-pink-soft': 'rgba(143,206,180,0.35)',
+        '--color-svg': '#2f4a3f',
+        '--sidebar-bg': 'rgba(235,245,240)',
+        '--sidebar-a': 'rgba(60,90,80,0.15)',
+        '--sidebar-bg-mobile': 'rgba(225,242,234,0.85)',
         '--card-bg': '#EDF6F1',
         '--content-card-bg': 'rgb(245,251,248)',
         '--profile-card-bg': 'rgb(245,251,248)',
@@ -183,6 +203,10 @@ const ColorThemeManager = {
       dark: {
         '--color-pink': '#a0dbc4',
         '--color-pink-soft': 'rgba(160,219,196,0.25)',
+        '--color-svg': '#c8f0e0',
+        '--sidebar-bg': 'rgba(20,30,25)',
+        '--sidebar-a': 'rgba(80,110,95,0.5)',
+        '--sidebar-bg-mobile': 'rgba(25,38,32,0.85)',
         '--card-bg': '#1d3028',
         '--content-card-bg': '#1d3028',
         '--profile-card-bg': '#1d3028',
@@ -202,11 +226,15 @@ const ColorThemeManager = {
         '--nav-time-bg': 'rgba(160,219,196,0.2)'
       }
     },
-    // ---------- purple ----------
+
     purple: {
       light: {
         '--color-pink': '#c5a3ff',
         '--color-pink-soft': 'rgba(197,163,255,0.3)',
+        '--color-svg': '#3e2f50',
+        '--sidebar-bg': 'rgba(240,235,250)',
+        '--sidebar-a': 'rgba(80,60,100,0.15)',
+        '--sidebar-bg-mobile': 'rgba(230,222,245,0.85)',
         '--card-bg': '#F3EDFC',
         '--content-card-bg': 'rgb(250,247,255)',
         '--profile-card-bg': 'rgb(250,247,255)',
@@ -228,6 +256,10 @@ const ColorThemeManager = {
       dark: {
         '--color-pink': '#d4baff',
         '--color-pink-soft': 'rgba(212,186,255,0.25)',
+        '--color-svg': '#e4d0ff',
+        '--sidebar-bg': 'rgba(30,25,40)',
+        '--sidebar-a': 'rgba(90,70,110,0.5)',
+        '--sidebar-bg-mobile': 'rgba(35,30,48,0.85)',
         '--card-bg': '#2a2038',
         '--content-card-bg': '#2a2038',
         '--profile-card-bg': '#2a2038',
@@ -249,10 +281,12 @@ const ColorThemeManager = {
     }
   },
 
+  // 获取当前保存的主题颜色名称
   getColor() {
     return localStorage.getItem(this.STORAGE_KEY) || 'pink';
   },
 
+  // 判断当前实际显示模式（浅色/深色）
   isDarkMode() {
     const theme = ThemeManager.getTheme();
     if (theme === 'dark') return true;
@@ -260,6 +294,7 @@ const ColorThemeManager = {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   },
 
+  // 应用主题颜色（设置 CSS 变量）
   applyColor(name) {
     const mode = this.isDarkMode() ? 'dark' : 'light';
     const vars = this.themes[name]?.[mode] || this.themes.pink[mode];
@@ -269,11 +304,13 @@ const ColorThemeManager = {
     this.updateActiveButton(name);
   },
 
+  // 切换主题颜色（保存并应用）
   setColor(name) {
     localStorage.setItem(this.STORAGE_KEY, name);
     this.applyColor(name);
   },
 
+  // 更新设置面板中颜色按钮的 active 状态
   updateActiveButton(name) {
     document.querySelectorAll('.theme-color-btn').forEach(btn => {
       btn.classList.remove('active');
@@ -281,10 +318,12 @@ const ColorThemeManager = {
     });
   },
 
+  // 初始化（页面加载时应用保存的颜色）
   init() {
     const saved = this.getColor();
     this.applyColor(saved);
 
+    // 监听系统深色模式切换，自动重新应用对应颜色
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (ThemeManager.getTheme() === 'auto') {
         this.applyColor(this.getColor());
