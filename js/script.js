@@ -61,37 +61,198 @@ const ThemeManager = {
 };
 
 /* =========================
-   主题颜色管理器
+   主题颜色管理器（扩展版）
 ========================= */
 const ColorThemeManager = {
   STORAGE_KEY: 'site-color-theme',
 
-  // 每种颜色在浅色和深色下的色值定义
   themes: {
+    // ---------- pink (默认) ----------
     pink: {
-      light: { '--color-pink': '#ff95bc', '--color-pink-soft': 'rgba(255,216,231,0.7)' },
-      dark:  { '--color-pink': '#ffb3cf', '--color-pink-soft': 'rgba(255,179,207,0.25)' }
+      light: {
+        '--color-pink': '#ff95bc',
+        '--color-pink-soft': 'rgba(255,216,231,0.7)',
+        '--card-bg': '#F7ECF4',
+        '--content-card-bg': 'rgb(250,242,248)',
+        '--profile-card-bg': 'rgb(250,242,248)',
+        '--about-card-bg': 'rgb(250,242,248)',
+        '--home-link-card-bg': 'rgb(250,242,248)',
+        '--article-card-bg': '#F7ECF4',
+        '--profile-list-bg': 'rgba(255,216,231,0.3)',
+        '--about-list-bg': 'rgba(255,216,231,0.3)',
+        '--time-badge-bg': 'rgba(255,216,231,0.8)',
+        '--li-a-bg': 'rgba(255,216,231,0.8)',
+        '--li-a-hover-bg': 'rgba(253,176,210,0.626)',
+        '--slogan-color': '#e91e63',
+        '--slogan-text-shadow': '0 2px 8px rgba(233,30,99,0.25)',
+        '--thoughts-color': '#b06a8c',
+        '--thoughts-bg': 'rgba(255,235,245,0.5)',
+        '--thoughts-border': '#f8bbd0',
+        '--nav-time-bg': 'rgba(255,216,231,0.8)'
+      },
+      dark: {
+        '--color-pink': '#ffb3cf',
+        '--color-pink-soft': 'rgba(255,179,207,0.25)',
+        '--card-bg': '#2A2125',
+        '--content-card-bg': '#2A2125',
+        '--profile-card-bg': '#2A2125',
+        '--about-card-bg': '#2A2125',
+        '--home-link-card-bg': '#2A2125',
+        '--article-card-bg': '#2A2125',
+        '--profile-list-bg': 'rgba(90,63,72,0.5)',
+        '--about-list-bg': 'rgba(90,63,72,0.5)',
+        '--time-badge-bg': 'rgba(255,179,207,0.2)',
+        '--li-a-bg': 'rgba(255,179,207,0.25)',
+        '--li-a-hover-bg': 'rgba(255,179,207,0.35)',
+        '--slogan-color': '#f48fb1',
+        '--slogan-text-shadow': '0 2px 12px rgba(244,143,177,0.35)',
+        '--thoughts-color': '#f8bbd0',
+        '--thoughts-bg': 'rgba(255,210,225,0.08)',
+        '--thoughts-border': '#f06292',
+        '--nav-time-bg': 'rgba(255,179,207,0.2)'
+      }
     },
+    // ---------- blue ----------
     blue: {
-      light: { '--color-pink': '#7fb4e0', '--color-pink-soft': 'rgba(127,180,224,0.3)' },
-      dark:  { '--color-pink': '#91c0f0', '--color-pink-soft': 'rgba(145,192,240,0.25)' }
+      light: {
+        '--color-pink': '#7fb4e0',
+        '--color-pink-soft': 'rgba(127,180,224,0.35)',
+        '--card-bg': '#EBF2F9',
+        '--content-card-bg': 'rgb(245,248,252)',
+        '--profile-card-bg': 'rgb(245,248,252)',
+        '--about-card-bg': 'rgb(245,248,252)',
+        '--home-link-card-bg': 'rgb(245,248,252)',
+        '--article-card-bg': '#EBF2F9',
+        '--profile-list-bg': 'rgba(127,180,224,0.2)',
+        '--about-list-bg': 'rgba(127,180,224,0.2)',
+        '--time-badge-bg': 'rgba(127,180,224,0.4)',
+        '--li-a-bg': 'rgba(127,180,224,0.35)',
+        '--li-a-hover-bg': 'rgba(127,180,224,0.55)',
+        '--slogan-color': '#3b7abf',
+        '--slogan-text-shadow': '0 2px 8px rgba(59,122,191,0.2)',
+        '--thoughts-color': '#5b8db8',
+        '--thoughts-bg': 'rgba(235,245,255,0.6)',
+        '--thoughts-border': '#a4c8e8',
+        '--nav-time-bg': 'rgba(127,180,224,0.35)'
+      },
+      dark: {
+        '--color-pink': '#91c0f0',
+        '--color-pink-soft': 'rgba(145,192,240,0.25)',
+        '--card-bg': '#1c2a33',
+        '--content-card-bg': '#1c2a33',
+        '--profile-card-bg': '#1c2a33',
+        '--about-card-bg': '#1c2a33',
+        '--home-link-card-bg': '#1c2a33',
+        '--article-card-bg': '#1c2a33',
+        '--profile-list-bg': 'rgba(30,60,90,0.5)',
+        '--about-list-bg': 'rgba(30,60,90,0.5)',
+        '--time-badge-bg': 'rgba(145,192,240,0.2)',
+        '--li-a-bg': 'rgba(145,192,240,0.25)',
+        '--li-a-hover-bg': 'rgba(145,192,240,0.35)',
+        '--slogan-color': '#91c0f0',
+        '--slogan-text-shadow': '0 2px 12px rgba(145,192,240,0.35)',
+        '--thoughts-color': '#b8d8f8',
+        '--thoughts-bg': 'rgba(30,60,90,0.15)',
+        '--thoughts-border': '#4a7ca5',
+        '--nav-time-bg': 'rgba(145,192,240,0.2)'
+      }
     },
+    // ---------- green ----------
     green: {
-      light: { '--color-pink': '#8fceb4', '--color-pink-soft': 'rgba(143,206,180,0.35)' },
-      dark:  { '--color-pink': '#a0dbc4', '--color-pink-soft': 'rgba(160,219,196,0.25)' }
+      light: {
+        '--color-pink': '#8fceb4',
+        '--color-pink-soft': 'rgba(143,206,180,0.35)',
+        '--card-bg': '#EDF6F1',
+        '--content-card-bg': 'rgb(245,251,248)',
+        '--profile-card-bg': 'rgb(245,251,248)',
+        '--about-card-bg': 'rgb(245,251,248)',
+        '--home-link-card-bg': 'rgb(245,251,248)',
+        '--article-card-bg': '#EDF6F1',
+        '--profile-list-bg': 'rgba(143,206,180,0.2)',
+        '--about-list-bg': 'rgba(143,206,180,0.2)',
+        '--time-badge-bg': 'rgba(143,206,180,0.4)',
+        '--li-a-bg': 'rgba(143,206,180,0.35)',
+        '--li-a-hover-bg': 'rgba(143,206,180,0.55)',
+        '--slogan-color': '#5b9a7a',
+        '--slogan-text-shadow': '0 2px 8px rgba(91,154,122,0.2)',
+        '--thoughts-color': '#6ba88a',
+        '--thoughts-bg': 'rgba(240,250,245,0.6)',
+        '--thoughts-border': '#a0d8c0',
+        '--nav-time-bg': 'rgba(143,206,180,0.35)'
+      },
+      dark: {
+        '--color-pink': '#a0dbc4',
+        '--color-pink-soft': 'rgba(160,219,196,0.25)',
+        '--card-bg': '#1d3028',
+        '--content-card-bg': '#1d3028',
+        '--profile-card-bg': '#1d3028',
+        '--about-card-bg': '#1d3028',
+        '--home-link-card-bg': '#1d3028',
+        '--article-card-bg': '#1d3028',
+        '--profile-list-bg': 'rgba(35,75,60,0.5)',
+        '--about-list-bg': 'rgba(35,75,60,0.5)',
+        '--time-badge-bg': 'rgba(160,219,196,0.2)',
+        '--li-a-bg': 'rgba(160,219,196,0.25)',
+        '--li-a-hover-bg': 'rgba(160,219,196,0.35)',
+        '--slogan-color': '#a0dbc4',
+        '--slogan-text-shadow': '0 2px 12px rgba(160,219,196,0.35)',
+        '--thoughts-color': '#c8f0e0',
+        '--thoughts-bg': 'rgba(30,60,45,0.15)',
+        '--thoughts-border': '#5b8a72',
+        '--nav-time-bg': 'rgba(160,219,196,0.2)'
+      }
     },
+    // ---------- purple ----------
     purple: {
-      light: { '--color-pink': '#c5a3ff', '--color-pink-soft': 'rgba(197,163,255,0.3)' },
-      dark:  { '--color-pink': '#d4baff', '--color-pink-soft': 'rgba(212,186,255,0.25)' }
+      light: {
+        '--color-pink': '#c5a3ff',
+        '--color-pink-soft': 'rgba(197,163,255,0.3)',
+        '--card-bg': '#F3EDFC',
+        '--content-card-bg': 'rgb(250,247,255)',
+        '--profile-card-bg': 'rgb(250,247,255)',
+        '--about-card-bg': 'rgb(250,247,255)',
+        '--home-link-card-bg': 'rgb(250,247,255)',
+        '--article-card-bg': '#F3EDFC',
+        '--profile-list-bg': 'rgba(197,163,255,0.2)',
+        '--about-list-bg': 'rgba(197,163,255,0.2)',
+        '--time-badge-bg': 'rgba(197,163,255,0.4)',
+        '--li-a-bg': 'rgba(197,163,255,0.3)',
+        '--li-a-hover-bg': 'rgba(197,163,255,0.5)',
+        '--slogan-color': '#8a6bc1',
+        '--slogan-text-shadow': '0 2px 8px rgba(138,107,193,0.2)',
+        '--thoughts-color': '#9a80c8',
+        '--thoughts-bg': 'rgba(245,240,255,0.6)',
+        '--thoughts-border': '#d4c0f0',
+        '--nav-time-bg': 'rgba(197,163,255,0.3)'
+      },
+      dark: {
+        '--color-pink': '#d4baff',
+        '--color-pink-soft': 'rgba(212,186,255,0.25)',
+        '--card-bg': '#2a2038',
+        '--content-card-bg': '#2a2038',
+        '--profile-card-bg': '#2a2038',
+        '--about-card-bg': '#2a2038',
+        '--home-link-card-bg': '#2a2038',
+        '--article-card-bg': '#2a2038',
+        '--profile-list-bg': 'rgba(70,50,90,0.5)',
+        '--about-list-bg': 'rgba(70,50,90,0.5)',
+        '--time-badge-bg': 'rgba(212,186,255,0.2)',
+        '--li-a-bg': 'rgba(212,186,255,0.25)',
+        '--li-a-hover-bg': 'rgba(212,186,255,0.35)',
+        '--slogan-color': '#d4baff',
+        '--slogan-text-shadow': '0 2px 12px rgba(212,186,255,0.35)',
+        '--thoughts-color': '#e4d0ff',
+        '--thoughts-bg': 'rgba(60,40,80,0.15)',
+        '--thoughts-border': '#7a5fa0',
+        '--nav-time-bg': 'rgba(212,186,255,0.2)'
+      }
     }
   },
 
-  // 获取当前保存的主题颜色名
   getColor() {
     return localStorage.getItem(this.STORAGE_KEY) || 'pink';
   },
 
-  // 判断当前实际显示模式（浅色 / 深色）
   isDarkMode() {
     const theme = ThemeManager.getTheme();
     if (theme === 'dark') return true;
@@ -99,7 +260,6 @@ const ColorThemeManager = {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   },
 
-  // 应用主题颜色（设置 CSS 变量）
   applyColor(name) {
     const mode = this.isDarkMode() ? 'dark' : 'light';
     const vars = this.themes[name]?.[mode] || this.themes.pink[mode];
@@ -109,13 +269,11 @@ const ColorThemeManager = {
     this.updateActiveButton(name);
   },
 
-  // 切换主题颜色
   setColor(name) {
     localStorage.setItem(this.STORAGE_KEY, name);
     this.applyColor(name);
   },
 
-  // 更新设置面板中颜色按钮的 active 状态
   updateActiveButton(name) {
     document.querySelectorAll('.theme-color-btn').forEach(btn => {
       btn.classList.remove('active');
@@ -123,18 +281,15 @@ const ColorThemeManager = {
     });
   },
 
-  // 初始化
   init() {
     const saved = this.getColor();
     this.applyColor(saved);
 
-    // 当系统深色模式或手动主题变化时，重新应用颜色（以适配深浅色值）
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (ThemeManager.getTheme() === 'auto') {
         this.applyColor(this.getColor());
       }
     });
-    // 在 ThemeManager.setTheme 中也会调用（见后文）
   }
 };
 
