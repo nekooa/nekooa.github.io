@@ -70,6 +70,7 @@ const ColorThemeManager = {
   themes: {
     pink: {
       light: {
+         '--color-bg': '#FFFBFF',
         '--color-pink': '#ff95bc',
         '--color-pink-soft': 'rgba(255,216,231,0.7)',
         '--color-svg': '#352f31',
@@ -95,6 +96,7 @@ const ColorThemeManager = {
         '--nav-time-bg': 'rgba(255,216,231,0.8)'
       },
       dark: {
+         '--color-bg': '#1F1A1C',
         '--color-pink': '#ffb3cf',
         '--color-pink-soft': 'rgba(255,179,207,0.25)',
         '--color-svg': '#fed9e6',
@@ -123,6 +125,7 @@ const ColorThemeManager = {
 
     blue: {
       light: {
+         '--color-bg': '#F4F9FD',
         '--color-pink': '#7fb4e0',
         '--color-pink-soft': 'rgba(127,180,224,0.35)',
         '--color-svg': '#2f4554',
@@ -148,6 +151,7 @@ const ColorThemeManager = {
         '--nav-time-bg': 'rgba(127,180,224,0.35)'
       },
       dark: {
+         '--color-bg': '#17212b',
         '--color-pink': '#91c0f0',
         '--color-pink-soft': 'rgba(145,192,240,0.25)',
         '--color-svg': '#c8ddf0',
@@ -176,6 +180,7 @@ const ColorThemeManager = {
 
     green: {
       light: {
+         '--color-bg': '#F5FAF7',
         '--color-pink': '#8fceb4',
         '--color-pink-soft': 'rgba(143,206,180,0.35)',
         '--color-svg': '#2f4a3f',
@@ -201,6 +206,7 @@ const ColorThemeManager = {
         '--nav-time-bg': 'rgba(143,206,180,0.35)'
       },
       dark: {
+         '--color-bg': '#182620',
         '--color-pink': '#a0dbc4',
         '--color-pink-soft': 'rgba(160,219,196,0.25)',
         '--color-svg': '#c8f0e0',
@@ -229,6 +235,7 @@ const ColorThemeManager = {
 
     purple: {
       light: {
+         '--color-bg': '#F9F5FF',
         '--color-pink': '#c5a3ff',
         '--color-pink-soft': 'rgba(197,163,255,0.3)',
         '--color-svg': '#3e2f50',
@@ -254,6 +261,7 @@ const ColorThemeManager = {
         '--nav-time-bg': 'rgba(197,163,255,0.3)'
       },
       dark: {
+         '--color-bg': '#221e2e',
         '--color-pink': '#d4baff',
         '--color-pink-soft': 'rgba(212,186,255,0.25)',
         '--color-svg': '#e4d0ff',
