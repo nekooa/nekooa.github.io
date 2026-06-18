@@ -22,17 +22,18 @@ const ThemeManager = {
   getTheme() {
     return document.documentElement.getAttribute('data-theme') || 'auto';
   },
-setTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem(this.STORAGE_KEY, theme);
-  this.updateMetaThemeColor();
-  // 若当前页面有评论区，重新加载
-  if (document.querySelector('.giscus')) {
-    initGiscus();
-  }
-  // 重新应用颜色主题（适配深浅色值变化）
-  ColorThemeManager.applyColor(ColorThemeManager.getColor());
-},
+  setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(this.STORAGE_KEY, theme);
+    this.updateMetaThemeColor();
+    if (document.querySelector('.giscus')) {
+      initGiscus();
+    }
+    // 安全调用：若 ColorThemeManager 已定义，则重新应用颜色
+    if (typeof ColorThemeManager !== 'undefined') {
+      ColorThemeManager.applyColor(ColorThemeManager.getColor());
+    }
+  },
   updateMetaThemeColor() {
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
@@ -58,8 +59,6 @@ setTheme(theme) {
     });
   }
 };
-
-ThemeManager.init();
 
 /* =========================
    主题颜色管理器
@@ -138,6 +137,8 @@ const ColorThemeManager = {
     // 在 ThemeManager.setTheme 中也会调用（见后文）
   }
 };
+
+ThemeManager.init();
 
 /* =========================
    动画执行
