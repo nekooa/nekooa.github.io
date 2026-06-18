@@ -22,14 +22,17 @@ const ThemeManager = {
   getTheme() {
     return document.documentElement.getAttribute('data-theme') || 'auto';
   },
-  setTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(this.STORAGE_KEY, theme);
-    this.updateMetaThemeColor();
-    if (document.querySelector('.giscus')) {
-      initGiscus();
-    }
-  },
+setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem(this.STORAGE_KEY, theme);
+  this.updateMetaThemeColor();
+  // 若当前页面有评论区，重新加载
+  if (document.querySelector('.giscus')) {
+    initGiscus();
+  }
+  // 重新应用颜色主题（适配深浅色值变化）
+  ColorThemeManager.applyColor(ColorThemeManager.getColor());
+},
   updateMetaThemeColor() {
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
@@ -57,6 +60,84 @@ const ThemeManager = {
 };
 
 ThemeManager.init();
+
+/* =========================
+   主题颜色管理器
+========================= */
+const ColorThemeManager = {
+  STORAGE_KEY: 'site-color-theme',
+
+  // 每种颜色在浅色和深色下的色值定义
+  themes: {
+    pink: {
+      light: { '--color-pink': '#ff95bc', '--color-pink-soft': 'rgba(255,216,231,0.7)' },
+      dark:  { '--color-pink': '#ffb3cf', '--color-pink-soft': 'rgba(255,179,207,0.25)' }
+    },
+    blue: {
+      light: { '--color-pink': '#7fb4e0', '--color-pink-soft': 'rgba(127,180,224,0.3)' },
+      dark:  { '--color-pink': '#91c0f0', '--color-pink-soft': 'rgba(145,192,240,0.25)' }
+    },
+    green: {
+      light: { '--color-pink': '#8fceb4', '--color-pink-soft': 'rgba(143,206,180,0.35)' },
+      dark:  { '--color-pink': '#a0dbc4', '--color-pink-soft': 'rgba(160,219,196,0.25)' }
+    },
+    purple: {
+      light: { '--color-pink': '#c5a3ff', '--color-pink-soft': 'rgba(197,163,255,0.3)' },
+      dark:  { '--color-pink': '#d4baff', '--color-pink-soft': 'rgba(212,186,255,0.25)' }
+    }
+  },
+
+  // 获取当前保存的主题颜色名
+  getColor() {
+    return localStorage.getItem(this.STORAGE_KEY) || 'pink';
+  },
+
+  // 判断当前实际显示模式（浅色 / 深色）
+  isDarkMode() {
+    const theme = ThemeManager.getTheme();
+    if (theme === 'dark') return true;
+    if (theme === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  },
+
+  // 应用主题颜色（设置 CSS 变量）
+  applyColor(name) {
+    const mode = this.isDarkMode() ? 'dark' : 'light';
+    const vars = this.themes[name]?.[mode] || this.themes.pink[mode];
+    Object.entries(vars).forEach(([prop, value]) => {
+      document.documentElement.style.setProperty(prop, value);
+    });
+    this.updateActiveButton(name);
+  },
+
+  // 切换主题颜色
+  setColor(name) {
+    localStorage.setItem(this.STORAGE_KEY, name);
+    this.applyColor(name);
+  },
+
+  // 更新设置面板中颜色按钮的 active 状态
+  updateActiveButton(name) {
+    document.querySelectorAll('.theme-color-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.dataset.color === name) btn.classList.add('active');
+    });
+  },
+
+  // 初始化
+  init() {
+    const saved = this.getColor();
+    this.applyColor(saved);
+
+    // 当系统深色模式或手动主题变化时，重新应用颜色（以适配深浅色值）
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (ThemeManager.getTheme() === 'auto') {
+        this.applyColor(this.getColor());
+      }
+    });
+    // 在 ThemeManager.setTheme 中也会调用（见后文）
+  }
+};
 
 /* =========================
    动画执行
@@ -631,6 +712,18 @@ function createSettingsDialog() {
               <span class="slider"></span>
             </span>
           </label>
+          <div class="md3-list-item theme-picker-item">
+  <span>
+    <div class="item-label">主题颜色</div>
+    <div class="item-supporting">选择你喜欢的强调色</div>
+  </span>
+  <span class="theme-color-options">
+    <span class="theme-color-btn pink" data-color="pink"></span>
+    <span class="theme-color-btn blue" data-color="blue"></span>
+    <span class="theme-color-btn green" data-color="green"></span>
+    <span class="theme-color-btn purple" data-color="purple"></span>
+  </span>
+</div>
           <div class="md3-list-item" id="clearCacheBtn">
             <span class="item-label">清除缓存</span>
           </div>
@@ -700,6 +793,15 @@ function createSettingsDialog() {
     ThemeManager.setTheme(themeSelect.value);
   });
 
+// 绑定主题颜色按钮
+document.querySelectorAll('.theme-color-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const color = btn.dataset.color;
+    ColorThemeManager.setColor(color);
+  });
+});
+   
   window.addEventListener('popstate', closeDialog);
   const originalLoadPage = window.loadPage;
   if (originalLoadPage) {
@@ -719,6 +821,8 @@ function openSettingsDialog() {
   dialog.setAttribute('aria-hidden', 'false');
   const themeSelect = document.getElementById('themeSelect');
   if (themeSelect) themeSelect.value = ThemeManager.getTheme();
+     // 刷新颜色按钮状态
+  ColorThemeManager.updateActiveButton(ColorThemeManager.getColor());
 }
 
 function bindSettingsTrigger() {
@@ -741,11 +845,8 @@ function initImageViewer() {
   // 选择需要添加查看器的图片容器
   const containers = document.querySelectorAll('.article-card');
   containers.forEach(container => {
-    // 避免对同一容器重复初始化
     if (container.dataset.viewer === 'true') return;
     container.dataset.viewer = 'true';
-
-    // 实例化 Viewer，options 可定制
     new Viewer(container, {
       toolbar: {
         zoomIn: 1,
@@ -753,17 +854,16 @@ function initImageViewer() {
         oneToOne: 1,
         reset: 1,
         prev: 1,
-        play: 0,          // 不需要幻灯片播放
+        play: 0,
         next: 1,
         rotateLeft: 1,
         rotateRight: 1,
         flipHorizontal: 1,
         flipVertical: 1,
       },
-      navbar: false,      // 如果图片少，可以隐藏缩略图导航
-      title: false,       // 不显示图片标题（用 alt 替代）
+      navbar: true,
+      title: false,
       toolbar: {
-        // 自定义工具栏，保留常用功能
         zoomIn: true,
         zoomOut: true,
         reset: true,
@@ -865,6 +965,7 @@ const Calendar = {
    初始化执行
 ========================= */
 function initAll() {
+   ColorThemeManager.init();
   bindLinks();
   addRippleEffect();
   bindSettingsTrigger();
