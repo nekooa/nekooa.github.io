@@ -1085,7 +1085,6 @@ function createSettingsDialog() {
           <div class="md3-list-item theme-picker-item">
   <span>
     <div class="item-label">主题颜色（beta）</div>
-    <div class="item-supporting">选择你喜欢的强调色</div>
   </span>
   <span class="theme-color-options">
     <span class="theme-color-btn pink" data-color="pink"></span>
