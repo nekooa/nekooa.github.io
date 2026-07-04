@@ -61,16 +61,16 @@ const ThemeManager = {
 };
 
 /* =========================
-   主题颜色管理器
+   主题颜色管理器（含播放器适配）
 ========================= */
 const ColorThemeManager = {
   STORAGE_KEY: 'site-color-theme',
 
-  // 颜色值
   themes: {
     pink: {
       light: {
-         '--color-bg': '#FFFBFF',
+        // 页面全局变量
+        '--color-bg': '#FFFBFF',
         '--color-pink': '#ff95bc',
         '--color-pink-soft': 'rgba(255,216,231,0.7)',
         '--color-svg': '#352f31',
@@ -93,10 +93,32 @@ const ColorThemeManager = {
         '--thoughts-color': '#b06a8c',
         '--thoughts-bg': 'rgba(255,235,245,0.5)',
         '--thoughts-border': '#f8bbd0',
-        '--nav-time-bg': 'rgba(255,216,231,0.8)'
+        '--nav-time-bg': 'rgba(255,216,231,0.8)',
+        // 播放器变量
+        player: {
+          '--playerColor-1': '#fffbff',
+          '--playerColor-2': '#1f1a1c',
+          '--playerColor-3': '#fdd9e7',
+          '--playerColor-4': '#504348',
+          '--playerColor-5': '#1C1B1F',
+          '--playerColor-6': '#ae1d79',
+          '--playerColor-7': '#fdd9e7',
+          '--playerColor-8': '#3d0027',
+          '--playerColor-9': '#f1dee4',
+          '--playerColor-10': '#7f553a',
+          '--playerColor-11': '#C27E94',
+          '--playerColor-12': '#301401',
+          '--playerColor-rgab-1': 'rgba(176,0,92,0.08)',
+          '--playerColor-rgab-2': 'rgba(255,255,255,0.8)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(176,0,92,0.05),0px 1px 3px 0px rgba(0,0,0,0.08)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(176,0,92,0.08),inset -4px 4px 10px 0px rgba(0,0,0,0.03)',
+          '--playerTextShadow-1': '0 0 1px rgba(176,0,92,0.15)',
+          '--playerTextShadow-2': '0 0 1px rgba(255,255,255,0.5)'
+        }
       },
       dark: {
-         '--color-bg': '#1F1A1C',
+        // 页面全局变量
+        '--color-bg': '#1F1A1C',
         '--color-pink': '#ffb3cf',
         '--color-pink-soft': 'rgba(255,179,207,0.25)',
         '--color-svg': '#fed9e6',
@@ -119,13 +141,34 @@ const ColorThemeManager = {
         '--thoughts-color': '#f8bbd0',
         '--thoughts-bg': 'rgba(255,210,225,0.08)',
         '--thoughts-border': '#f06292',
-        '--nav-time-bg': 'rgba(255,179,207,0.2)'
+        '--nav-time-bg': 'rgba(255,179,207,0.2)',
+        // 播放器变量
+        player: {
+          '--playerColor-1': '#1f1a1c',
+          '--playerColor-2': '#ebe0e2',
+          '--playerColor-3': '#59404b',
+          '--playerColor-4': '#d4c2c8',
+          '--playerColor-5': '#FFB3C6',
+          '--playerColor-6': '#ffafd5',
+          '--playerColor-7': '#5C3A47',
+          '--playerColor-8': '#ffd8e8',
+          '--playerColor-9': '#504348',
+          '--playerColor-10': '#D27B94',
+          '--playerColor-11': '#F5C2D2',
+          '--playerColor-12': '#FFDFED',
+          '--playerColor-rgab-1': 'rgba(255,223,237,0.12)',
+          '--playerColor-rgab-2': 'rgba(65,42,52,0.7)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(0,0,0,0.3),0px 1px 3px 0px rgba(0,0,0,0.4)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(0,0,0,0.4),inset -4px 4px 10px 0px rgba(255,223,237,0.05)',
+          '--playerTextShadow-1': '0 0 1px rgba(255,179,198,0.4)',
+          '--playerTextShadow-2': '0 0 1px rgba(0,0,0,0.5)'
+        }
       }
     },
 
     blue: {
       light: {
-         '--color-bg': '#F4F9FD',
+        '--color-bg': '#F4F9FD',
         '--color-pink': '#7fb4e0',
         '--color-pink-soft': 'rgba(127,180,224,0.35)',
         '--color-svg': '#2f4554',
@@ -148,22 +191,42 @@ const ColorThemeManager = {
         '--thoughts-color': '#5b8db8',
         '--thoughts-bg': 'rgba(235,245,255,0.6)',
         '--thoughts-border': '#a4c8e8',
-        '--nav-time-bg': 'rgba(127,180,224,0.35)'
+        '--nav-time-bg': 'rgba(127,180,224,0.35)',
+        player: {
+          '--playerColor-1': '#f4f9fd',
+          '--playerColor-2': '#1a2a38',
+          '--playerColor-3': '#d9eaf8',
+          '--playerColor-4': '#3e5a70',
+          '--playerColor-5': '#1C1B1F',
+          '--playerColor-6': '#5b9bd5',
+          '--playerColor-7': '#d9eaf8',
+          '--playerColor-8': '#0f2a3f',
+          '--playerColor-9': '#e4f0f8',
+          '--playerColor-10': '#7f553a',
+          '--playerColor-11': '#6c8ebf',
+          '--playerColor-12': '#301401',
+          '--playerColor-rgab-1': 'rgba(91,155,213,0.08)',
+          '--playerColor-rgab-2': 'rgba(255,255,255,0.8)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(91,155,213,0.05),0px 1px 3px 0px rgba(0,0,0,0.08)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(91,155,213,0.08),inset -4px 4px 10px 0px rgba(0,0,0,0.03)',
+          '--playerTextShadow-1': '0 0 1px rgba(91,155,213,0.15)',
+          '--playerTextShadow-2': '0 0 1px rgba(255,255,255,0.5)'
+        }
       },
       dark: {
-         '--color-bg': '#1A1C1E',
-        '--color-pink': '#A0CAFF',
-        '--color-pink-soft': '#3C4858',
-        '--color-svg': '#D7E3F8',
+        '--color-bg': '#17212b',
+        '--color-pink': '#91c0f0',
+        '--color-pink-soft': 'rgba(145,192,240,0.25)',
+        '--color-svg': '#c8ddf0',
         '--sidebar-bg': 'rgba(20,28,36)',
         '--sidebar-a': 'rgba(100,130,160,0.5)',
-        '--sidebar-bg-mobile': '#252A30',
-        '--card-bg': '#202429',
-        '--content-card-bg': '#202429',
-        '--profile-card-bg': '#202429',
-        '--about-card-bg': '#202429',
-        '--home-link-card-bg': '#202429',
-        '--article-card-bg': '#202429',
+        '--sidebar-bg-mobile': 'rgba(25,35,45,0.85)',
+        '--card-bg': '#1c2a33',
+        '--content-card-bg': '#1c2a33',
+        '--profile-card-bg': '#1c2a33',
+        '--about-card-bg': '#1c2a33',
+        '--home-link-card-bg': '#1c2a33',
+        '--article-card-bg': '#1c2a33',
         '--profile-list-bg': 'rgba(30,60,90,0.5)',
         '--about-list-bg': 'rgba(30,60,90,0.5)',
         '--time-badge-bg': 'rgba(145,192,240,0.2)',
@@ -174,13 +237,33 @@ const ColorThemeManager = {
         '--thoughts-color': '#b8d8f8',
         '--thoughts-bg': 'rgba(30,60,90,0.15)',
         '--thoughts-border': '#4a7ca5',
-        '--nav-time-bg': 'rgba(145,192,240,0.2)'
+        '--nav-time-bg': 'rgba(145,192,240,0.2)',
+        player: {
+          '--playerColor-1': '#17212b',
+          '--playerColor-2': '#d4e4f5',
+          '--playerColor-3': '#2e4358',
+          '--playerColor-4': '#b8d4f0',
+          '--playerColor-5': '#91c0f0',
+          '--playerColor-6': '#91c0f0',
+          '--playerColor-7': '#2e4358',
+          '--playerColor-8': '#d4e4f5',
+          '--playerColor-9': '#3a4a5a',
+          '--playerColor-10': '#a4c2d8',
+          '--playerColor-11': '#8ab8e0',
+          '--playerColor-12': '#e4f0f8',
+          '--playerColor-rgab-1': 'rgba(145,192,240,0.12)',
+          '--playerColor-rgab-2': 'rgba(23,33,43,0.7)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(0,0,0,0.3),0px 1px 3px 0px rgba(0,0,0,0.4)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(0,0,0,0.4),inset -4px 4px 10px 0px rgba(145,192,240,0.05)',
+          '--playerTextShadow-1': '0 0 1px rgba(145,192,240,0.4)',
+          '--playerTextShadow-2': '0 0 1px rgba(0,0,0,0.5)'
+        }
       }
     },
 
     green: {
       light: {
-         '--color-bg': '#F5FAF7',
+        '--color-bg': '#F5FAF7',
         '--color-pink': '#8fceb4',
         '--color-pink-soft': 'rgba(143,206,180,0.35)',
         '--color-svg': '#2f4a3f',
@@ -203,10 +286,30 @@ const ColorThemeManager = {
         '--thoughts-color': '#6ba88a',
         '--thoughts-bg': 'rgba(240,250,245,0.6)',
         '--thoughts-border': '#a0d8c0',
-        '--nav-time-bg': 'rgba(143,206,180,0.35)'
+        '--nav-time-bg': 'rgba(143,206,180,0.35)',
+        player: {
+          '--playerColor-1': '#f5faf7',
+          '--playerColor-2': '#1a2e24',
+          '--playerColor-3': '#d3ede0',
+          '--playerColor-4': '#3e5a48',
+          '--playerColor-5': '#1C1B1F',
+          '--playerColor-6': '#5b9a7a',
+          '--playerColor-7': '#d3ede0',
+          '--playerColor-8': '#0f2a1a',
+          '--playerColor-9': '#e4f5ec',
+          '--playerColor-10': '#7f553a',
+          '--playerColor-11': '#7bb094',
+          '--playerColor-12': '#301401',
+          '--playerColor-rgab-1': 'rgba(91,154,122,0.08)',
+          '--playerColor-rgab-2': 'rgba(255,255,255,0.8)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(91,154,122,0.05),0px 1px 3px 0px rgba(0,0,0,0.08)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(91,154,122,0.08),inset -4px 4px 10px 0px rgba(0,0,0,0.03)',
+          '--playerTextShadow-1': '0 0 1px rgba(91,154,122,0.15)',
+          '--playerTextShadow-2': '0 0 1px rgba(255,255,255,0.5)'
+        }
       },
       dark: {
-         '--color-bg': '#182620',
+        '--color-bg': '#182620',
         '--color-pink': '#a0dbc4',
         '--color-pink-soft': 'rgba(160,219,196,0.25)',
         '--color-svg': '#c8f0e0',
@@ -229,13 +332,33 @@ const ColorThemeManager = {
         '--thoughts-color': '#c8f0e0',
         '--thoughts-bg': 'rgba(30,60,45,0.15)',
         '--thoughts-border': '#5b8a72',
-        '--nav-time-bg': 'rgba(160,219,196,0.2)'
+        '--nav-time-bg': 'rgba(160,219,196,0.2)',
+        player: {
+          '--playerColor-1': '#182620',
+          '--playerColor-2': '#c8f0e0',
+          '--playerColor-3': '#2e4a3a',
+          '--playerColor-4': '#b8e0d0',
+          '--playerColor-5': '#a0dbc4',
+          '--playerColor-6': '#a0dbc4',
+          '--playerColor-7': '#2e4a3a',
+          '--playerColor-8': '#c8f0e0',
+          '--playerColor-9': '#3a5a4a',
+          '--playerColor-10': '#a4d8c0',
+          '--playerColor-11': '#8ad4b0',
+          '--playerColor-12': '#e4f8f0',
+          '--playerColor-rgab-1': 'rgba(160,219,196,0.12)',
+          '--playerColor-rgab-2': 'rgba(24,38,32,0.7)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(0,0,0,0.3),0px 1px 3px 0px rgba(0,0,0,0.4)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(0,0,0,0.4),inset -4px 4px 10px 0px rgba(160,219,196,0.05)',
+          '--playerTextShadow-1': '0 0 1px rgba(160,219,196,0.4)',
+          '--playerTextShadow-2': '0 0 1px rgba(0,0,0,0.5)'
+        }
       }
     },
 
     purple: {
       light: {
-         '--color-bg': '#F9F5FF',
+        '--color-bg': '#F9F5FF',
         '--color-pink': '#c5a3ff',
         '--color-pink-soft': 'rgba(197,163,255,0.3)',
         '--color-svg': '#3e2f50',
@@ -258,10 +381,30 @@ const ColorThemeManager = {
         '--thoughts-color': '#9a80c8',
         '--thoughts-bg': 'rgba(245,240,255,0.6)',
         '--thoughts-border': '#d4c0f0',
-        '--nav-time-bg': 'rgba(197,163,255,0.3)'
+        '--nav-time-bg': 'rgba(197,163,255,0.3)',
+        player: {
+          '--playerColor-1': '#f9f5ff',
+          '--playerColor-2': '#1e1a2e',
+          '--playerColor-3': '#e4dafb',
+          '--playerColor-4': '#4e3e60',
+          '--playerColor-5': '#1C1B1F',
+          '--playerColor-6': '#8a6bc1',
+          '--playerColor-7': '#e4dafb',
+          '--playerColor-8': '#1a0f30',
+          '--playerColor-9': '#f0e8fc',
+          '--playerColor-10': '#7f553a',
+          '--playerColor-11': '#9a80c8',
+          '--playerColor-12': '#301401',
+          '--playerColor-rgab-1': 'rgba(138,107,193,0.08)',
+          '--playerColor-rgab-2': 'rgba(255,255,255,0.8)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(138,107,193,0.05),0px 1px 3px 0px rgba(0,0,0,0.08)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(138,107,193,0.08),inset -4px 4px 10px 0px rgba(0,0,0,0.03)',
+          '--playerTextShadow-1': '0 0 1px rgba(138,107,193,0.15)',
+          '--playerTextShadow-2': '0 0 1px rgba(255,255,255,0.5)'
+        }
       },
       dark: {
-         '--color-bg': '#221e2e',
+        '--color-bg': '#221e2e',
         '--color-pink': '#d4baff',
         '--color-pink-soft': 'rgba(212,186,255,0.25)',
         '--color-svg': '#e4d0ff',
@@ -284,17 +427,35 @@ const ColorThemeManager = {
         '--thoughts-color': '#e4d0ff',
         '--thoughts-bg': 'rgba(60,40,80,0.15)',
         '--thoughts-border': '#7a5fa0',
-        '--nav-time-bg': 'rgba(212,186,255,0.2)'
+        '--nav-time-bg': 'rgba(212,186,255,0.2)',
+        player: {
+          '--playerColor-1': '#221e2e',
+          '--playerColor-2': '#e4d0ff',
+          '--playerColor-3': '#3e3050',
+          '--playerColor-4': '#c8b8f0',
+          '--playerColor-5': '#d4baff',
+          '--playerColor-6': '#d4baff',
+          '--playerColor-7': '#3e3050',
+          '--playerColor-8': '#e4d0ff',
+          '--playerColor-9': '#4e4060',
+          '--playerColor-10': '#b0a0d0',
+          '--playerColor-11': '#c0b0e0',
+          '--playerColor-12': '#f0e8ff',
+          '--playerColor-rgab-1': 'rgba(212,186,255,0.12)',
+          '--playerColor-rgab-2': 'rgba(34,30,46,0.7)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(0,0,0,0.3),0px 1px 3px 0px rgba(0,0,0,0.4)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(0,0,0,0.4),inset -4px 4px 10px 0px rgba(212,186,255,0.05)',
+          '--playerTextShadow-1': '0 0 1px rgba(212,186,255,0.4)',
+          '--playerTextShadow-2': '0 0 1px rgba(0,0,0,0.5)'
+        }
       }
     }
   },
 
-  // 获取当前保存的主题颜色名称
   getColor() {
     return localStorage.getItem(this.STORAGE_KEY) || 'pink';
   },
 
-  // 判断当前实际显示模式（浅色/深色）
   isDarkMode() {
     const theme = ThemeManager.getTheme();
     if (theme === 'dark') return true;
@@ -302,23 +463,33 @@ const ColorThemeManager = {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   },
 
-  // 应用主题颜色（设置 CSS 变量）
   applyColor(name) {
     const mode = this.isDarkMode() ? 'dark' : 'light';
     const vars = this.themes[name]?.[mode] || this.themes.pink[mode];
+
+    // 应用全局页面变量
     Object.entries(vars).forEach(([prop, value]) => {
-      document.documentElement.style.setProperty(prop, value);
+      if (prop !== 'player') {
+        document.documentElement.style.setProperty(prop, value);
+      }
     });
+
+    // 应用播放器变量
+    const playerEl = document.querySelector('#xf-MusicPlayer .xf-girlPink');
+    if (playerEl && vars.player) {
+      Object.entries(vars.player).forEach(([prop, value]) => {
+        playerEl.style.setProperty(prop, value);
+      });
+    }
+
     this.updateActiveButton(name);
   },
 
-  // 切换主题颜色（保存并应用）
   setColor(name) {
     localStorage.setItem(this.STORAGE_KEY, name);
     this.applyColor(name);
   },
 
-  // 更新设置面板中颜色按钮的 active 状态
   updateActiveButton(name) {
     document.querySelectorAll('.theme-color-btn').forEach(btn => {
       btn.classList.remove('active');
@@ -326,12 +497,10 @@ const ColorThemeManager = {
     });
   },
 
-  // 初始化（页面加载时应用保存的颜色）
   init() {
     const saved = this.getColor();
     this.applyColor(saved);
 
-    // 监听系统深色模式切换，自动重新应用对应颜色
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (ThemeManager.getTheme() === 'auto') {
         this.applyColor(this.getColor());
@@ -339,8 +508,6 @@ const ColorThemeManager = {
     });
   }
 };
-
-ThemeManager.init();
 
 /* =========================
    动画执行
