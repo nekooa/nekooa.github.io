@@ -61,12 +61,12 @@ const ThemeManager = {
 };
 
 /* =========================
-   主题颜色管理器（全覆盖版）
+   主题颜色管理器
 ========================= */
 const ColorThemeManager = {
   STORAGE_KEY: 'site-color-theme',
 
-  // 每种颜色的浅色 / 深色值（完整变量）
+  // 颜色值
   themes: {
     pink: {
       light: {
@@ -907,8 +907,8 @@ function createSettingsDialog() {
           </div>
           <label class="md3-list-item">
             <span>
-              <div class="item-label">动画效果</div>
-              <div class="item-supporting">启用页面切换动画（目前只是个摆设）</div>
+              <div class="item-label">动画效果（beta）</div>
+              <div class="item-supporting">启用页面切换动画</div>
             </span>
             <span class="md3-switch">
               <input type="checkbox" id="animationToggle" checked>
@@ -917,7 +917,7 @@ function createSettingsDialog() {
           </label>
           <div class="md3-list-item theme-picker-item">
   <span>
-    <div class="item-label">主题颜色</div>
+    <div class="item-label">主题颜色（beta）</div>
     <div class="item-supporting">选择你喜欢的强调色</div>
   </span>
   <span class="theme-color-options">
