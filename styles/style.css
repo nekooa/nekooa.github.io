@@ -1646,6 +1646,7 @@ hr.dot {
 .scroll-item {
   flex: 0 0 auto;
   width: 240px;
+  min-height: 240px;
   scroll-snap-align: start;
   text-decoration: none;
   color: var(--color-text);
