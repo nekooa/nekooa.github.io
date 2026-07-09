@@ -767,7 +767,7 @@ function bindLinks() {
     return normalize(url1) === normalize(url2);
   };
 
-  document.querySelectorAll('.sidebar a, .spa-link').forEach(link => {
+  document.querySelectorAll('.sidebar a, .spa-link, .spa-link-home').forEach(link => {
     link.onclick = e => {
       e.preventDefault();
       const url = link.getAttribute('href');
@@ -924,7 +924,8 @@ function addRippleEffect() {
     .settings-button-m,
     .close-button, 
     .md3-button, 
-    .md3-list-item
+    .md3-list-item,
+    .spa-link-home
   `);
 
   rippleElements.forEach(element => {
