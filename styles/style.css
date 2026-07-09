@@ -1368,7 +1368,7 @@ hr.dot {
   margin: 0 auto 30px auto;
   width: 100%;
   min-height: 220px;
-  max-width: 800px;
+  max-width: 500px;
   align-items: center;
   padding: 24px;
   border-radius: 16px;
@@ -1411,7 +1411,7 @@ hr.dot {
   gap: 20px;
   background: var(--profile-card-bg);
   border-radius: 16px;
-  padding: 25px;
+  padding: 24px;
   margin: 0 auto 0 auto;
   max-width: 800px;
   transition: 0.4s;
@@ -1464,7 +1464,7 @@ hr.dot {
   border-radius: 16px;
   padding: 24px;
   margin: 0 auto 30px auto;
-  max-width: 800px;
+  max-width: 500px;
   gap: 10px;
   transition: 0.4s;
 }
