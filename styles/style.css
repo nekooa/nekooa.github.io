@@ -1621,7 +1621,7 @@ hr.dot {
 .scroll-title {
   font-size: 1.3rem;
   font-weight: 600;
-  margin: 0 0 16px 0;
+  margin: 0 0 0px 0;
   color: var(--color-text);
   opacity: 0.85;
   letter-spacing: 0.02em;
@@ -2470,7 +2470,7 @@ code-box {
   }
   .scroll-title {
     font-size: 1.1rem;
-    margin-bottom: 12px;
+    margin-bottom: 0px;
   }
   .footer { margin-left: 0; width: 100%; padding-bottom: 80px; }
 }
