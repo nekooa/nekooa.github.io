@@ -2331,7 +2331,11 @@ code-box {
 
   .spa-link {
     display: block;
+    width: 100%;
+  }
 
+  .spa-link-home {
+    display: block;
   }
 
   .card {
