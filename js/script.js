@@ -935,7 +935,8 @@ function addRippleEffect() {
     if (position === 'static') element.style.position = 'relative';
     if (window.getComputedStyle(element).overflow !== 'hidden') element.style.overflow = 'hidden';
 
-    element.addEventListener('click', function (e) {
+    // 将 'click' 改为 'pointerdown'，实现按下即播
+    element.addEventListener('pointerdown', function (e) {
       const rect = element.getBoundingClientRect();
       const circle = document.createElement('span');
       const diameter = Math.max(rect.width, rect.height);
