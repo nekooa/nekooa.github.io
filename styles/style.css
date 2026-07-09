@@ -576,6 +576,7 @@ body {
   align-items: center;
   gap: var(--sidebar-gap);
   background: var(--sidebar-bg);
+  overscroll-behavior: contain;
 }
 
 .sidebar ul {
@@ -982,6 +983,7 @@ body {
   overflow: hidden;
   color: var(--color-text);
   box-sizing: border-box;
+  overscroll-behavior: contain;
 }
 
 .settings-dialog.open .settings-panel {
