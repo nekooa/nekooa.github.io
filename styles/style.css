@@ -1622,10 +1622,10 @@ hr.dot {
   font-size: 1.3rem;
   font-weight: 600;
   margin: 20px 0 0px 0;
-  color: var(--color-text);
-  opacity: 0.85;
-  letter-spacing: 0.02em;
+  display: inline-flex;
   align-items: center;
+  gap: 10px;
+  color: var(--color-text);
 }
 
 /* 滚动条 */
