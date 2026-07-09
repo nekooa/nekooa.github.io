@@ -1583,18 +1583,18 @@ hr.dot {
   max-width: 100%;
   min-width: 0;
   margin: 30px 0;
-  overflow: hidden;                /* 形成 BFC，阻断宽度传递 */
   box-sizing: border-box;
+  /* 不再使用 overflow: hidden，避免裁剪滚动条 */
 }
 
 .scroll-container {
   display: flex;
   flex-wrap: nowrap;
   gap: 20px;
-  overflow-x: auto;
-  /* 移除 width: max-content，改用 100% 宽度，让滚动发生在容器内部 */
+  overflow-x: auto;               /* 关键：滚动发生在这里 */
   width: 100%;
   max-width: 100%;
+  min-width: 0;                   /* 防止 flex 内容把容器撑开 */
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 10px;
@@ -1603,7 +1603,7 @@ hr.dot {
   box-sizing: border-box;
 }
 
-/* 滚动条样式保持不变 */
+/* 滚动条样式保持 */
 .scroll-container::-webkit-scrollbar {
   height: 6px;
 }
@@ -1667,7 +1667,7 @@ hr.dot {
   margin: 0 12px 12px 12px;
 }
 
-/* 移动端适配 */
+/* 移动端卡片宽度 */
 @media (max-width: 768px) {
   .scroll-item {
     width: 200px;
@@ -1862,7 +1862,7 @@ code-box {
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
-  align-items: stretch;          /* 改用 stretch 让子元素自动填充宽度 */
+  align-items: stretch;          /* 子元素自动填满宽度 */
   gap: 20px;
   flex-wrap: wrap;
   max-width: 500px;
@@ -2388,25 +2388,28 @@ code-box {
     max-width: 100% !important;
     padding-left: 20px;
     padding-right: 20px;
-    overflow-x: hidden;          /* 最后一道防线 */
+    overflow-x: hidden;          /* 最后防线，裁剪页面级溢出 */
   }
 
-  .home-header { height: 45vh !important; width: 100%; margin: 0 0 0 0; }
-  .header-overlay { height: 45vh; width: 100%; margin: 0 0 0 0; }
-
+  /* flex 容器在移动端垂直排列，不再使用 overflow:hidden */
   .home-flex {
     flex-direction: column;
     align-items: center;
     width: 100% !important;
     max-width: 100% !important;
-    overflow: hidden;            /* 二次保障，阻断异常宽度 */
+    /* 移除 overflow: hidden，否则会裁掉滚动条 */
   }
-  /* 确保横向滚动列表始终占满可用宽度 */
+
+  /* 横向滚动列表完全占满宽度 */
   .article-scroll-list {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0;
   }
+	
+  .home-header { height: 45vh !important; width: 100%; margin: 0 0 0 0; }
+  .header-overlay { height: 45vh; width: 100%; margin: 0 0 0 0; }
+
   .home-profile, .home-right-cards { width: 100%; max-width: 400px; }
   .home-right-cards { flex-direction: column; }
   .home-link-card {
