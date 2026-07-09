@@ -1617,6 +1617,16 @@ hr.dot {
   border-radius: 16px;
 }
 
+/* 滚动列表标题 */
+.scroll-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: var(--color-text);
+  opacity: 0.85;
+  letter-spacing: 0.02em;
+}
+
 /* 滚动条 */
 .scroll-container::-webkit-scrollbar {
   display: none;
@@ -2458,7 +2468,10 @@ code-box {
     width: 100%;
     padding: 20px 48px 20px 20px;
   }
-
+  .scroll-title {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
   .footer { margin-left: 0; width: 100%; padding-bottom: 80px; }
 }
 
