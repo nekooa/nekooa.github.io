@@ -1581,12 +1581,13 @@ hr.dot {
   width: 100%;
   max-width: 100%;
   margin: 30px 0;
-  overflow-x: hidden;                /* 防止整个区域撑大页面 */
+  overflow-x: hidden;                /* 隐藏超出容器的滚动条 */
+  box-sizing: border-box;
 }
 
 .scroll-container {
   display: flex;
-  flex-wrap: nowrap;                 /* 强制不换行，保证横向滚动 */
+  flex-wrap: nowrap;
   gap: 20px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -1594,6 +1595,9 @@ hr.dot {
   padding-bottom: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--color-pink-soft) transparent;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* 滚动条样式（WebKit） */
@@ -1666,13 +1670,18 @@ hr.dot {
   margin: 0 12px 12px 12px;
 }
 
-/* 移动端适当缩小卡片宽度 */
+/* 移动端适配 */
 @media (max-width: 768px) {
   .scroll-item {
     width: 200px;
   }
   .scroll-item-img {
     height: 120px;
+  }
+  /* 确保 home-flex 子元素不超出屏幕 */
+  .home-flex > * {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
