@@ -1601,7 +1601,6 @@ hr.dot {
   min-width: 0;               /* 允许收缩，产生内部滚动 */
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--color-pink-soft) transparent;
   box-sizing: border-box;
