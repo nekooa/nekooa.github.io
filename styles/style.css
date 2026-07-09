@@ -1659,12 +1659,10 @@ hr.dot {
   overflow: hidden;
 }
 .scroll-item-date {
-  font-size: 0.75rem;
-  padding: 0 0 13px 13px;
-  border-radius: 999px;
-  background: var(--time-badge-bg);
-  color: var(--time-badge-color);
-  white-space: nowrap;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.6;
+  margin: 0 12px 12px 12px;
 }
 
 /* 移动端卡片尺寸 */
