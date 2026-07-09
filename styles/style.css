@@ -1625,6 +1625,7 @@ hr.dot {
   color: var(--color-text);
   opacity: 0.85;
   letter-spacing: 0.02em;
+  align-items: center;
 }
 
 /* 滚动条 */
