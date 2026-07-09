@@ -1610,13 +1610,16 @@ hr.dot {
 
 /* 滚动条 */
 .scroll-container::-webkit-scrollbar {
+  display: none;
   height: 6px;
 }
 .scroll-container::-webkit-scrollbar-thumb {
+  display: none;
   background-color: var(--color-pink-soft);
   border-radius: 10px;
 }
 .scroll-container::-webkit-scrollbar-track {
+  display: none;
   background: transparent;
 }
 
