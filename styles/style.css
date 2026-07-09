@@ -500,6 +500,16 @@ p {
   opacity: 0.8;
 }
 
+/* 闪烁动画 */
+.loader-inner p {
+  animation: blink 1.0s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
 .loader-ring {
   width: 40px;
   height: 40px;
