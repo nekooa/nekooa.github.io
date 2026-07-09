@@ -818,7 +818,11 @@ body {
 }
 
 .content-inner {
-	will-change: transform,opacity;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;          /* 阻断内部溢出影响布局 */
+  box-sizing: border-box;
+  will-change: transform,opacity;
 }
 
 @media (min-width: 769px) {
@@ -1581,20 +1585,20 @@ hr.dot {
   flex: 1 1 100%;
   width: 100%;
   max-width: 100%;
-  min-width: 0;                /* 防止内容把自身撑宽 */
+  min-width: 0;
   margin: 30px 0;
   box-sizing: border-box;
-  overflow: hidden;            /* 关键：形成 BFC，阻断宽度传递，且不会隐藏内部滚动条 */
+  overflow: hidden;           /* 形成 BFC，阻止宽度扩散 */
 }
 
 .scroll-container {
   display: flex;
   flex-wrap: nowrap;
   gap: 20px;
-  overflow-x: auto;            /* 滚动发生在这里 */
+  overflow-x: auto;
   width: 100%;
   max-width: 100%;
-  min-width: 0;                /* 允许收缩，使内部滚动生效 */
+  min-width: 0;               /* 允许收缩，产生内部滚动 */
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 10px;
@@ -1603,7 +1607,7 @@ hr.dot {
   box-sizing: border-box;
 }
 
-/* 滚动条样式保持不变 */
+/* 滚动条 */
 .scroll-container::-webkit-scrollbar {
   height: 6px;
 }
@@ -1615,7 +1619,6 @@ hr.dot {
   background: transparent;
 }
 
-/* 单个卡片 */
 .scroll-item {
   flex: 0 0 auto;
   width: 240px;
@@ -2385,37 +2388,53 @@ code-box {
   .home-content {
     margin-left: 0 !important;
     margin-right: 0 !important;
+    width: 100% !important;
     max-width: 100% !important;
     padding-left: 20px;
     padding-right: 20px;
-    overflow-x: hidden;          /* 最后防线，裁剪页面级溢出 */
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .home-content > * {
+    max-width: 100vw !important;   /* 硬性限制，永远不超出视口 */
+    box-sizing: border-box;
   }
 
+  /* 内容包裹器强化 */
+  .content-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden;
+  }
+
+  /* flex 容器垂直布局，所有子元素禁止内容撑宽 */
   .home-flex {
     flex-direction: column;
     align-items: center;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    /* 不再使用 overflow: hidden，避免裁剪滚动条，宽度已由 min-width:0 控制 */
   }
-
   .home-flex > * {
-    min-width: 0 !important;       /* 核心：阻止每个子项因内容撑宽 */
-    max-width: 100% !important;    /* 确保不超出父容器 */
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100%;               /* 让子元素自动占满 */
   }
 
+  /* 横向滚动列表自身限制 */
   .article-scroll-list {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    overflow: hidden;              /* 保证自身宽度不扩散 */
+    overflow: hidden;
   }
 
+  /* 右侧链接卡片 */
   .home-profile,
   .home-right-cards {
     width: 100%;
     max-width: 400px;
+    min-width: 0;
   }
   .home-right-cards {
     flex-direction: column;
