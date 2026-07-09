@@ -1578,6 +1578,7 @@ hr.dot {
    横向滚动文章列表
 ========================= */
 .article-scroll-list {
+  flex: 1 1 100%;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -1876,6 +1877,8 @@ code-box {
   gap: 20px;
   flex-wrap: wrap;
   max-width: 500px;
+  min-width: 0;
+  width: 100%;
   margin: 0 auto 30px;
 }
 
