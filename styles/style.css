@@ -2482,12 +2482,13 @@ code-box {
 @media (min-width: 769px) {
   .home-flex {
     display: grid;
-    grid-template-columns: 280px minmax(0, 600px);   /* 右栏最大600px */
-    grid-template-rows: auto auto auto auto;          /* 右栏4行：标题-列表-标题-列表 */
+    grid-template-columns: 280px minmax(0, 600px);
+    /* 现在需要 5 行：第1行只有左侧个人卡片，右侧从第2行开始 */
+    grid-template-rows: auto auto auto auto auto;
     gap: 24px;
     align-items: start;
 
-    max-width: 904px;   /* 280 + 24 + 600 */
+    max-width: 904px;
     margin: 0 auto;
     width: 100%;
   }
@@ -2495,14 +2496,14 @@ code-box {
   /* ========== 左栏 ========== */
   .profile-card.home-profile {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 1;          /* 独立占第1行，不会影响右侧高度 */
     width: 100%;
     margin: 0;
   }
 
   .home-right-cards {
     grid-column: 1;
-    grid-row: 2 / 5;         /* 跨越右栏的2~4行 */
+    grid-row: 2 / 6;      /* 占据第2～5行，与右栏内容对齐 */
     align-self: start;
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -2511,29 +2512,29 @@ code-box {
     max-width: none;
   }
 
-  /* ========== 右栏：精确按子元素位置定位 ========== */
-  /* Latest 标题 (第2个子元素) */
+  /* ========== 右栏（整体下移一行） ========== */
+  /* Latest 标题（第2个子元素），放到第2行 */
   .home-flex > :nth-child(2) {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  /* 第一个横向滚动列表 (第3个子元素) */
-  .home-flex > :nth-child(3) {
     grid-column: 2;
     grid-row: 2;
   }
-  /* Test 标题 (第4个子元素) */
-  .home-flex > :nth-child(4) {
+  /* 第一个横向滚动列表（第3个子元素），放到第3行 */
+  .home-flex > :nth-child(3) {
     grid-column: 2;
     grid-row: 3;
   }
-  /* 第二个横向滚动列表 (第5个子元素) */
-  .home-flex > :nth-child(5) {
+  /* Test 标题（第4个子元素），放到第4行 */
+  .home-flex > :nth-child(4) {
     grid-column: 2;
     grid-row: 4;
   }
+  /* 第二个横向滚动列表（第5个子元素），放到第5行 */
+  .home-flex > :nth-child(5) {
+    grid-column: 2;
+    grid-row: 5;
+  }
 
-  /* 确保横向滚动不受宽度限制 */
+  /* 保证横向滚动列表不被压缩 */
   .article-scroll-list {
     width: 100%;
     min-width: 0;
