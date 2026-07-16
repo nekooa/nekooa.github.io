@@ -1851,7 +1851,8 @@ code-box {
 }
 
 .home-header {
-  width: 100%;
+  max-width: 904px;
+  border-radius: 16px;
   margin: auto;
   display: block;
   object-fit: cover;
