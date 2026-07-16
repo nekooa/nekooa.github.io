@@ -2480,26 +2480,38 @@ code-box {
 
 
 @media (min-width: 769px) {
-  /* 去掉之前可能存在的窄宽限制，并为三栏布局做准备 */
+  /* 将原来的 flex 改为两栏网格，并移除宽度限制 */
   .home-flex {
     display: grid;
-    grid-template-columns: 280px 1fr 280px;  /* 左右固定宽度，中间自适应 */
+    grid-template-columns: 280px 1fr;   /* 左栏固定宽，右栏自适应 */
+    grid-template-rows: auto auto auto auto; /* 右栏需要4个行位 */
     gap: 24px;
-    max-width: none;          /* 移除原有的 500px 限制 */
+    align-items: start;                 /* 避免同一行内高度互相拉伸 */
+    max-width: none;
     width: 100%;
-    align-items: start;
   }
 
-  /* 左栏：个人卡片跨越全部行 */
+  /* ========== 左栏 ========== */
   .home-profile {
     grid-column: 1;
-    grid-row: 1 / 5;         /* 覆盖4行（标题1/列表1/标题2/列表2） */
-    width: auto;
-    max-width: none;
-    align-self: start;
+    grid-row: 1;
+    width: 100%;
+    margin: 0;
   }
 
-  /* 中栏：第一个文章区块 */
+  .home-right-cards {
+    grid-column: 1;
+    grid-row: 2 / 5;         /* 占据第2～4行，但实际高度由内容决定 */
+    align-self: start;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* ========== 右栏 ========== */
+  /* 第一个文章区块：标题 + 列表 */
   .home-flex > .scroll-title:nth-of-type(1) {
     grid-column: 2;
     grid-row: 1;
@@ -2509,7 +2521,7 @@ code-box {
     grid-row: 2;
   }
 
-  /* 中栏：第二个文章区块 */
+  /* 第二个文章区块 */
   .home-flex > .scroll-title:nth-of-type(2) {
     grid-column: 2;
     grid-row: 3;
@@ -2519,20 +2531,13 @@ code-box {
     grid-row: 4;
   }
 
-  /* 右栏：链接卡片跨越全部行，内部仍然是上下两个卡片 */
-  .home-right-cards {
-    grid-column: 3;
-    grid-row: 1 / 5;        /* 与左栏等高 */
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    gap: 20px;
-    height: 100%;           /* 填充网格区域 */
-    align-self: stretch;
+  /* 保证横向滚动列表在右栏内正常工作 */
+  .article-scroll-list {
+    width: 100%;
+    min-width: 0;
   }
-
-  /* 保证个人卡片内部的图片和内容不受额外限制 */
-  .profile-card.home-profile {
-    margin: 0;
+  .scroll-container {
+    width: 100%;
   }
 }
 
