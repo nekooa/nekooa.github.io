@@ -1797,8 +1797,6 @@ code-box {
   margin-left: var(--sidebar-width);
   overflow: hidden;
   z-index: 1;
-  mask-image: linear-gradient(to bottom, black 70%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
 }
 
 .header-container.fade-in {
@@ -1851,18 +1849,16 @@ code-box {
 }
 
 .home-header {
-  max-width: 904px;
   border-radius: 16px;
-  margin: auto;
-  display: block;
+  /* 移除可能干扰的固定高度，改用 aspect-ratio 或 height: auto */
+  height: auto;
+  max-height: var(--home-header-height);
+  width: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: 0;
-  position: relative;
+  transform: scale(1.2);
   will-change: transform;
-  z-index: 0;
-  height: var(--home-header-height);
-  transform: scale(1.2); 
+  display: block;
 }
 
 .header-overlay {
@@ -2481,6 +2477,24 @@ code-box {
 
 
 @media (min-width: 769px) {
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;      /* 图片从顶部开始 */
+    /* 保持原有的 margin-left 和 width，使容器避开侧边栏 */
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+  }
+
+  /* 图片本身设置最大宽度，与 home-flex 一致 */
+  .home-header {
+    max-width: 904px;            /* 和 home-flex 的 max-width 相同 */
+    width: 100%;
+    height: auto;                 /* 高度由比例决定 */
+    max-height: var(--home-header-height); /* 不超过 55vh */
+  }
+
+	
   .home-flex {
     display: grid;
     grid-template-columns: 280px minmax(0, 600px);  /* 左列固定，右列自适应且最大600px */
