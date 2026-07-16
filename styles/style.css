@@ -2482,59 +2482,36 @@ code-box {
 @media (min-width: 769px) {
   .home-flex {
     display: grid;
-    grid-template-columns: 280px minmax(0, 600px);
-    /* 现在需要 5 行：第1行只有左侧个人卡片，右侧从第2行开始 */
-    grid-template-rows: auto auto auto auto auto;
+    grid-template-columns: 280px minmax(0, 800px);  /* 左列固定宽，右列自适应最大800px */
     gap: 24px;
-    align-items: start;
-
-    max-width: 904px;
+    align-items: start;          /* 顶部对齐 */
+    max-width: 1104px;           /* 整体最大宽度，居中显示 */
     margin: 0 auto;
     width: 100%;
   }
 
-  /* ========== 左栏 ========== */
+  /* ====== 左列：个人卡片 + 导航卡片 ====== */
   .profile-card.home-profile {
-    grid-column: 1;
-    grid-row: 1;          /* 独立占第1行，不会影响右侧高度 */
+    grid-column: 1;              /* 固定在第1列 */
     width: 100%;
     margin: 0;
   }
 
   .home-right-cards {
-    grid-column: 1;
-    grid-row: 2 / 6;      /* 占据第2～5行，与右栏内容对齐 */
-    align-self: start;
+    grid-column: 1;              /* 仍在第1列，自动排在个人卡片下方 */
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr; /* 两个链接卡片等分 */
     gap: 20px;
     width: 100%;
-    max-width: none;
   }
 
-  /* ========== 右栏（整体下移一行） ========== */
-  /* Latest 标题（第2个子元素），放到第2行 */
-  .home-flex > :nth-child(2) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-  /* 第一个横向滚动列表（第3个子元素），放到第3行 */
-  .home-flex > :nth-child(3) {
-    grid-column: 2;
-    grid-row: 3;
-  }
-  /* Test 标题（第4个子元素），放到第4行 */
-  .home-flex > :nth-child(4) {
-    grid-column: 2;
-    grid-row: 4;
-  }
-  /* 第二个横向滚动列表（第5个子元素），放到第5行 */
-  .home-flex > :nth-child(5) {
-    grid-column: 2;
-    grid-row: 5;
-  }
+  /* ====== 右列：标题 + 列表，按文档流顺序自动排列 ====== */
+  .home-flex > :nth-child(2) { grid-column: 2; }   /* Latest 标题 */
+  .home-flex > :nth-child(3) { grid-column: 2; }   /* 第一个横向列表 */
+  .home-flex > :nth-child(4) { grid-column: 2; }   /* Test 标题 */
+  .home-flex > :nth-child(5) { grid-column: 2; }   /* 第二个横向列表 */
 
-  /* 保证横向滚动列表不被压缩 */
+  /* 确保右列内部元素宽度正常 */
   .article-scroll-list {
     width: 100%;
     min-width: 0;
