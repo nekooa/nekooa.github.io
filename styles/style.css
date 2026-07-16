@@ -852,7 +852,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
-  top: 50%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -1788,17 +1788,22 @@ code-box {
   padding: 12px !important;
 }
 
+
+
+
+
+
+
+
 /* =========================
    首页头图
 ========================= */
 .header-container {
-  width: 100% !important;            /* 改为全宽，不再受侧边栏影响 */
-  margin-left: 0 !important;        /* 清除侧边栏偏移 */
-  mask-image: none !important;      /* 移除底部渐隐遮罩，圆角后不需要 */
-  -webkit-mask-image: none !important;
-  overflow: visible;                /* 让圆角不被裁剪 */
-  border-radius: 16px;              /* 圆角矩形，数值可按喜好调整 */
+  border-radius: 16px;
+  box-sizing: border-box;
+  height: 200px;
 }
+
 
 .header-container.fade-in {
   animation: heroIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -1850,16 +1855,29 @@ code-box {
 }
 
 .home-header {
-  width: 100% !important;
-  height: 200px !important;         /* 固定高度 */
-  object-fit: cover;                /* 保持图片比例裁剪 */
-  border-radius: 16px;              /* 与容器一致 */
-  transform: none !important;       /* 移除缩放效果，否则圆角会变形 */
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 16px;
+  transform: none !important;       /* 移除原有缩放效果 */
 }
 
 .header-overlay {
-  height: 200px !important;         /* 与头图同高 */
-  border-radius: 16px;              /* 圆角 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;           /* 与容器圆角一致 */
+  background: var(--header-overlay-bg);
+  pointer-events: none;
+  z-index: 1;                      /* 确保覆盖在图片上方，但不阻挡交互 */
+}
+
+.header-container > *:not(.header-overlay):not(.home-header) {
+  position: relative;
+  z-index: 2;
 }
 
 /* =========================
@@ -2387,10 +2405,15 @@ code-box {
   }
 
   .header-container {
-    padding: 0 16px;                /* 与内容区留白一致 */
+    width: 100%;
+    max-width: 100%;
+    margin-top: var(--navbar-height);
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0 20px;                 /* 与 home-content 的左右 padding 一致 */
     box-sizing: border-box;
   }
-
+  
   .home-content {
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -2447,7 +2470,6 @@ code-box {
   }
 	
   .home-header { height: 45vh !important; width: 100%; margin: 0 0 0 0; }
-  .header-overlay { height: 45vh; width: 100%; margin: 0 0 0 0; }
   .home-link-card {
     box-sizing: border-box;
     width: 100%;
@@ -2464,20 +2486,28 @@ code-box {
 
 @media (min-width: 769px) {
   .header-container {
-    max-width: 904px;              /* 与 home-flex 的 max-width 一致 */
-    margin: 0 auto !important;      /* 居中 */
-    padding: 0;                     /* 去除可能的内边距 */
+    /* 与 home-flex 采用完全相同的布局策略：
+       - 父级（这里没有额外容器，直接放在 body 中）
+       - 使用 margin 对齐，避开 sidebar，并在剩余空间居中
+    */
+    --content-area-width: calc(100vw - var(--sidebar-width) - 40px); /* 内容区可用宽度 */
+    width: var(--content-area-width);
+    max-width: 904px;                 /* 与 home-flex 最大宽度一致 */
+    
+    /* 动态左 margin，让容器在 sidebar 右侧区域水平居中 */
+    margin-left: max(
+      calc((100vw + var(--sidebar-width) - 904px) / 2),
+      calc(var(--sidebar-width) + 20px)
+    );
+    margin-right: auto;
+    
+    margin-top: var(--navbar-height); /* 为顶部导航栏留出空间 */
+    margin-bottom: 0;
+    
+    position: relative;              /* 为 overlay 提供定位上下文 */
+    padding: 0 !important;           /* 确保无内边距影响对齐 */
   }
 
-  /* 图片本身设置最大宽度，与 home-flex 一致 */
-  .home-header {
-    max-width: 904px;            /* 和 home-flex 的 max-width 相同 */
-    width: 100%;
-    height: auto;                 /* 高度由比例决定 */
-    max-height: var(--home-header-height); /* 不超过 55vh */
-  }
-
-	
   .home-flex {
     display: grid;
     grid-template-columns: 280px minmax(0, 600px);  /* 左列固定，右列自适应且最大600px */
