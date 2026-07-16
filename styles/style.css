@@ -852,13 +852,13 @@ body {
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
-  top: 60%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
   width: auto;
   min-width: 300px;
-  max-width: 700px;
+  max-width: 90%;
   text-align: center;
   background: none !important;
   margin: 0;
@@ -1792,11 +1792,12 @@ code-box {
    首页头图
 ========================= */
 .header-container {
-  position: relative;
-  width: calc(100% - var(--sidebar-width));
-  margin-left: var(--sidebar-width);
-  overflow: hidden;
-  z-index: 1;
+  width: 100% !important;            /* 改为全宽，不再受侧边栏影响 */
+  margin-left: 0 !important;        /* 清除侧边栏偏移 */
+  mask-image: none !important;      /* 移除底部渐隐遮罩，圆角后不需要 */
+  -webkit-mask-image: none !important;
+  overflow: visible;                /* 让圆角不被裁剪 */
+  border-radius: 16px;              /* 圆角矩形，数值可按喜好调整 */
 }
 
 .header-container.fade-in {
@@ -1849,30 +1850,16 @@ code-box {
 }
 
 .home-header {
-  border-radius: 16px;
-  /* 移除可能干扰的固定高度，改用 aspect-ratio 或 height: auto */
-  height: auto;
-  max-height: var(--home-header-height);
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-  transform: scale(1.2);
-  will-change: transform;
-  display: block;
+  width: 100% !important;
+  height: 200px !important;         /* 固定高度 */
+  object-fit: cover;                /* 保持图片比例裁剪 */
+  border-radius: 16px;              /* 与容器一致 */
+  transform: none !important;       /* 移除缩放效果，否则圆角会变形 */
 }
 
 .header-overlay {
-  display: none;
-  position: absolute;
-  width: 100%;
-  margin: auto;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--header-overlay-bg);
-  pointer-events: none;
-  height: var(--header-overlay-height);
+  height: 200px !important;         /* 与头图同高 */
+  border-radius: 16px;              /* 圆角 */
 }
 
 /* =========================
@@ -2400,10 +2387,8 @@ code-box {
   }
 
   .header-container {
-    position: relative;
-    width: 100%;
-    margin-left: 0;
-    overflow: hidden;
+    padding: 0 16px;                /* 与内容区留白一致 */
+    box-sizing: border-box;
   }
 
   .home-content {
@@ -2479,12 +2464,9 @@ code-box {
 
 @media (min-width: 769px) {
   .header-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;      /* 图片从顶部开始 */
-    /* 保持原有的 margin-left 和 width，使容器避开侧边栏 */
-    margin-left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
+    max-width: 904px;              /* 与 home-flex 的 max-width 一致 */
+    margin: 0 auto !important;      /* 居中 */
+    padding: 0;                     /* 去除可能的内边距 */
   }
 
   /* 图片本身设置最大宽度，与 home-flex 一致 */
