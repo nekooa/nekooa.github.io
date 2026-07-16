@@ -2480,14 +2480,17 @@ code-box {
 
 
 @media (min-width: 769px) {
-  /* 将原来的 flex 改为两栏网格，并移除宽度限制 */
   .home-flex {
     display: grid;
-    grid-template-columns: 280px 1fr;   /* 左栏固定宽，右栏自适应 */
-    grid-template-rows: auto auto auto auto; /* 右栏需要4个行位 */
+    /* 左栏固定280px，右栏自适应但最大600px */
+    grid-template-columns: 280px minmax(0, 600px);
+    grid-template-rows: auto auto auto auto;
     gap: 24px;
-    align-items: start;                 /* 避免同一行内高度互相拉伸 */
-    max-width: none;
+    align-items: start;
+
+    /* 整体居中，并限制最大总宽度 */
+    max-width: 904px;   /* 280 + 24 + 600 */
+    margin: 0 auto;
     width: 100%;
   }
 
@@ -2501,7 +2504,7 @@ code-box {
 
   .home-right-cards {
     grid-column: 1;
-    grid-row: 2 / 5;         /* 占据第2～4行，但实际高度由内容决定 */
+    grid-row: 2 / 5;
     align-self: start;
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -2511,7 +2514,6 @@ code-box {
   }
 
   /* ========== 右栏 ========== */
-  /* 第一个文章区块：标题 + 列表 */
   .home-flex > .scroll-title:nth-of-type(1) {
     grid-column: 2;
     grid-row: 1;
@@ -2521,7 +2523,6 @@ code-box {
     grid-row: 2;
   }
 
-  /* 第二个文章区块 */
   .home-flex > .scroll-title:nth-of-type(2) {
     grid-column: 2;
     grid-row: 3;
@@ -2531,7 +2532,6 @@ code-box {
     grid-row: 4;
   }
 
-  /* 保证横向滚动列表在右栏内正常工作 */
   .article-scroll-list {
     width: 100%;
     min-width: 0;
