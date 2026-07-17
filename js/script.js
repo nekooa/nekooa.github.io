@@ -2,17 +2,6 @@
    加载屏
 ========================= */
 var pageLoadStart = Date.now();   // 记录脚本开始执行的时刻
-(function() {
-  var preloader = document.createElement('div');
-  preloader.id = 'preloader';
-  preloader.innerHTML = '\
-    <div class="loader-inner">\
-      <div class="loader-ring"></div>\
-      <p>正在加载喵...</p>\
-    </div>\
-  ';
-  document.body.insertBefore(preloader, document.body.firstChild);
-})();
 
 /* =========================
    全局变量与初始化
