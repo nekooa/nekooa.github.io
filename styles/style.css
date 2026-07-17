@@ -1599,6 +1599,16 @@ hr.dot {
 .scroll-title {
   font-size: 1.4rem;
   font-weight: 600;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+}
+
+.scroll-title-top {
+  font-size: 1.4rem;
+  font-weight: 600;
   margin: 20px 0 0px 0;
   display: inline-flex;
   align-items: center;
