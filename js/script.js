@@ -248,8 +248,7 @@ const ColorThemeManager = {
           '--playerTextShadow-2': '0 0 1px rgba(0,0,0,0.5)'
         }
       }
-    },
-   }
+    }
   },
 
   getColor() {
