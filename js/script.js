@@ -958,6 +958,21 @@ function addRippleEffect() {
 }
 
 /* =========================
+   横向滚动支持
+========================= */
+function enableHorizontalScroll() {
+  document.addEventListener('wheel', (e) => {
+    const container = e.target.closest('.scroll-container');
+    if (!container) return;
+    // 只有横向可以滚动时才拦截（避免容器内容未溢出时无法纵向滚动页面）
+    if (container.scrollWidth > container.clientWidth) {
+      e.preventDefault();
+      container.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });   // passive: false 才能调用 preventDefault
+}
+
+/* =========================
    一言 API
 ========================= */
 let hitokotoCache = null;
@@ -1336,9 +1351,10 @@ const Calendar = {
    初始化执行
 ========================= */
 function initAll() {
-   ColorThemeManager.init();
+  ColorThemeManager.init();
   bindLinks();
   addRippleEffect();
+  enableHorizontalScroll();
   bindSettingsTrigger();
   Calendar.init();
   initGiscus();
