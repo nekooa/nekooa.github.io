@@ -852,7 +852,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
-  top: 20%;
+  top: -50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -1799,6 +1799,7 @@ code-box {
    首页头图
 ========================= */
 .header-container {
+  position: relative ！important;
   border-radius: 16px;
   box-sizing: border-box;
   height: 200px;
@@ -2407,10 +2408,11 @@ code-box {
   .header-container {
     width: 100%;
     max-width: 100%;
+    height: 70px !important;
     margin-top: var(--navbar-height);
     margin-left: 0;
     margin-right: 0;
-    padding: 0 20px;                 /* 与 home-content 的左右 padding 一致 */
+    padding: 0 20px;
     box-sizing: border-box;
   }
   
