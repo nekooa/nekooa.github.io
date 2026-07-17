@@ -278,8 +278,6 @@ p {
    overflow: auto;
    -ms-overflow-style: none;
    scrollbar-width: none;
-   user-select: none;           /* 禁止选中文本 */
-   -webkit-user-select: none;   /* Safari 兼容 */
   }
   body::-webkit-scrollbar {
    display: none;
@@ -543,6 +541,8 @@ body {
   color: var(--color-text);
   margin: 0;
   transition: var(--transition);
+  user-select: none;           /* 禁止选中文本 */
+  -webkit-user-select: none;   /* Safari 兼容 */
 }
 
 /* =========================
