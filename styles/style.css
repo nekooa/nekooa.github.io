@@ -278,6 +278,8 @@ p {
    overflow: auto;
    -ms-overflow-style: none;
    scrollbar-width: none;
+   user-select: none;           /* 禁止选中文本 */
+   -webkit-user-select: none;   /* Safari 兼容 */
   }
   body::-webkit-scrollbar {
    display: none;
@@ -1253,6 +1255,8 @@ body {
   background: var(--article-card-bg);
   box-sizing: border-box;
   color: var(--article-card-text);
+  user-select: text;           /* 允许选中文字 */
+  -webkit-user-select: text;   /* Safari 兼容 */
 }
 
 .article-card img {
