@@ -148,7 +148,16 @@ a::after {
 
 html, body {
   overflow-x: hidden;
+  overflow-y: scroll;
   touch-action: pan-y;
+}
+
+body {
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
+}
+body::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari/新版Edge */
 }
 
 hr {
@@ -2460,18 +2469,16 @@ code-box {
 
 @media (min-width: 769px) {
   .header-container {
-
-    --content-area-width: calc(100vw - var(--sidebar-width) - 40px);
-    width: var(--content-area-width);
+    width: calc(100% - var(--sidebar-width) - 40px);
     max-width: 904px;
     margin-left: max(
-      calc((100vw + var(--sidebar-width) - 904px) / 2),
+      calc((100% + var(--sidebar-width) - 904px) / 2),
       calc(var(--sidebar-width) + 20px)
     );
     margin-right: auto;
     margin-top: var(--navbar-height);
     margin-bottom: 0;
-    position: relative;              /* 为 overlay 提供定位上下文 */
+    position: relative;
     padding: 0 !important;
   }
 
@@ -2513,7 +2520,6 @@ code-box {
   /* 第二个列表 */
   .home-flex > :nth-child(5) { grid-area: list2; }
 
-  /* 确保横向滚动列表不被压缩 */
   .article-scroll-list {
     width: 100%;
     min-width: 0;
@@ -2521,71 +2527,4 @@ code-box {
   .scroll-container {
     width: 100%;
   }
-}
-
-
-
-/* =========================
-   播放器手动主题适配
-========================= */
-[data-theme="dark"] #xf-MusicPlayer .xf-girlPink {
-  --playerColor-1: #1f1a1c;
-  --playerColor-2: #ebe0e2;
-  --playerColor-3: #59404b;
-  --playerColor-4: #d4c2c8;
-  --playerColor-5: #FFB3C6;
-  --playerColor-6: #ffafd5;
-  --playerColor-7: #5C3A47;
-  --playerColor-8: #ffd8e8;
-  --playerColor-9: #504348;
-  --playerColor-10: #D27B94;
-  --playerColor-11: #F5C2D2;
-  --playerColor-12: #FFDFED;
-  --playerColor-rgab-1: rgba(255, 223, 237, 0.12);
-  --playerColor-rgab-2: rgba(65, 42, 52, 0.7);
-  --playerShadow-1: 0px 4px 8px 3px rgba(0, 0, 0, 0.3), 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
-  --playerShadow-2: -4px 4px 8px 0px rgba(0, 0, 0, 0.4), inset -4px 4px 10px 0px rgba(255, 223, 237, 0.05);
-  --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
-  --playerTextShadow-2: 0 0 1px rgba(0, 0, 0, 0.5);
-}
-[data-theme="dark"] #xf-lyric {
-  background-color: rgba(65, 42, 52, 0.9) !important;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
-}
-[data-theme="dark"] .xf-music-pop {
-  background-color: rgba(89, 64, 75, 0.6) !important;
-}
-[data-theme="dark"] .xf-throughDisplay {
-  background-color: rgba(65, 42, 52, 0.9) !important;
-}
-
-[data-theme="light"] #xf-MusicPlayer .xf-girlPink {
-  --playerColor-1: #fffbff;
-  --playerColor-2: #1f1a1c;
-  --playerColor-3: #fdd9e7;
-  --playerColor-4: #504348;
-  --playerColor-5: #1C1B1F;
-  --playerColor-6: #ae1d79;
-  --playerColor-7: #fdd9e7;
-  --playerColor-8: #3d0027;
-  --playerColor-9: #f1dee4;
-  --playerColor-10: #7f553a;
-  --playerColor-11: #C27E94;
-  --playerColor-12: #301401;
-  --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
-  --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
-  --playerShadow-2: -4px 4px 8px 0px rgba(176, 0, 92, 0.08), inset -4px 4px 10px 0px rgba(0, 0, 0, 0.03);
-  --playerTextShadow-1: 0 0 1px rgba(176, 0, 92, 0.15);
-  --playerTextShadow-2: 0 0 1px rgba(255, 255, 255, 0.5);
-}
-[data-theme="light"] #xf-lyric {
-  background-color: rgba(253, 217, 231, 0.7) !important;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-[data-theme="light"] .xf-music-pop {
-  background-color: rgba(253, 217, 231, 0.7) !important;
-}
-[data-theme="light"] .xf-throughDisplay {
-  background-color: rgba(0, 0, 0, 0.75) !important;
 }
