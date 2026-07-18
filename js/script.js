@@ -167,7 +167,7 @@ const ColorThemeManager = {
         '--card-bg': '#EFF5F8',
         '--content-card-bg': '#EFF5F8',
         '--profile-card-bg': '#EFF5F8',
-        '--about-card-bg': #EFF5F8',
+        '--about-card-bg': '#EFF5F8',
         '--home-link-card-bg': '#EFF5F8',
         '--article-card-bg': '#EFF5F8',
         '--profile-list-bg': '#D1E5F4',
