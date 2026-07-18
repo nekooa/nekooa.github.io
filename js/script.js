@@ -162,7 +162,7 @@ const ColorThemeManager = {
         '--color-pink-soft': '#C3E8FF',
         '--color-svg': '#2f4554',
         '--sidebar-bg': '#001E2C',
-        '--sidebar-a': '#D1E5F4',
+        '--sidebar-a': 'rgba(106,106,106,0.2)',
         '--sidebar-bg-mobile': 'rgba(231,240,245,0.8)',
         '--card-bg': '#EFF5F8',
         '--content-card-bg': '#EFF5F8',
