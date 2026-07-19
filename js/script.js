@@ -237,6 +237,7 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(30,60,90,0.15)',
         '--thoughts-border': '#4a7ca5',
         '--nav-time-bg': 'rgba(145,192,240,0.2)',
+        '--settings-panel-bg': '#17212b',
         player: {
           '--playerColor-1': '#17212b',
           '--playerColor-2': '#d4e4f5',
