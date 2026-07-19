@@ -1,4 +1,4 @@
-"use strict"; 
+"use strict";
 window.addEventListener('DOMContentLoaded', function () {
     var playerEle = document.querySelectorAll('#xf-MusicPlayer');
     if (playerEle.length === 0) { return; }
@@ -313,7 +313,7 @@ window.addEventListener('DOMContentLoaded', function () {
                             res.map(async data => {
                                 const musicId = data.id;
                                 const musicName = data.name;
-                                // 修改：优先使用歌手名
+                                // 歌手优先使用 artistsname，回退 ar 组合
                                 const artistsname = data.artistsname || (data.ar ? data.ar.map(a => a.name).join(' / ') : '未知歌手');
                                 const picurl = data.picurl || data.al.picUrl;
                                 const mp3 = data.url || `${musicApi}/musicAll/?songId=${musicId}&mp3Url=mp3`;
@@ -435,13 +435,6 @@ window.addEventListener('DOMContentLoaded', function () {
                                     fetchData(wyLyric).then(res => {
                                         xfAllLyri.innerHTML = '';
                                         if (res.code === 200) {
-                                            // 注入滚动关键帧（仅一次）
-                                            if (!document.getElementById('xf-lyric-scroll-keyframes')) {
-                                                const style = document.createElement('style');
-                                                style.id = 'xf-lyric-scroll-keyframes';
-                                                style.textContent = '@keyframes xf-lyric-scroll-custom { 0% { transform: translateX(0); } 100% { transform: translateX(var(--scroll-distance)); } }';
-                                                document.head.appendChild(style);
-                                            }
                                             const lyricsData = res.lrc.lyric;
                                             const lines = lyricsData.split('\n');
                                             const lyricsArray = lines.map(line => {
@@ -463,7 +456,7 @@ window.addEventListener('DOMContentLoaded', function () {
                                             });
                                             function updateLyricDisplay() {
                                                 const currentTime = xfMusicAudio.currentTime;
-                                                // 移除所有高亮
+                                                // 清除所有高亮
                                                 for (let i = 0; i < lyricsArray.length; i++) {
                                                     const el = xfAllLyri.children[i];
                                                     if (el) el.classList.remove('xf-textShow');
@@ -483,7 +476,9 @@ window.addEventListener('DOMContentLoaded', function () {
                                                     const sp = item.querySelector('span');
                                                     if (sp) {
                                                         sp.style.animation = '';
-                                                        sp.style.removeProperty('--scroll-distance');
+                                                        // 恢复原始文本
+                                                        const original = item.getAttribute('data-original-text');
+                                                        if (original) sp.textContent = original;
                                                     }
                                                 });
                                                 const lisEle = xfAllLyri.children[currentLyricIndex];
@@ -491,12 +486,18 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 if (lisEle) {
                                                     const span = lisEle.querySelector('span');
                                                     if (span) {
+                                                        // 保存原始文本
+                                                        const originalText = span.textContent;
+                                                        lisEle.setAttribute('data-original-text', originalText);
                                                         requestAnimationFrame(() => {
+                                                            // 先恢复单倍文本获取溢出宽度
+                                                            span.textContent = originalText;
                                                             if (span.scrollWidth > lisEle.clientWidth) {
+                                                                // 复制文本并拼接（中间加间隔）
+                                                                span.textContent = originalText + '　　' + originalText;
                                                                 lisEle.classList.add('scrolling');
-                                                                const overflow = span.scrollWidth - lisEle.clientWidth;
-                                                                span.style.setProperty('--scroll-distance', `-${overflow}px`);
-                                                                span.style.animation = `xf-lyric-scroll-custom ${Math.max(4, overflow / 40)}s linear infinite`;
+                                                                const duration = Math.max(5, span.scrollWidth / 40);
+                                                                span.style.animation = `xf-lyric-marquee ${duration}s linear infinite`;
                                                             }
                                                         });
                                                     }
