@@ -680,6 +680,25 @@ lisEle.innerHTML = `<span>${lyric.text}</span>`
                                                     }
                                                     const lisEle = xfAllLyri.children[currentLyricIndex]
                                                     if (lisEle) lisEle.classList.add('xf-textShow')
+                                                // 检测所有歌词行，宽出则启用滚动
+const lyricItems = xfAllLyri.querySelectorAll('.xf-ly');
+lyricItems.forEach(item => {
+  const span = item.querySelector('span');
+  if (span) {
+    // 比较实际文本宽度与容器宽度
+    if (span.scrollWidth > item.clientWidth) {
+      item.classList.add('scrolling');
+      // 动态计算滚动距离
+      const overflow = span.scrollWidth - item.clientWidth;
+      span.style.animationDuration = `${Math.max(4, overflow / 40)}s`; // 根据长度调整速度
+      span.style.setProperty('--scroll-distance', `-${overflow}px`);
+      // 修改关键帧为具体距离
+      span.style.animationName = 'xf-lyric-scroll-custom';
+    } else {
+      item.classList.remove('scrolling');
+    }
+  }
+});
                                                 }
 
                                                 xfMusicAudio.removeEventListener('timeupdate', updateLyricDisplay)
