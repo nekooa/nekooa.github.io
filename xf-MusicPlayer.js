@@ -659,7 +659,8 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 lyricsArray.forEach(lyric => {
                                                     const lisEle = document.createElement('li')
                                                     lisEle.classList.add('xf-ly')
-                                                    lisEle.textContent = lyric.text
+                                                    // 用 span 包裹，方便检测宽度
+lisEle.innerHTML = `<span>${lyric.text}</span>`
                                                     xfAllLyri.appendChild(lisEle)
                                                 })
 
