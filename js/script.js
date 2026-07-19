@@ -1,7 +1,22 @@
 /* =========================
+   常量配置
+========================= */
+const CONFIG = {
+  /* [修改] 提取为顶层常量 */
+  GISCUS_REPO: 'sagiriworld/sagiriworld.github.io',
+  GISCUS_REPO_ID: 'R_kgDORzOqxQ',
+  GISCUS_CATEGORY: 'Announcements',
+  GISCUS_CATEGORY_ID: 'DIC_kwDORzOqxc4C-uzR',
+  GISCUS_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-dark.css',
+  GISCUS_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-light.css',
+  HITOKOTO_CACHE_DURATION: 60 * 1000,   /* [修改] 3s → 60s */
+  MIN_LOAD_TIME: 3000,
+};
+
+/* =========================
    加载屏
 ========================= */
-var pageLoadStart = Date.now();   // 记录脚本开始执行的时刻
+var pageLoadStart = Date.now();
 
 /* =========================
    全局变量与初始化
@@ -58,7 +73,6 @@ const ColorThemeManager = {
   themes: {
     pink: {
       light: {
-        // 页面全局变量
         '--color-bg': '#FFFBFF',
         '--color-pink': '#ff95bc',
         '--color-pink-soft': 'rgba(255,216,231,0.7)',
@@ -83,7 +97,6 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(255,235,245,0.5)',
         '--thoughts-border': '#f8bbd0',
         '--nav-time-bg': 'rgba(255,216,231,0.8)',
-        // 播放器变量
         player: {
           '--playerColor-1': '#fffbff',
           '--playerColor-2': '#1f1a1c',
@@ -106,7 +119,6 @@ const ColorThemeManager = {
         }
       },
       dark: {
-        // 页面全局变量
         '--color-bg': '#1F1A1C',
         '--color-pink': '#ffb3cf',
         '--color-pink-soft': 'rgba(255,179,207,0.25)',
@@ -131,7 +143,6 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(255,210,225,0.08)',
         '--thoughts-border': '#f06292',
         '--nav-time-bg': 'rgba(255,179,207,0.2)',
-        // 播放器变量
         player: {
           '--playerColor-1': '#1f1a1c',
           '--playerColor-2': '#ebe0e2',
@@ -178,7 +189,8 @@ const ColorThemeManager = {
         '--slogan-color': '#006689',
         '--slogan-text-shadow': '0 2px 8px rgba(59,122,191,0.2)',
         '--thoughts-color': '#006689',
-        '--thoughts-bg': 'D1E5F4',
+        /* [修改] 修复缺失的 # 号 */
+        '--thoughts-bg': '#D1E5F4',
         '--thoughts-border': '#C3E8FF',
         '--nav-time-bg': 'rgba(195,232,255,0.6)',
         player: {
@@ -323,10 +335,8 @@ function playEnterAnimation(selectors) {
     if (el.matches('.header-container')) return;
     el.style.opacity = '0';
     if (el.matches('.logo')) {
-      // 左侧滑入
       el.style.transform = 'translateX(-20px)';
     } else if (el.matches('.settings-button-m')) {
-      // 右侧滑入
       el.style.transform = 'translateX(20px)';
     } else if (el.matches('.article-card, .comment-content')) {
       el.style.transform = isMobile
@@ -337,10 +347,10 @@ function playEnterAnimation(selectors) {
     }
   });
 
-  // 二：强制重排，让浏览器记录内联样式
+  // 二：强制重排
   void document.body.offsetWidth;
 
-  // 三：移除内联样式并添加 .fade-in，触发过渡
+  // 三：移除内联样式并添加 .fade-in
   elements.forEach(el => {
     if (el.matches('.header-container')) {
       el.classList.add('fade-in');
@@ -352,7 +362,24 @@ function playEnterAnimation(selectors) {
   });
 }
 
+/* =========================
+   页面加载守卫
+========================= */
+/* [修改] 防止快速连续点击导致并发加载 */
+let isLoadingPage = false;
+
 async function loadPage(url, addToHistory = true) {
+  /* [修改] 防止并发 */
+  if (isLoadingPage) return;
+  isLoadingPage = true;
+
+  /* [修改] 如果设置弹窗开着，先关掉 */
+  const settingsDialog = document.getElementById('settingsDialog');
+  if (settingsDialog && settingsDialog.classList.contains('open')) {
+    settingsDialog.classList.remove('open');
+    settingsDialog.setAttribute('aria-hidden', 'true');
+  }
+
   try {
     const res = await fetch(url);
     const text = await res.text();
@@ -547,7 +574,15 @@ async function loadPage(url, addToHistory = true) {
       }
     });
   } catch (err) {
+    /* [修改] 加载失败时恢复页面状态，而不是卡在 fade-out */
     console.error('页面加载失败:', err);
+    document.querySelectorAll('.fade-out').forEach(el => {
+      el.classList.remove('fade-out');
+      el.classList.add('fade-in');
+    });
+  } finally {
+    /* [修改] 无论成功失败都释放锁 */
+    isLoadingPage = false;
   }
 }
 
@@ -557,7 +592,6 @@ async function loadPage(url, addToHistory = true) {
 function bindLinks() {
   let activeTimer = null;
 
-  // 判断两个路径是否指向同一页面
   const isSamePage = (url1, url2) => {
     const normalize = (path) => {
       if (path === '/' || path === '/index.html') return 'index.html';
@@ -566,10 +600,23 @@ function bindLinks() {
     return normalize(url1) === normalize(url2);
   };
 
+  /* [修改] 判断是否为站内链接 */
+  const isInternalLink = (url) => {
+    if (!url) return false;
+    if (url.startsWith('http://') || url.startsWith('https://')) return false;
+    if (url.startsWith('mailto:') || url.startsWith('tel:') || url.startsWith('javascript:')) return false;
+    if (url.startsWith('#')) return false;
+    return true;
+  };
+
   document.querySelectorAll('.sidebar a, .spa-link, .spa-link-home').forEach(link => {
     link.onclick = e => {
-      e.preventDefault();
       const url = link.getAttribute('href');
+
+      /* [修改] 外部链接、锚点等不做 SPA 拦截，交给浏览器处理 */
+      if (!isInternalLink(url)) return;
+
+      e.preventDefault();
 
       if (isSamePage(url, location.pathname)) {
         return;
@@ -686,16 +733,15 @@ function initGiscus() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   })();
 
-  const themeUrl = isDark
-    ? 'https://neneneko.pages.dev/styles/giscus-dark.css'
-    : 'https://neneneko.pages.dev/styles/giscus-light.css';
+  /* [修改] 使用 CONFIG 常量 */
+  const themeUrl = isDark ? CONFIG.GISCUS_DARK_THEME : CONFIG.GISCUS_LIGHT_THEME;
 
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
-  script.setAttribute('data-repo', 'sagiriworld/sagiriworld.github.io');
-  script.setAttribute('data-repo-id', 'R_kgDORzOqxQ');
-  script.setAttribute('data-category', 'Announcements');
-  script.setAttribute('data-category-id', 'DIC_kwDORzOqxc4C-uzR');
+  script.setAttribute('data-repo', CONFIG.GISCUS_REPO);
+  script.setAttribute('data-repo-id', CONFIG.GISCUS_REPO_ID);
+  script.setAttribute('data-category', CONFIG.GISCUS_CATEGORY);
+  script.setAttribute('data-category-id', CONFIG.GISCUS_CATEGORY_ID);
   script.setAttribute('data-mapping', 'pathname');
   script.setAttribute('data-strict', '0');
   script.setAttribute('data-reactions-enabled', '1');
@@ -716,13 +762,13 @@ function initGiscus() {
 ========================= */
 function addRippleEffect() {
   const rippleElements = document.querySelectorAll(`
-    .sidebar a, 
+    .sidebar a,
     .li-a,
     .card,
     .home-link-card,
     .settings-button-m,
-    .close-button, 
-    .md3-button, 
+    .close-button,
+    .md3-button,
     .md3-list-item,
     .spa-link-home
   `);
@@ -735,7 +781,6 @@ function addRippleEffect() {
     if (position === 'static') element.style.position = 'relative';
     if (window.getComputedStyle(element).overflow !== 'hidden') element.style.overflow = 'hidden';
 
-    // 将 'click' 改为 'pointerdown'，实现按下即播
     element.addEventListener('pointerdown', function (e) {
       const rect = element.getBoundingClientRect();
       const circle = document.createElement('span');
@@ -763,12 +808,11 @@ function enableHorizontalScroll() {
   document.addEventListener('wheel', (e) => {
     const container = e.target.closest('.scroll-container');
     if (!container) return;
-    // 只有横向可以滚动时才拦截（避免容器内容未溢出时无法纵向滚动页面）
     if (container.scrollWidth > container.clientWidth) {
       e.preventDefault();
       container.scrollLeft += e.deltaY;
     }
-  }, { passive: false });   // passive: false 才能调用 preventDefault
+  }, { passive: false });
 }
 
 /* =========================
@@ -776,7 +820,6 @@ function enableHorizontalScroll() {
 ========================= */
 let hitokotoCache = null;
 let hitokotoCacheTime = 0;
-const HITOKOTO_CACHE_DURATION = 3 * 1000; //缓存
 
 function applyHitokoto(data) {
   const mainText = document.getElementById('hitokoto_text');
@@ -805,7 +848,14 @@ function applyFallback() {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
 
-  const fallback = '愿你的每一天都独特而美好';
+  /* [修改] fallback 数组随机选取 */
+  const fallbacks = [
+    '愿你的每一天都独特而美好',
+    '生活明朗，万物可爱',
+    '保持热爱，奔赴山海',
+    '心有所期，全力以赴',
+  ];
+  const fallback = fallbacks[Math.floor(Math.random() * fallbacks.length)];
 
   if (mainText.dataset.current === fallback) return;
   mainText.dataset.current = fallback;
@@ -828,7 +878,8 @@ async function initHitokoto(delay = false) {
     return;
   }
 
-  if (hitokotoCache && (Date.now() - hitokotoCacheTime) < HITOKOTO_CACHE_DURATION) {
+  /* [修改] 使用 CONFIG.HITOKOTO_CACHE_DURATION（60s） */
+  if (hitokotoCache && (Date.now() - hitokotoCacheTime) < CONFIG.HITOKOTO_CACHE_DURATION) {
     applyHitokoto(hitokotoCache);
     return;
   }
@@ -899,14 +950,14 @@ function createSettingsDialog() {
             </span>
           </label>
           <div class="md3-list-item theme-picker-item">
-  <span>
-    <div class="item-label">主题颜色（beta）</div>
-  </span>
-  <span class="theme-color-options">
-    <span class="theme-color-btn pink" data-color="pink"></span>
-    <span class="theme-color-btn blue" data-color="blue"></span>
-  </span>
-</div>
+            <span>
+              <div class="item-label">主题颜色（beta）</div>
+            </span>
+            <span class="theme-color-options">
+              <span class="theme-color-btn pink" data-color="pink"></span>
+              <span class="theme-color-btn blue" data-color="blue"></span>
+            </span>
+          </div>
           <div class="md3-list-item" id="clearCacheBtn">
             <span class="item-label">清除缓存</span>
           </div>
@@ -963,7 +1014,7 @@ function createSettingsDialog() {
   });
 
   document.getElementById('clearCacheBtn').addEventListener('click', () => {
-    if (confirm('确定清除所有缓存数据吗？')) {
+    if (confirm('确定清除所有缓存数据吗？？')) {
       localStorage.clear();
       ThemeManager.setTheme('auto');
       themeSelect.value = 'auto';
@@ -976,23 +1027,19 @@ function createSettingsDialog() {
     ThemeManager.setTheme(themeSelect.value);
   });
 
-// 绑定主题颜色按钮
-document.querySelectorAll('.theme-color-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const color = btn.dataset.color;
-    ColorThemeManager.setColor(color);
+  // 绑定主题颜色按钮
+  document.querySelectorAll('.theme-color-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const color = btn.dataset.color;
+      ColorThemeManager.setColor(color);
+    });
   });
-});
-   
+
+  /* [修改] 移除了无效的 window.loadPage 包装（loadPage 不在 window 上）
+     loadPage 开头已内置关闭弹窗的逻辑 */
+
   window.addEventListener('popstate', closeDialog);
-  const originalLoadPage = window.loadPage;
-  if (originalLoadPage) {
-    window.loadPage = async function(url) {
-      closeDialog();
-      return originalLoadPage.call(this, url);
-    };
-  }
 
   addRippleEffect();
 }
@@ -1004,7 +1051,7 @@ function openSettingsDialog() {
   dialog.setAttribute('aria-hidden', 'false');
   const themeSelect = document.getElementById('themeSelect');
   if (themeSelect) themeSelect.value = ThemeManager.getTheme();
-     // 刷新颜色按钮状态
+  // 刷新颜色按钮状态
   ColorThemeManager.updateActiveButton(ColorThemeManager.getColor());
 }
 
@@ -1025,36 +1072,27 @@ function bindSettingsTrigger() {
    Viewer.js 图片查看器初始化
 ========================= */
 function initImageViewer() {
-  // 选择需要添加查看器的图片容器
   const containers = document.querySelectorAll('.article-card');
   containers.forEach(container => {
     if (container.dataset.viewer === 'true') return;
     container.dataset.viewer = 'true';
     new Viewer(container, {
-      toolbar: {
-        zoomIn: 1,
-        zoomOut: 1,
-        oneToOne: 1,
-        reset: 1,
-        prev: 1,
-        play: 0,
-        next: 1,
-        rotateLeft: 1,
-        rotateRight: 1,
-        flipHorizontal: 1,
-        flipVertical: 1,
-      },
-      navbar: true,
-      title: false,
+      /* [修改] 合并为单一 toolbar 对象，修复重复定义导致第一个被覆盖的 bug */
       toolbar: {
         zoomIn: true,
         zoomOut: true,
+        oneToOne: true,
         reset: true,
         prev: true,
+        play: false,
         next: true,
         rotateLeft: true,
         rotateRight: true,
+        flipHorizontal: true,
+        flipVertical: true,
       },
+      navbar: true,
+      title: false,
       keyboard: true,
       tooltip: true,
       movable: true,
@@ -1068,7 +1106,7 @@ function initImageViewer() {
 }
 
 /* =========================
-   日历组件
+   日历组件（事件委托）
 ========================= */
 const Calendar = {
   current: new Date(),
@@ -1100,12 +1138,10 @@ const Calendar = {
         ${['日','一','二','三','四','五','六'].map(d => `<div class="cal-day-name">${d}</div>`).join('')}
     `;
 
-    // 空白占位
     for (let i = 0; i < firstDay; i++) {
       html += `<div class="cal-day empty"></div>`;
     }
 
-    // 日期
     for (let d = 1; d <= lastDate; d++) {
       const isToday =
         d === today.getDate() &&
@@ -1123,24 +1159,21 @@ const Calendar = {
     container.innerHTML = html;
   },
 
+  /* [修改] 使用事件委托，避免每次 render 后重新绑定 */
   bindEvents() {
     const container = document.getElementById('calendar');
-    if (!container) return;
+    if (!container || container.dataset.bound === 'true') return;
+    container.dataset.bound = 'true';
 
-    const prev = container.querySelector('.cal-prev');
-    const next = container.querySelector('.cal-next');
-
-    prev.onclick = () => {
-      this.current.setMonth(this.current.getMonth() - 1);
-      this.render();
-      this.bindEvents();
-    };
-
-    next.onclick = () => {
-      this.current.setMonth(this.current.getMonth() + 1);
-      this.render();
-      this.bindEvents();
-    };
+    container.addEventListener('click', (e) => {
+      if (e.target.closest('.cal-prev')) {
+        this.current.setMonth(this.current.getMonth() - 1);
+        this.render();
+      } else if (e.target.closest('.cal-next')) {
+        this.current.setMonth(this.current.getMonth() + 1);
+        this.render();
+      }
+    });
   }
 };
 
@@ -1148,7 +1181,11 @@ const Calendar = {
    初始化执行
 ========================= */
 function initAll() {
+  /* [修改] 先初始化 ThemeManager，恢复 data-theme 属性，
+     再初始化 ColorThemeManager 读取正确的暗/亮模式 */
+  ThemeManager.init();
   ColorThemeManager.init();
+
   bindLinks();
   addRippleEffect();
   enableHorizontalScroll();
@@ -1156,19 +1193,16 @@ function initAll() {
   Calendar.init();
   initGiscus();
 
-  const MIN_LOAD_TIME = 3000;   // 最短停留 3 秒
-
   const hidePreloader = () => {
     const preloader = document.getElementById('preloader');
     if (!preloader) return;
 
-    const elapsed = Date.now() - pageLoadStart;        // 已经过去的时间
-    const remaining = Math.max(MIN_LOAD_TIME - elapsed, 0);  // 还需等待的时间
+    const elapsed = Date.now() - pageLoadStart;
+    const remaining = Math.max(CONFIG.MIN_LOAD_TIME - elapsed, 0);
 
     const doHide = () => {
       preloader.classList.add('hidden');
 
-      // 等淡出动画结束后再执行内容入场动画
       setTimeout(() => {
         initCodeBoxes();
         initHitokoto();
@@ -1178,7 +1212,7 @@ function initAll() {
           '.logo, .settings-button-m, .footer, .comment-content'
         );
         initImageViewer();
-      }, 400); // 与 CSS 的 opacity 过渡时间一致
+      }, 400);
     };
 
     if (remaining > 0) {
@@ -1188,7 +1222,6 @@ function initAll() {
     }
   };
 
-  // 等待 DOM 就绪后执行
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     setTimeout(hidePreloader, 0);
   } else {
@@ -1196,9 +1229,9 @@ function initAll() {
   }
 }
 
-// 监听浏览器前进/后退，交给 loadPage 内部更新 active
+// 监听浏览器前进/后退
 window.addEventListener('popstate', () => {
-  loadPage(location.pathname, false);   // ← 传入 false 避免重复 pushState
+  loadPage(location.pathname, false);
 });
 
 initAll();
