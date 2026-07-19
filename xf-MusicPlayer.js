@@ -455,7 +455,35 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 lisEle.innerHTML = `<span>${lyric.text}</span>`;
                                                 xfAllLyri.appendChild(lisEle);
                                             });
+
+                                            // 歌词滚动控制（纯 JS 无限循环）
                                             let lastLyricIndex = -1;
+                                            let scrollAnimFrame = null;
+                                            let scrollStartTime = null;
+                                            let scrollOverflow = 0;
+                                            const scrollSpeed = 30; // 像素/秒
+
+                                            function stopLyricScroll() {
+                                                if (scrollAnimFrame) {
+                                                    cancelAnimationFrame(scrollAnimFrame);
+                                                    scrollAnimFrame = null;
+                                                    scrollStartTime = null;
+                                                }
+                                            }
+
+                                            function startLyricScroll(span, overflow) {
+                                                stopLyricScroll();
+                                                scrollOverflow = overflow;
+                                                const scroll = (timestamp) => {
+                                                    if (!scrollStartTime) scrollStartTime = timestamp;
+                                                    const elapsed = timestamp - scrollStartTime;
+                                                    const offset = (elapsed / 1000 * scrollSpeed) % (overflow + 40);
+                                                    span.style.transform = `translateX(-${offset}px)`;
+                                                    scrollAnimFrame = requestAnimationFrame(scroll);
+                                                };
+                                                scrollAnimFrame = requestAnimationFrame(scroll);
+                                            }
+
                                             function updateLyricDisplay() {
                                                 const currentTime = xfMusicAudio.currentTime;
                                                 for (let i = 0; i < lyricsArray.length; i++) {
@@ -474,16 +502,20 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 if (lisEle) lisEle.classList.add('xf-textShow');
                                                 if (currentLyricIndex === lastLyricIndex) return;
                                                 lastLyricIndex = currentLyricIndex;
+
+                                                // 清除之前行的滚动状态
                                                 const allItems = xfAllLyri.querySelectorAll('.xf-ly');
                                                 allItems.forEach(item => {
                                                     item.classList.remove('scrolling');
                                                     const sp = item.querySelector('span');
                                                     if (sp) {
-                                                        sp.style.animation = '';
+                                                        sp.style.transform = '';
                                                         const original = item.getAttribute('data-original-text');
                                                         if (original) sp.textContent = original;
                                                     }
                                                 });
+                                                stopLyricScroll();
+
                                                 if (lisEle) {
                                                     const span = lisEle.querySelector('span');
                                                     if (span) {
@@ -494,13 +526,14 @@ window.addEventListener('DOMContentLoaded', function () {
                                                             if (span.scrollWidth > lisEle.clientWidth) {
                                                                 span.textContent = originalText + '　　' + originalText;
                                                                 lisEle.classList.add('scrolling');
-                                                                const duration = Math.max(5, span.scrollWidth / 40);
-                                                                span.style.animation = `xf-lyric-marquee ${duration}s linear infinite`;
+                                                                const overflow = span.scrollWidth - lisEle.clientWidth;
+                                                                startLyricScroll(span, overflow);
                                                             }
                                                         });
                                                     }
                                                 }
                                             }
+
                                             xfMusicAudio.removeEventListener('timeupdate', updateLyricDisplay);
                                             xfMusicAudio.addEventListener('timeupdate', updateLyricDisplay);
                                         }
