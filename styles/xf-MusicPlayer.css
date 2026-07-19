@@ -495,6 +495,14 @@
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }  /* 根据实际宽度调整 */
 }
+@keyframes xf-lyric-scroll-custom {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(var(--scroll-distance, -50%));
+  }
+}
 #xf-lyric .xf-AllLyric-box .xf-textShow {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
