@@ -487,13 +487,13 @@
   white-space: nowrap;
   will-change: transform;
 }
-/* 滚动动画由 JS 触发 */
+/* 滚动动画由 JS 触发（实际可用 JS 动态覆盖） */
 #xf-lyric .xf-AllLyric-box .xf-ly.scrolling span {
   animation: xf-lyric-scroll 8s linear infinite;
 }
 @keyframes xf-lyric-scroll {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }  /* 根据实际宽度调整 */
+  100% { transform: translateX(-50%); }  /* 备用，实际使用 JS 动态距离 */
 }
 @keyframes xf-lyric-scroll-custom {
   0% {
