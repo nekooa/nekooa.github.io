@@ -2,14 +2,13 @@
    常量配置
 ========================= */
 const CONFIG = {
-  /* [修改] 提取为顶层常量 */
   GISCUS_REPO: 'sagiriworld/sagiriworld.github.io',
   GISCUS_REPO_ID: 'R_kgDORzOqxQ',
   GISCUS_CATEGORY: 'Announcements',
   GISCUS_CATEGORY_ID: 'DIC_kwDORzOqxc4C-uzR',
   GISCUS_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-dark.css',
   GISCUS_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-light.css',
-  HITOKOTO_CACHE_DURATION: 60 * 1000,   /* [修改] 3s → 60s */
+  HITOKOTO_CACHE_DURATION: 5 * 1000,
   MIN_LOAD_TIME: 3000,
 };
 
@@ -65,7 +64,7 @@ const ThemeManager = {
 };
 
 /* =========================
-   主题颜色管理器（含播放器适配）
+   主题颜色管理器
 ========================= */
 const ColorThemeManager = {
   STORAGE_KEY: 'site-color-theme',
@@ -189,8 +188,7 @@ const ColorThemeManager = {
         '--slogan-color': '#006689',
         '--slogan-text-shadow': '0 2px 8px rgba(59,122,191,0.2)',
         '--thoughts-color': '#006689',
-        /* [修改] 修复缺失的 # 号 */
-        '--thoughts-bg': '#D1E5F4',
+        '--thoughts-bg': 'rgba(209,229,244,0.3)',
         '--thoughts-border': '#C3E8FF',
         '--nav-time-bg': 'rgba(195,232,255,0.6)',
         player: {
