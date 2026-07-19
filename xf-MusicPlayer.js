@@ -68,7 +68,9 @@ window.addEventListener('DOMContentLoaded', function () {
             appendStylesheet(MusicPlayerCSS),
         ]).catch(error => { console.error('样式加载出错:', error); });
     }
+
     startExecutionPlayer();
+
     function startExecutionPlayer() {
         const characterToElement = (str, mainBox) => {
             const parser = new DOMParser();
@@ -313,7 +315,6 @@ window.addEventListener('DOMContentLoaded', function () {
                             res.map(async data => {
                                 const musicId = data.id;
                                 const musicName = data.name;
-                                // 歌手优先使用 artistsname，回退 ar 组合
                                 const artistsname = data.artistsname || (data.ar ? data.ar.map(a => a.name).join(' / ') : '未知歌手');
                                 const picurl = data.picurl || data.al.picUrl;
                                 const mp3 = data.url || `${musicApi}/musicAll/?songId=${musicId}&mp3Url=mp3`;
@@ -457,7 +458,6 @@ window.addEventListener('DOMContentLoaded', function () {
                                             let lastLyricIndex = -1;
                                             function updateLyricDisplay() {
                                                 const currentTime = xfMusicAudio.currentTime;
-                                                // 移除所有高亮
                                                 for (let i = 0; i < lyricsArray.length; i++) {
                                                     const el = xfAllLyri.children[i];
                                                     if (el) el.classList.remove('xf-textShow');
