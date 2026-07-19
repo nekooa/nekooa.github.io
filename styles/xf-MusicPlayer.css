@@ -472,17 +472,28 @@
   transform: translate(-50%, -50%) scale(0);
   width: calc(var(--width-100B) - 20%);
   line-height: var(--height-1);
-  color: var(--color-1);
   text-align: center;
   font-size: 1em;
   font-weight: 600;
   text-shadow: var(--text-shadow-1);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-all;
-  white-space: nowrap;
+  white-space: nowrap;           /* 保持单行 */
+  overflow: hidden;             /* 隐藏溢出 */
   opacity: 0;
   transition: all 0.5s;
+}
+/* 内部 span 用于滚动 */
+#xf-lyric .xf-AllLyric-box .xf-ly span {
+  display: inline-block;
+  white-space: nowrap;
+  will-change: transform;
+}
+/* 滚动动画由 JS 触发 */
+#xf-lyric .xf-AllLyric-box .xf-ly.scrolling span {
+  animation: xf-lyric-scroll 8s linear infinite;
+}
+@keyframes xf-lyric-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }  /* 根据实际宽度调整 */
 }
 #xf-lyric .xf-AllLyric-box .xf-textShow {
   opacity: 1;
