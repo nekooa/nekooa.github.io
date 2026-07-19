@@ -301,7 +301,7 @@
   color: var(--playerColor-6);
 }
 
-/* 封面容器：固定尺寸，防止被文字挤压 */
+/* 封面容器 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures {
   position: relative;
   width: 45px;
@@ -309,10 +309,10 @@
   margin-left: var(--distance10px);
   overflow: hidden;
   border-radius: 10px;
-  flex-shrink: 0;               /* 关键：禁止收缩 */
+  flex-shrink: 0;
 }
 
-/* 封面图片：填满容器，放大裁切 */
+/* 封面图片 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures .xf-playlistImg {
   display: block;
   width: 100%;
@@ -326,11 +326,11 @@
   transform: scale(1.08);
 }
 
-/* 文字信息区域：允许收缩，内部文字省略 */
+/* 文字信息区域 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation {
   width: var(--songInformationWidth);
   margin-left: var(--distance10px);
-  min-width: 0;                  /* 允许 flex 子项收缩到小于内容宽度 */
+  min-width: 0;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle {
@@ -395,7 +395,7 @@
   transform: translateX(0);
 }
 
-/* 其他组件样式 */
+/* 其他组件 */
 .xf-singleLineEllipsis {
   text-overflow: ellipsis;
   overflow: hidden;
@@ -465,6 +465,13 @@
   width: 100%;
   height: 100%;
 }
+
+/* 歌词行 - 超宽无限滚动 */
+@keyframes xf-lyric-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 #xf-lyric .xf-AllLyric-box .xf-ly {
   position: absolute;
   left: 50%;
@@ -476,32 +483,18 @@
   font-size: 1em;
   font-weight: 600;
   text-shadow: var(--text-shadow-1);
-  white-space: nowrap;           /* 保持单行 */
-  overflow: hidden;             /* 隐藏溢出 */
+  white-space: nowrap;
+  overflow: hidden;
   opacity: 0;
   transition: all 0.5s;
 }
-/* 内部 span 用于滚动 */
 #xf-lyric .xf-AllLyric-box .xf-ly span {
   display: inline-block;
   white-space: nowrap;
   will-change: transform;
 }
-/* 滚动动画由 JS 触发（实际可用 JS 动态覆盖） */
 #xf-lyric .xf-AllLyric-box .xf-ly.scrolling span {
-  animation: xf-lyric-scroll 8s linear infinite;
-}
-@keyframes xf-lyric-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }  /* 备用，实际使用 JS 动态距离 */
-}
-@keyframes xf-lyric-scroll-custom {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(var(--scroll-distance, -50%));
-  }
+  animation: xf-lyric-marquee 8s linear infinite;
 }
 #xf-lyric .xf-AllLyric-box .xf-textShow {
   opacity: 1;
