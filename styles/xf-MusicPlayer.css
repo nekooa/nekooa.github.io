@@ -474,7 +474,7 @@
 @media (max-width: 768px) {
   #xf-lyric.xf-lyricShow {
     bottom: 70px !important;
-    z-index: 900;
+    z-index: 140;
   }
 }
 #xf-lyric:hover {
@@ -502,7 +502,6 @@
   text-align: center;
   font-size: 1em;
   font-weight: 600;
-  text-shadow: var(--text-shadow-1);
   white-space: nowrap;
   overflow: hidden;
   opacity: 0;
@@ -531,7 +530,7 @@
   max-width: 90vw;
   min-width: 60px;
   padding: 10px 10px;
-  background: rgba(253,217,231,0.7);
+  background: rgba(253,217,231,0.9);
   color: var(--playerColor-4);
   font-size: 7px;
   font-weight: 500;
@@ -616,4 +615,7 @@
   #xf-lyric { background-color: rgba(65, 42, 52, 0.9) !important; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);}
   .xf-music-pop { background-color: rgba(89,64,75,0.6) !important; }
   .xf-throughDisplay { background-color: rgba(65, 42, 52, 0.9) !important; }
+}
+@media (max-width: 768px) {
+  #xf-lyric {z-index: 140;}
 }
