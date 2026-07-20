@@ -460,12 +460,12 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 xfAllLyri.appendChild(lisEle);
                                             });
 
-                                            // 歌词滚动控制（纯 JS 无限循环 — 5 段拼接）
+                                            // 歌词滚动控制
                                             let lastLyricIndex = -1;
                                             let scrollAnimFrame = null;
                                             let scrollStartTime = null;
                                             let scrollOverflow = 0;
-                                            const scrollSpeed = 30; // 像素/秒 ← 改这里生效
+                                            const scrollSpeed = 40; // 像素/秒
 
                                             function stopLyricScroll() {
                                                 if (scrollAnimFrame) {
