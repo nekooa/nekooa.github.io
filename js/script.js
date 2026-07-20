@@ -786,20 +786,6 @@ function addRippleEffect() {
 }
 
 /* =========================
-   横向滚动支持
-========================= */
-function enableHorizontalScroll() {
-  document.addEventListener('wheel', (e) => {
-    const container = e.target.closest('.scroll-container');
-    if (!container) return;
-    if (container.scrollWidth > container.clientWidth) {
-      e.preventDefault();
-      container.scrollLeft += e.deltaY;
-    }
-  }, { passive: false });
-}
-
-/* =========================
    一言 API
 ========================= */
 let hitokotoCache = null;
@@ -1172,7 +1158,6 @@ function initAll() {
 
   bindLinks();
   addRippleEffect();
-  enableHorizontalScroll();
   bindSettingsTrigger();
   Calendar.init();
   initGiscus();
