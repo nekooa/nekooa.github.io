@@ -1351,6 +1351,7 @@ hr.dot {
 .about-card img {
   width: 80px;
   height: 80px;
+  margin-bottom: -20px !important;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -2215,13 +2216,13 @@ code-box {
     margin: 0 auto 0 auto;
     box-sizing: border-box;
   }
-
+  
   .about-card {
     width: 100%;
     max-width: 600px;
     margin: 0 auto 0 auto;
     box-sizing: border-box;
-    padding: 12px 12px;
+    padding: 20px 14px 10px 14px;
     overflow: hidden;
   }
 
