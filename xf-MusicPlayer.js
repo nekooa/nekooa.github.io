@@ -590,6 +590,8 @@ window.addEventListener('DOMContentLoaded', function () {
                             if (e.key === 'ArrowLeft' || e.keyCode === 37) { prevMusic(); }
                         });
                         xfMusicAudio.addEventListener('timeupdate', () => {
+                            /* 拖拽进度条时不更新进度条位置，避免与拖拽冲突 */
+                            if (isSliding) return;
                             const duration = xfMusicAudio.duration;
                             const currentTime = xfMusicAudio.currentTime;
                             const progress = (currentTime / duration) * 100;
@@ -642,19 +644,34 @@ window.addEventListener('DOMContentLoaded', function () {
                 let isSliding = false;
                 /* [BUG#5 修复] 统一鼠标和触摸事件，支持移动端拖拽进度条 */
                 const getClientX = e => e.touches ? e.touches[0].clientX : e.clientX;
-                const startSlide = e => { isSliding = true; slide(e); playMusic(); addPlaying(); };
+                /* 拖拽开始：暂停播放，仅视觉跟踪 */
+                const startSlide = e => {
+                    isSliding = true;
+                    pauseMusic();
+                    removebePlaying();
+                    slide(e);
+                };
+                /* 拖拽中：只更新进度条视觉位置，不改变播放进度 */
                 const slide = e => {
                     if (!isSliding) return;
                     const containerRect = totalAudioProgress.getBoundingClientRect();
                     const clickX = getClientX(e) - containerRect.left;
                     const containerWidth = containerRect.width;
                     const clickProgress = Math.max(0, Math.min(100, (clickX / containerWidth) * 100));
+                    audioProgress.style.width = `${clickProgress}%`;
+                };
+                /* 松开：跳转到该位置并恢复播放 */
+                const endSlide = e => {
+                    if (!isSliding) return;
+                    isSliding = false;
                     const duration = xfMusicAudio.duration;
                     if (!isNaN(duration)) {
-                        xfMusicAudio.currentTime = (clickProgress / 100) * duration;
+                        const width = parseFloat(audioProgress.style.width) || 0;
+                        xfMusicAudio.currentTime = (width / 100) * duration;
                     }
+                    playMusic();
+                    addPlaying();
                 };
-                const endSlide = () => { isSliding = false; };
                 totalAudioProgress.addEventListener('mousedown', startSlide);
                 totalAudioProgress.addEventListener('mousemove', slide);
                 totalAudioProgress.addEventListener('mouseup', endSlide);
