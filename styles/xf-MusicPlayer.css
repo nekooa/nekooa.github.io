@@ -1,7 +1,7 @@
 #xf-MusicPlayer {
   font-size: 16px !important;
   position: fixed;
-  z-index: 800;
+  z-index: 114514;
 }
 #xf-MusicPlayer * {
   margin: 0;
@@ -86,6 +86,7 @@
   color: var(--playerColor-1);
   border-top-left-radius: var(--playerRadius-1);
   border-bottom-left-radius: var(--playerRadius-1);
+  z-index: 10;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
   display: block;
