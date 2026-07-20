@@ -2152,8 +2152,8 @@ code-box {
   }
 
   .content {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     padding-bottom: 120px;
     margin: 0 auto 30px;
     max-width: 1200px;
@@ -2163,6 +2163,10 @@ code-box {
     justify-items: center;
   }
 
+  .content-card {
+    padding: 24px 15px;   /* 原 24px 四边 */
+  }
+  
   .comment-content {
     transform: none;
     width: calc(100% - 30px);
@@ -2222,13 +2226,13 @@ code-box {
     max-width: 600px;
     margin: 0 auto 0 auto;
     box-sizing: border-box;
-    padding: 20px 14px 10px 14px;
+    padding: 20px 15px 10px 15px;
     overflow: hidden;
   }
 
   .header-container {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100% - 30px);
     max-width: 100%;
     height: 150px !important;
     margin-top: var(--navbar-height);
@@ -2251,8 +2255,8 @@ code-box {
     margin-right: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     overflow-x: hidden;
     box-sizing: border-box;
   }
