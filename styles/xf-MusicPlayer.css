@@ -1,7 +1,7 @@
 #xf-MusicPlayer {
   font-size: 16px !important;
   position: fixed;
-  z-index: 114514;
+  z-index: 800;
 }
 #xf-MusicPlayer * {
   margin: 0;
@@ -102,8 +102,9 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
   width: var(--parentWidthRemoveParty24);
   height: calc(135px);
-  border-top-left-radius: var(--playerRadius-1);
-  border-bottom-left-radius: var(--playerRadius-1);
+  margin-left: 24px;
+  border-top-right-radius: var(--playerRadius-1);
+  border-bottom-right-radius: var(--playerRadius-1);
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
   display: flex;
@@ -247,9 +248,10 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
   --distance10px: 10px;
   width: var(--SingingSheetWidth);
+  margin-left: 24px;
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
-  border-bottom-left-radius: var(--playerRadius-1);
+  border-bottom-right-radius: var(--playerRadius-1);
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 0;
