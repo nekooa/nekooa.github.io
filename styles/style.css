@@ -250,7 +250,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
 
     --img-placeholder-bg: #3a3a3a;
 
-    --settings-panel-bg: #201418;
+    --settings-panel-bg: var(--color-bg);
     --close-btn-hover-bg: rgba(255,255,255,0.08);
     --dialog-overlay-bg: rgba(0, 0, 0, 0.4);
 
@@ -311,7 +311,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
 
   --img-placeholder-bg: #3a3a3a;
 
-  --settings-panel-bg: #201418;
+  --settings-panel-bg: var(--color-bg);
   --close-btn-hover-bg: rgba(255,255,255,0.08);
   --dialog-overlay-bg: rgba(0, 0, 0, 0.4);
 
