@@ -559,6 +559,9 @@ async function loadPage(url, addToHistory = true) {
       history.pushState(null, '', url);
     }
 
+    /* [BUG#3 修复] 记录最后加载的路径，供 popstate 判断用 */
+    window.__lastLoadedPath = url;
+
     // 更新侧边栏 active 状态
     const currentPath = location.pathname;
     document.querySelectorAll('.sidebar a').forEach(a => {
@@ -608,7 +611,11 @@ function bindLinks() {
     return true;
   };
 
-  document.querySelectorAll('.sidebar a, .spa-link, .spa-link-home').forEach(link => {
+  /* [BUG#2 修复] 扩展选择器覆盖文章内容内链，data-spa-bound 防重复绑定 */
+  document.querySelectorAll('.sidebar a, .spa-link, .spa-link-home, .content a[href$=".html"], .home-content a[href$=".html"]').forEach(link => {
+    if (link.dataset.spaBound === 'true') return;
+    link.dataset.spaBound = 'true';
+
     link.onclick = e => {
       const url = link.getAttribute('href');
 
@@ -722,8 +729,10 @@ function initGiscus() {
   const container = document.querySelector('.giscus');
   if (!container) return;
 
+  /* [BUG#4 修复] 清除旧的 Giscus script 和 iframe，防止累积 */
   const oldScript = document.querySelector('script[data-giscus]');
   if (oldScript) oldScript.remove();
+  container.querySelectorAll('iframe').forEach(f => f.remove());
 
   const isDark = (() => {
     const theme = ThemeManager.getTheme();
@@ -1230,7 +1239,15 @@ function initAll() {
 
 // 监听浏览器前进/后退
 window.addEventListener('popstate', () => {
-  loadPage(location.pathname, false);
+  /* [BUG#3 修复] 避免重复加载同一页面 */
+  const targetPath = location.pathname;
+  const normalize = (path) => {
+    if (path === '/' || path === '/index.html') return 'index.html';
+    return path.replace(/^\//, '');
+  };
+  if (normalize(targetPath) !== normalize(window.__lastLoadedPath || '')) {
+    loadPage(targetPath, false);
+  }
 });
 
 initAll();
