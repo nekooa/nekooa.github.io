@@ -2332,6 +2332,12 @@ code-box {
     width: 100%;
     padding: 20px 48px 20px 20px;
   }
+
+  .scroll-title-top {
+    font-size: 1.1rem;
+    margin-bottom: 0px;
+  }
+   
   .scroll-title {
     font-size: 1.1rem;
     margin-bottom: 0px;
