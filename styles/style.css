@@ -29,7 +29,7 @@
   --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.1);
 
   /* 卡片背景 */
-  --card-bg: #F7ECF4;
+  --card-bg: #FAF2F8;
 
   /* 标签 / 列表项 */
   --profile-list-bg: rgba(255, 216, 231, 0.3);
@@ -335,7 +335,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
   --sidebar-bg-mobile: rgba(247, 236, 244, 0.8);
   --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.1);
 
-  --card-bg: #F7ECF4;
+  --card-bg: #FAF2F8;
 
   --profile-list-bg: rgba(255, 216, 231, 0.3);
   --time-badge-bg: rgba(255,216,231,0.8);
