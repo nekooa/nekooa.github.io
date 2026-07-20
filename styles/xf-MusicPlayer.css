@@ -46,17 +46,18 @@
   --musicControlWidth: calc(var(--parentWidthRemoveParty24) - var(--songPictureWidth) - 5px);
   --SingingSheetWidth: calc(301.9px);
   position: fixed;
-  left: 0;
+  right: 0;
   bottom: 2em;
   width: var(--parentWidth);
   height: var(--numParentHeight);
-  border-top-right-radius: var(--playerRadius-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  border-top-left-radius: var(--playerRadius-1);
+  border-bottom-left-radius: var(--playerRadius-1);
   text-shadow: var(--playerTextShadow-1);
   z-index: 99;
-  transform: translateX(calc(-100% + 24px));
+  transform: scale(0.8) translateX(calc(100% - 30px));
   will-change: transform;
   transition: transform 0.5s;
+  transform-origin: right bottom;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar {
@@ -76,15 +77,15 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   height: calc(135px);
   width: calc(24px);
   display: flex;
   align-items: center;
   background-color: var(--playerColor-3);
   color: var(--playerColor-1);
-  border-top-right-radius: var(--playerRadius-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  border-top-left-radius: var(--playerRadius-1);
+  border-bottom-left-radius: var(--playerRadius-1);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
   display: block;
@@ -92,15 +93,16 @@
   font-weight: bold;
   transition: transform 0.5s;
   color: var(--playerColor-8);
+  transform: rotate(180deg);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .xf-jiantou1 {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
   width: var(--parentWidthRemoveParty24);
   height: calc(135px);
-  border-top-right-radius: var(--playerRadius-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  border-top-left-radius: var(--playerRadius-1);
+  border-bottom-left-radius: var(--playerRadius-1);
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
   display: flex;
@@ -246,7 +248,7 @@
   width: var(--SingingSheetWidth);
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
-  border-bottom-right-radius: var(--playerRadius-1);
+  border-bottom-left-radius: var(--playerRadius-1);
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 0;
@@ -392,7 +394,7 @@
 }
 
 #xf-MusicPlayer .xf-playerShow {
-  transform: translateX(0);
+  transform: scale(0.8) translateX(0);
 }
 
 /* 其他组件 */
