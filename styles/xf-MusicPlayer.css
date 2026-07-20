@@ -521,7 +521,7 @@
 /* 歌词行 - 超宽无限滚动 */
 @keyframes xf-lyric-marquee {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-80%); }
 }
 
 #xf-lyric .xf-AllLyric-box .xf-ly {
