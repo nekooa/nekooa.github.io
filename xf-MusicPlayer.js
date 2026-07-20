@@ -465,7 +465,7 @@ window.addEventListener('DOMContentLoaded', function () {
                                             let scrollAnimFrame = null;
                                             let scrollStartTime = null;
                                             let scrollOverflow = 0;
-                                            const scrollSpeed = 5; // 像素/秒
+                                            const scrollSpeed = 30; // 像素/秒 ← 改这里生效
 
                                             function stopLyricScroll() {
                                                 if (scrollAnimFrame) {
@@ -478,8 +478,6 @@ window.addEventListener('DOMContentLoaded', function () {
                                             function startLyricScroll(span, overflow, segmentWidth) {
                                                 stopLyricScroll();
                                                 scrollOverflow = overflow;
-                                                /* segmentWidth 为单段歌词宽度（含间隔），
-                                                   每次滚动恰好移动一段后重置，实现无缝循环 */
                                                 const loopWidth = segmentWidth || (overflow + 40);
                                                 const scroll = (timestamp) => {
                                                     if (!scrollStartTime) scrollStartTime = timestamp;
@@ -533,9 +531,7 @@ window.addEventListener('DOMContentLoaded', function () {
                                                             if (span.scrollWidth > lisEle.clientWidth) {
                                                                 const separator = '　　';
                                                                 span.textContent = (originalText + separator).repeat(5);
-                                                                lisEle.classList.add('scrolling');
                                                                 const overflow = span.scrollWidth - lisEle.clientWidth;
-                                                                /* 5 段宽度 / 5 = 单段宽度，用作无缝循环的步长 */
                                                                 const segmentWidth = span.scrollWidth / 5;
                                                                 startLyricScroll(span, overflow, segmentWidth);
                                                             }
