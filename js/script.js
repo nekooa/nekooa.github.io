@@ -79,7 +79,7 @@ const ColorThemeManager = {
         '--sidebar-bg': 'rgba(240,240,240)',
         '--sidebar-a': 'rgba(106,106,106,0.2)',
         '--sidebar-bg-mobile': 'rgba(247,236,244,0.8)',
-        '--card-bg': '#F7ECF4',
+        '--card-bg': '#FAF2F8',
         '--profile-list-bg': 'rgba(255,216,231,0.3)',
         '--time-badge-bg': 'rgba(255,216,231,0.8)',
         '--li-a-bg': 'rgba(255,216,231,0.8)',
