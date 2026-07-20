@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', function () {
         ({}).toString.call({ ...{} }) !== '[object Object]' ||
         Array.isArray([]) !== true
     ) {
-        alert('当前浏览器不支持解析 ES6 语法, 无法使用“xf-MusicPlayer”插件, 请升级您的浏览器!');
+        alert('当前浏览器不支持解析 ES6 语法, 无法使用"xf-MusicPlayer"插件, 请升级您的浏览器!');
         window.location.href = 'https://support.dmeng.net/upgrade-your-browser.html?referrer=' + encodeURIComponent(window.location.href);
         return;
     }
@@ -417,7 +417,6 @@ window.addEventListener('DOMContentLoaded', function () {
                                     return;
                                 }
                                 function hasScrollbar() { return playerBody.scrollHeight > (window.innerHeight || document.documentElement.clientHeight); }
-                                /* [BUG#3 修复] 移除旧的滚动监听器，防止重复累积 */
                                 if (window.__xfScrollHandler) {
                                     document.removeEventListener('scroll', window.__xfScrollHandler);
                                 }
@@ -461,7 +460,7 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 xfAllLyri.appendChild(lisEle);
                                             });
 
-                                            // 歌词滚动控制（纯 JS 无限循环）
+                                            // 歌词滚动控制（纯 JS 无限循环 — 5 段拼接）
                                             let lastLyricIndex = -1;
                                             let scrollAnimFrame = null;
                                             let scrollStartTime = null;
@@ -476,13 +475,16 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 }
                                             }
 
-                                            function startLyricScroll(span, overflow) {
+                                            function startLyricScroll(span, overflow, segmentWidth) {
                                                 stopLyricScroll();
                                                 scrollOverflow = overflow;
+                                                /* segmentWidth 为单段歌词宽度（含间隔），
+                                                   每次滚动恰好移动一段后重置，实现无缝循环 */
+                                                const loopWidth = segmentWidth || (overflow + 40);
                                                 const scroll = (timestamp) => {
                                                     if (!scrollStartTime) scrollStartTime = timestamp;
                                                     const elapsed = timestamp - scrollStartTime;
-                                                    const offset = (elapsed / 1000 * scrollSpeed) % (overflow + 40);
+                                                    const offset = (elapsed / 1000 * scrollSpeed) % loopWidth;
                                                     span.style.transform = `translateX(-${offset}px)`;
                                                     scrollAnimFrame = requestAnimationFrame(scroll);
                                                 };
@@ -529,17 +531,19 @@ window.addEventListener('DOMContentLoaded', function () {
                                                         requestAnimationFrame(() => {
                                                             span.textContent = originalText;
                                                             if (span.scrollWidth > lisEle.clientWidth) {
-                                                                span.textContent = originalText + '　　' + originalText;
+                                                                const separator = '　　';
+                                                                span.textContent = (originalText + separator).repeat(5);
                                                                 lisEle.classList.add('scrolling');
                                                                 const overflow = span.scrollWidth - lisEle.clientWidth;
-                                                                startLyricScroll(span, overflow);
+                                                                /* 5 段宽度 / 5 = 单段宽度，用作无缝循环的步长 */
+                                                                const segmentWidth = span.scrollWidth / 5;
+                                                                startLyricScroll(span, overflow, segmentWidth);
                                                             }
                                                         });
                                                     }
                                                 }
                                             }
 
-                                            /* [BUG#4 修复] 用具名引用确保能正确移除旧监听器 */
                                             if (window.__xfLyricTimeUpdate) {
                                                 xfMusicAudio.removeEventListener('timeupdate', window.__xfLyricTimeUpdate);
                                             }
@@ -590,7 +594,6 @@ window.addEventListener('DOMContentLoaded', function () {
                             if (e.key === 'ArrowLeft' || e.keyCode === 37) { prevMusic(); }
                         });
                         xfMusicAudio.addEventListener('timeupdate', () => {
-                            /* 拖拽进度条时不更新进度条位置，避免与拖拽冲突 */
                             if (isSliding) return;
                             const duration = xfMusicAudio.duration;
                             const currentTime = xfMusicAudio.currentTime;
@@ -604,7 +607,6 @@ window.addEventListener('DOMContentLoaded', function () {
                         });
                         const loadedMetadataHandler = () => {
                             detectionCookies(() => {
-                                /* [BUG#2 修复] 每次读取最新 cookie，而非闭包中的旧值 */
                                 const freshCookie = getCookie(cookieName);
                                 if (!freshCookie) return;
                                 const { musicTime } = JSON.parse(freshCookie);
@@ -642,16 +644,13 @@ window.addEventListener('DOMContentLoaded', function () {
                 };
                 playBackAndForth();
                 let isSliding = false;
-                /* [BUG#5 修复] 统一鼠标和触摸事件，支持移动端拖拽进度条 */
                 const getClientX = e => e.touches ? e.touches[0].clientX : e.clientX;
-                /* 拖拽开始：暂停播放，仅视觉跟踪 */
                 const startSlide = e => {
                     isSliding = true;
                     pauseMusic();
                     removebePlaying();
                     slide(e);
                 };
-                /* 拖拽中：只更新进度条视觉位置，不改变播放进度 */
                 const slide = e => {
                     if (!isSliding) return;
                     const containerRect = totalAudioProgress.getBoundingClientRect();
@@ -660,7 +659,6 @@ window.addEventListener('DOMContentLoaded', function () {
                     const clickProgress = Math.max(0, Math.min(100, (clickX / containerWidth) * 100));
                     audioProgress.style.width = `${clickProgress}%`;
                 };
-                /* 松开：跳转到该位置并恢复播放 */
                 const endSlide = e => {
                     if (!isSliding) return;
                     isSliding = false;
