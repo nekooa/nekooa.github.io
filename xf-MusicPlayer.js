@@ -82,6 +82,10 @@ window.addEventListener('DOMContentLoaded', function () {
         let lyricStr = `<div id="xf-lyric"><ul class="xf-AllLyric-box"></ul></div>`;
         characterToElement(musicStr, MusicPlayer);
         allPlayerFeatures();
+        // [修复] 播放器 DOM 刚创建完成，重新应用站点颜色主题
+        if (typeof ColorThemeManager !== 'undefined') {
+            ColorThemeManager.applyColor(ColorThemeManager.getColor());
+        }
         function allPlayerFeatures() {
             const xfAudio = document.createElement('audio');
             xfAudio.id = 'xf-musicAudio';
