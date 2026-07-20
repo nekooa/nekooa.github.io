@@ -417,15 +417,20 @@ window.addEventListener('DOMContentLoaded', function () {
                                     return;
                                 }
                                 function hasScrollbar() { return playerBody.scrollHeight > (window.innerHeight || document.documentElement.clientHeight); }
+                                /* [BUG#3 修复] 移除旧的滚动监听器，防止重复累积 */
+                                if (window.__xfScrollHandler) {
+                                    document.removeEventListener('scroll', window.__xfScrollHandler);
+                                }
                                 if (hasScrollbar()) {
-                                    document.addEventListener('scroll', () => {
+                                    window.__xfScrollHandler = () => {
                                         if (xfMusicAudio.paused) return;
                                         if ((window.innerHeight + window.scrollY) >= playerBody.offsetHeight) {
                                             if (xfLyric) { xfLyric.classList.add('xf-lyricHidden'); xfLyric.classList.remove('xf-lyricShow'); }
                                         } else {
                                             if (xfLyric) { xfLyric.classList.add('xf-lyricShow'); xfLyric.classList.remove('xf-lyricHidden'); }
                                         }
-                                    });
+                                    };
+                                    document.addEventListener('scroll', window.__xfScrollHandler);
                                 }
                                 if (interfaceAndLocal === null && lyricsShowOrHide !== '0' && lyricsShowOrHide !== 'false' && xfLyric) {
                                     let xfAllLyri = xfLyric.querySelector('.xf-AllLyric-box');
@@ -534,7 +539,11 @@ window.addEventListener('DOMContentLoaded', function () {
                                                 }
                                             }
 
-                                            xfMusicAudio.removeEventListener('timeupdate', updateLyricDisplay);
+                                            /* [BUG#4 修复] 用具名引用确保能正确移除旧监听器 */
+                                            if (window.__xfLyricTimeUpdate) {
+                                                xfMusicAudio.removeEventListener('timeupdate', window.__xfLyricTimeUpdate);
+                                            }
+                                            window.__xfLyricTimeUpdate = updateLyricDisplay;
                                             xfMusicAudio.addEventListener('timeupdate', updateLyricDisplay);
                                         }
                                     }).catch(error => console.error(`歌词获取失败：${error}`));
@@ -574,7 +583,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         window.addEventListener('keyup', e => {
                             if (e.key === 'ArrowRight' || e.keyCode === 39) {
                                 isFunctionTriggered = true;
-                                currentSongIndex = (currentSongIndex + songsItem.length + 2) % songsItem.length;
+                                currentSongIndex = (currentSongIndex + 1) % songsItem.length;
                                 updateSong(currentSongIndex);
                                 setCk(currentSongIndex);
                             }
@@ -593,8 +602,10 @@ window.addEventListener('DOMContentLoaded', function () {
                         });
                         const loadedMetadataHandler = () => {
                             detectionCookies(() => {
-                                if (!rsCookie) return;
-                                const { musicTime } = JSON.parse(rsCookie);
+                                /* [BUG#2 修复] 每次读取最新 cookie，而非闭包中的旧值 */
+                                const freshCookie = getCookie(cookieName);
+                                if (!freshCookie) return;
+                                const { musicTime } = JSON.parse(freshCookie);
                                 const duration = xfMusicAudio.duration;
                                 xfMusicAudio.currentTime = musicTime >= duration ? 0 : musicTime;
                                 playMusic();
@@ -629,22 +640,28 @@ window.addEventListener('DOMContentLoaded', function () {
                 };
                 playBackAndForth();
                 let isSliding = false;
+                /* [BUG#5 修复] 统一鼠标和触摸事件，支持移动端拖拽进度条 */
+                const getClientX = e => e.touches ? e.touches[0].clientX : e.clientX;
                 const startSlide = e => { isSliding = true; slide(e); playMusic(); addPlaying(); };
                 const slide = e => {
                     if (!isSliding) return;
                     const containerRect = totalAudioProgress.getBoundingClientRect();
-                    const clickX = e.clientX - containerRect.left;
+                    const clickX = getClientX(e) - containerRect.left;
                     const containerWidth = containerRect.width;
-                    const clickProgress = (clickX / containerWidth) * 100;
+                    const clickProgress = Math.max(0, Math.min(100, (clickX / containerWidth) * 100));
                     const duration = xfMusicAudio.duration;
-                    const newTime = (clickProgress / 100) * duration;
-                    xfMusicAudio.currentTime = newTime;
+                    if (!isNaN(duration)) {
+                        xfMusicAudio.currentTime = (clickProgress / 100) * duration;
+                    }
                 };
                 const endSlide = () => { isSliding = false; };
                 totalAudioProgress.addEventListener('mousedown', startSlide);
                 totalAudioProgress.addEventListener('mousemove', slide);
                 totalAudioProgress.addEventListener('mouseup', endSlide);
                 totalAudioProgress.addEventListener('mouseleave', endSlide);
+                totalAudioProgress.addEventListener('touchstart', startSlide, { passive: true });
+                totalAudioProgress.addEventListener('touchmove', slide, { passive: true });
+                totalAudioProgress.addEventListener('touchend', endSlide);
                 playlistBtn.addEventListener('click', () => {
                     const showSong = MusicPlayer.getElementsByClassName('xf-outsideSongListShow').length;
                     showSong ? outsideSongList.classList.remove('xf-outsideSongListShow') : outsideSongList.classList.add('xf-outsideSongListShow');
