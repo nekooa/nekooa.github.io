@@ -1,7 +1,7 @@
 #xf-MusicPlayer {
   font-size: 16px !important;
   position: fixed;
-  z-index: 800;
+  z-index: 150;
 }
 #xf-MusicPlayer * {
   margin: 0;
