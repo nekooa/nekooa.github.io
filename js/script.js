@@ -90,6 +90,7 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(255,235,245,0.5)',
         '--thoughts-border': '#f8bbd0',
         '--nav-time-bg': 'rgba(255,216,231,0.8)',
+        '--settings-panel-bg': '#FFFBFF',
         player: {
           '--playerColor-1': '#fffbff',
           '--playerColor-2': '#1f1a1c',
@@ -130,6 +131,7 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(255,210,225,0.08)',
         '--thoughts-border': '#f06292',
         '--nav-time-bg': 'rgba(255,179,207,0.2)',
+        '--settings-panel-bg': '#1F1A1C',
         player: {
           '--playerColor-1': '#1f1a1c',
           '--playerColor-2': '#ebe0e2',
@@ -173,6 +175,7 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(209,229,244,0.3)',
         '--thoughts-border': '#C3E8FF',
         '--nav-time-bg': 'rgba(195,232,255,0.6)',
+        '--settings-panel-bg': '#FBFCFE',
         player: {
           '--playerColor-1': '#f4f9fd',
           '--playerColor-2': '#1a2a38',
