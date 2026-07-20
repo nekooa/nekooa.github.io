@@ -54,7 +54,7 @@
   border-bottom-left-radius: var(--playerRadius-1);
   text-shadow: var(--playerTextShadow-1);
   z-index: 99;
-  transform: scale(0.8) translateX(calc(100% - 30px));
+  transform: scale(0.8) translateX(calc(100% - 24px));
   will-change: transform;
   transition: transform 0.5s;
   transform-origin: right bottom;
@@ -86,6 +86,7 @@
   color: var(--playerColor-1);
   border-top-left-radius: var(--playerRadius-1);
   border-bottom-left-radius: var(--playerRadius-1);
+  box-shadow: var(--playerShadow-1);
   z-index: 10;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
@@ -247,7 +248,7 @@
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
   --distance10px: 10px;
-  width: var(--SingingSheetWidth);
+  width: var(--parentWidthRemoveParty24);
   margin-left: 24px;
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
