@@ -167,7 +167,7 @@ const ColorThemeManager = {
 
     blue: {
       light: {
-        '--color-bg': '#FBFCFE',
+        '--color-bg': '#F0F4F7',
         '--color-pink': '#006689',
         '--color-pink-soft': '#C3E8FF',
         '--color-svg': '#40484C',
