@@ -465,7 +465,7 @@ window.addEventListener('DOMContentLoaded', function () {
                                             let scrollAnimFrame = null;
                                             let scrollStartTime = null;
                                             let scrollOverflow = 0;
-                                            const scrollSpeed = 15; // 像素/秒
+                                            const scrollSpeed = 5; // 像素/秒
 
                                             function stopLyricScroll() {
                                                 if (scrollAnimFrame) {
