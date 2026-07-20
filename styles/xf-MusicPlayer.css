@@ -79,7 +79,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  margin-left: -16px;
+  margin-left: -10px;
   height: calc(50px);
   width: calc(24px);
   display: flex;
@@ -179,6 +179,7 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-introduce .xf-songName {
   color: var(--playerColor-8);
   font-size: 1.5em;
+  line-height: 1.3;
   font-weight: bold;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-introduce .xf-singer {
