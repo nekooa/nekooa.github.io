@@ -787,3 +787,32 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress {
   flex: 1;
 }
+
+/* =========================
+   播放器 Ripple 效果
+========================= */
+#xf-MusicPlayer .xf-ripple {
+  position: absolute;
+  border-radius: 50%;
+  animation: xf-ripple-animation 0.5s ease-out forwards;
+  background: var(--playerColor-rgab-1);
+  pointer-events: none;
+}
+
+@keyframes xf-ripple-animation {
+  from { transform: scale(0.25); opacity: 0.8; }
+  to   { transform: scale(2.5);   opacity: 0; }
+}
+
+/* .xf-switchPlayer 已有 position:absolute，只需加 overflow */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
+  overflow: hidden;
+}
+
+/* 其余涟漪目标元素 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-playerControl li,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-playlistBtn,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-songsItem {
+  position: relative;
+  overflow: hidden;
+}
