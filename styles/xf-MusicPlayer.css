@@ -232,15 +232,11 @@
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl .xf-playbackControl {
   margin: 0 1.5em;
-  opacity: 0.5;
   transition: opacity 0.5s;
-}
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl .xf-playbackControl:hover {
-  opacity: 0.8;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
   --iconControlSize: 24px;
-  --widthAndHeight: 10px;
+  --widthAndHeight: 15px;
   flex: 1;
   padding: 0;
   display: flex;
