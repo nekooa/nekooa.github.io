@@ -1,2382 +1,824 @@
-/* =========================
-   全局变量（浅色默认）
-========================= */
-:root {
-  /* 布局 */
-  --navbar-height: 90px;
-  --sidebar-width: 100px;
-  --sidebar-gap: 18px;
-  --blur: blur(20px);
-  --transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-
-  /* z-index 层级体系 */
-  --z-navbar: 100;
-  --z-sidebar: 200;
-  --z-settings: 500;
-  --z-preloader: 900;
-
-  /* 基础颜色 */
-  --color-bg: #FFFBFF;
-  --color-text: #3d3d3d;
-  --color-white: #ffffff;
-  --color-pink: #ff95bc;
-  --color-pink-soft: rgba(255,216,231,0.7);
-  --color-svg: #352f31;
-  --sidebar-bg: rgba(240, 240, 240);
-  --sidebar-a: rgba(106, 106, 106, 0.2);
-  --shadow: rgba(0, 0, 0, 0.2);
-  --sidebar-bg-mobile: rgba(250, 242, 248, 0.8);
-  --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.1);
-
-  /* 卡片背景 */
-  --card-bg: #FAF2F8;
-
-  /* 标签 / 列表项 */
-  --profile-list-bg: rgba(255, 216, 231, 0.3);
-  --time-badge-bg: rgba(255,216,231,0.8);
-  --time-badge-color: var(--color-text);
-  --li-a-bg: var(--color-pink-soft);
-  --li-a-hover-bg: rgba(253, 176, 210, 0.626);
-
-  /* 导航栏 */
-  --navbar-bg: transparent;
-  --navbar-backdrop: blur(10px);
-  --nav-time-bg: var(--color-pink-soft);
-  --nav-time-color: var(--color-text);
-  --navbar-mask: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0));
-
-  /* 头图覆盖层 */
-  --header-overlay-bg: rgba(255, 255, 255, 0.5);
-  --header-overlay-height: 55vh;
-  --home-header-height: 30vh;
-
-  /* 分割线 */
-  --divider-line-bg: rgba(0,0,0,0.2);
-  --divider-text-color: var(--color-text);
-  --divider-text-opacity: 0.6;
-
-  /* 文章装饰 */
-  --slogan-color: #e91e63;
-  --slogan-text-shadow: 0 2px 8px rgba(233, 30, 99, 0.25);
-  --thoughts-color: #b06a8c;
-  --thoughts-bg: rgba(255, 235, 245, 0.5);
-  --thoughts-border: #f8bbd0;
-  --announcement-color: #5d6d7e;
-  --announcement-bg: #f0f3f5;
-  --announcement-border: #b0bec5;
-  --to-be-continued-color: #b0a0a8;
-  --dot-hr-opacity: 0.8;
-
-  /* 代码框 */
-  --code-box-bg: #f6f8fa;
-  --code-box-border: rgba(0, 0, 0, 0.08);
-  --code-box-header-color: #222;
-  --code-box-code-color: #1f2328;
-  --code-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-
-  /* 图片占位背景 */
-  --img-placeholder-bg: #e0e0e0;
-
-  /* 设置面板 */
-  --settings-panel-bg: var(--color-bg);
-  --close-btn-hover-bg: rgba(0,0,0,0.05);
-  --dialog-overlay-bg: rgba(0, 0, 0, 0.4);
-
-  /* 日历 */
-  --calendar-bg: var(--sidebar-bg);
-
-  /* 一言出处 */
-  --hitokoto-from-color: #666;
-
-  /* 下拉选择框 */
-  --select-border: rgba(0, 0, 0, 0.2);
-}
-
-/* =========================
-   字体
-========================= */
-@font-face {
-  font-family: 'MyFont';
-  src: url('./font.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-* {
-  font-family: 'MyFont', sans-serif !important;
-}
-
-button, .sidebar a, .nav-link, .md3-list-item {
-  -webkit-tap-highlight-color: transparent;
-}
-
-a {
-  color: var(--color-text);
-  position: relative;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-}
-
-.a {
-  color: var(--color-pink);
-}
-
-a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: currentColor;
-  transform: scaleX(0);
-  transition: transform 0.2s ease;
-  transform-origin: left;
-  pointer-events: none;
-}
-
-.a:hover::after {
-  filter: brightness(1.1);
-  transform: scaleX(1);
-  transition: transform 0.1s ease-out;
-}
-
-html, body {
-  overflow-x: hidden;
-  overflow-y: auto;
-  touch-action: pan-y;
-}
-
-body {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-body::-webkit-scrollbar {
-  display: none;
-}
-
-hr {
-  border: none;
-  height: 1px;
-  background: var(--color-pink);
-  margin: 20px 0;
-  max-width: 500px;
-}
-
-p {
-  line-height: 1.5;
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 20px 0;
-}
-
-.divider::before,
-.divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--divider-line-bg);
-}
-
-.divider span {
-  padding: 0 10px;
-  font-size: 12px;
-  color: var(--divider-text-color);
-  opacity: var(--divider-text-opacity);
-}
-
-/* 图片占位背景 */
-img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
-  background-color: var(--img-placeholder-bg);
-}
-
-/* =========================
-   深色模式（系统偏好）
-   只在没有手动设置 data-theme="light" 或 data-theme="dark" 时生效
-========================= */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]):not([data-theme="dark"]) {
-    --color-bg: #1F1A1C;
-    --color-text: #f5f5f5;
-    --sidebar-bg: rgba(30,30,30);
-    --shadow: rgba(0,0,0,0.5);
-    --color-pink-soft: rgba(255,179,207,0.25);
-    --color-pink: #ffb3cf;
-    --color-svg: #fed9e6;
-    --sidebar-bg-mobile: rgba(49, 38, 42, 0.8);
-    --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.5);
-    --sidebar-a: rgba(106, 106, 106, 0.6);
-
-    --card-bg: #2A2125;
-
-    --profile-list-bg: rgba(90,63,72,0.5);
-    --time-badge-bg: rgba(255, 179, 207, 0.2);
-    --time-badge-color: var(--color-text);
-    --li-a-hover-bg: rgba(255, 179, 207, 0.35);
-    --li-a-bg: var(--color-pink-soft);
-
-    --navbar-bg: rgba(0, 0, 0, 0.2);
-    --nav-time-bg: rgba(255, 179, 207, 0.2);
-    --nav-time-color: var(--color-text);
-    --navbar-mask: linear-gradient(to bottom, rgb(0, 0, 0) 85%, rgba(0, 0, 0, 0));
-
-    --header-overlay-bg: rgba(0, 0, 0, 0.5);
-
-    --divider-line-bg: var(--color-pink-soft);
-    --divider-text-opacity: 0.8;
-
-    --slogan-color: #f48fb1;
-    --slogan-text-shadow: 0 2px 12px rgba(244, 143, 177, 0.35);
-    --thoughts-color: #f8bbd0;
-    --thoughts-bg: rgba(255, 210, 225, 0.08);
-    --thoughts-border: #f06292;
-    --announcement-color: #b0bec5;
-    --announcement-bg: #1c2529;
-    --announcement-border: #455a64;
-    --to-be-continued-color: #bc9aa8;
-    --dot-hr-opacity: 0.6;
-
-    --code-box-bg: #2d2d2d;
-    --code-box-border: rgba(225, 225, 225, 0.3);
-    --code-box-header-color: #fff;
-    --code-box-code-color: #f5f5f5;
-    --code-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-    --img-placeholder-bg: #3a3a3a;
-
-    --settings-panel-bg: var(--color-bg);
-    --close-btn-hover-bg: rgba(255,255,255,0.08);
-    --dialog-overlay-bg: rgba(0, 0, 0, 0.4);
-
-    --hitokoto-from-color: #c9c9c9;
-    --select-border: rgba(255, 255, 255, 0.2);
-  }
-}
-
-/* =========================
-   手动强制深色模式
-========================= */
-[data-theme="dark"] {
-  --color-bg: #1F1A1C;
-  --color-text: #f5f5f5;
-  --sidebar-bg: rgba(30,30,30);
-  --shadow: rgba(0,0,0,0.5);
-  --color-pink-soft: rgba(255,179,207,0.25);
-  --color-pink: #ffb3cf;
-  --color-svg: #fed9e6;
-  --sidebar-bg-mobile: rgba(49, 38, 42, 0.8);
-  --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.5);
-  --sidebar-a: rgba(106, 106, 106, 0.6);
-
-  --card-bg: #2A2125;
-
-  --profile-list-bg: rgba(90,63,72,0.5);
-  --time-badge-bg: rgba(255, 179, 207, 0.2);
-  --time-badge-color: var(--color-text);
-  --li-a-hover-bg: rgba(255, 179, 207, 0.35);
-  --li-a-bg: var(--color-pink-soft);
-
-  --navbar-bg: rgba(0, 0, 0, 0.2);
-  --nav-time-bg: rgba(255, 179, 207, 0.2);
-  --nav-time-color: var(--color-text);
-  --navbar-mask: linear-gradient(to bottom, rgb(0, 0, 0) 85%, rgba(0, 0, 0, 0));
-
-  --header-overlay-bg: rgba(0, 0, 0, 0.5);
-
-  --divider-line-bg: var(--color-pink-soft);
-  --divider-text-opacity: 0.8;
-
-  --slogan-color: #f48fb1;
-  --slogan-text-shadow: 0 2px 12px rgba(244, 143, 177, 0.35);
-  --thoughts-color: #f8bbd0;
-  --thoughts-bg: rgba(255, 210, 225, 0.08);
-  --thoughts-border: #f06292;
-  --announcement-color: #b0bec5;
-  --announcement-bg: #1c2529;
-  --announcement-border: #455a64;
-  --to-be-continued-color: #bc9aa8;
-  --dot-hr-opacity: 0.6;
-
-  --code-box-bg: #2d2d2d;
-  --code-box-border: rgba(225, 225, 225, 0.3);
-  --code-box-header-color: #fff;
-  --code-box-code-color: #f5f5f5;
-  --code-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  --img-placeholder-bg: #3a3a3a;
-
-  --settings-panel-bg: var(--color-bg);
-  --close-btn-hover-bg: rgba(255,255,255,0.08);
-  --dialog-overlay-bg: rgba(0, 0, 0, 0.4);
-
-  --hitokoto-from-color: #c9c9c9;
-  --select-border: rgba(255, 255, 255, 0.2);
-}
-
-/* =========================
-   手动强制浅色模式
-========================= */
-[data-theme="light"] {
-  --color-bg: #FFFBFF;
-  --color-text: #3d3d3d;
-  --color-white: #ffffff;
-  --color-pink: #ff95bc;
-  --color-pink-soft: rgba(255,216,231,0.7);
-  --color-svg: #352f31;
-  --sidebar-bg: rgba(240, 240, 240);
-  --sidebar-a: rgba(106, 106, 106, 0.2);
-  --shadow: rgba(0, 0, 0, 0.2);
-  --sidebar-bg-mobile: rgba(250, 242, 248, 0.8);
-  --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.1);
-
-  --card-bg: #FAF2F8;
-
-  --profile-list-bg: rgba(255, 216, 231, 0.3);
-  --time-badge-bg: rgba(255,216,231,0.8);
-  --time-badge-color: var(--color-text);
-  --li-a-bg: var(--color-pink-soft);
-  --li-a-hover-bg: rgba(253, 176, 210, 0.626);
-
-  --navbar-bg: transparent;
-  --nav-time-bg: var(--color-pink-soft);
-  --nav-time-color: var(--color-text);
-  --navbar-mask: linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0));
-
-  --header-overlay-bg: rgba(255, 255, 255, 0.5);
-
-  --divider-line-bg: rgba(0,0,0,0.2);
-  --divider-text-opacity: 0.6;
-
-  --slogan-color: #e91e63;
-  --slogan-text-shadow: 0 2px 8px rgba(233, 30, 99, 0.25);
-  --thoughts-color: #b06a8c;
-  --thoughts-bg: rgba(255, 235, 245, 0.5);
-  --thoughts-border: #f8bbd0;
-  --announcement-color: #5d6d7e;
-  --announcement-bg: #f0f3f5;
-  --announcement-border: #b0bec5;
-  --to-be-continued-color: #b0a0a8;
-  --dot-hr-opacity: 0.8;
-
-  --code-box-bg: #f6f8fa;
-  --code-box-border: rgba(0, 0, 0, 0.08);
-  --code-box-header-color: #222;
-  --code-box-code-color: #1f2328;
-  --code-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-
-  --img-placeholder-bg: #e0e0e0;
-
-  --settings-panel-bg: var(--color-bg);
-  --close-btn-hover-bg: rgba(0,0,0,0.05);
-  --dialog-overlay-bg: rgba(0, 0, 0, 0.4);
-
-  --hitokoto-from-color: #666;
-  --select-border: rgba(0, 0, 0, 0.2);
-}
-
-/* =========================
-   全屏加载画面
-========================= */
-#preloader {
+#xf-MusicPlayer {
+  font-size: 16px !important;
   position: fixed;
-  inset: 0;
-  z-index: var(--z-preloader);
-  background: var(--color-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
-  opacity: 1;
-  visibility: visible;
+  z-index: 150;
 }
-
-#preloader.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.loader-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  color: var(--color-text);
-  font-size: 0.95rem;
-  opacity: 0.8;
-}
-
-/* 闪烁动画 */
-.loader-inner p {
-  animation: blink 1.0s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.6; }
-}
-
-.loader-ring {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255, 179, 207, 0.2);
-  border-top-color: var(--color-pink);
-  border-radius: 50%;
-  animation: ring-spin 1.2s linear infinite;
-}
-
-@keyframes ring-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* =========================
-   基础布局
-========================= */
-body {
-  background: var(--color-bg);
-  color: var(--color-text);
+#xf-MusicPlayer * {
   margin: 0;
-  transition: var(--transition);
-}
-
-/* 禁止交互元素上的文本选中 */
-button, .sidebar, .navbar, .settings-button-m,
-.nav-time, .md3-list-item, .calendar-nav button {
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* =========================
-   navbar
-========================= */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: var(--sidebar-width);
-  width: calc(100% - var(--sidebar-width));
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  box-sizing: border-box;
-  z-index: var(--z-navbar);
-  background: var(--navbar-bg);
-  backdrop-filter: var(--navbar-backdrop);
-  -webkit-backdrop-filter: var(--navbar-backdrop);
-  mask-image: var(--navbar-mask);
-}
-
-.nav-time {
-  font-size: 0.65rem;
-  padding: 7px 8px;
-  border-radius: 999px;
-  background: var(--nav-time-bg);
-  color: var(--nav-time-color);
-  line-height: 1;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* =========================
-   sidebar
-========================= */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: var(--sidebar-width);
-  height: 100vh;
-  z-index: var(--z-sidebar);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sidebar-gap);
-  background: var(--sidebar-bg);
-  overscroll-behavior: contain;
-}
-
-.sidebar ul {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  gap: var(--sidebar-gap);
-  width: 100%;
-  align-items: center;
   padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.sidebar ul li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.sidebar a {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 63px;
-  height: 35px;
-  min-height: 30px;
-  border-radius: 22px;
-  color: var(--color-svg);
-  text-decoration: none;
-  transition: var(--transition);
-  isolation: isolate;
-}
-
-.sidebar a:hover {
-  background: var(--sidebar-a);
-}
-
-.sidebar-text {
-  font-size: 0.75rem;
-  text-align: center;
-  color: var(--color-svg);
-}
-
-.sidebar li:has(a.active) .sidebar-text {
-  font-weight: bold;
-}
-
-.sidebar a::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  background: var(--color-pink-soft);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
-  z-index: -1;
-  pointer-events: none;
-}
-
-.sidebar a.active::before {
-  transform: scaleX(1);
-}
-
-/* =========================
-   ripple
-========================= */
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  animation: ripple-animation 0.5s ease-out forwards;
-  background: var(--sidebar-a);
-  pointer-events: none;
-}
-
-@keyframes ripple-animation {
-  from {
-    transform: scale(0.25);
-    opacity: 0.8;
-  }
-  to {
-    transform: scale(2.5);
-    opacity: 0;
-  }
-}
-
-/* =========================
-   动画
-========================= */
-.content,
-.home-content,
-.card,
-.home-link-card,
-.about-card,
-.profile-card,
-.article-card,
-.header-container,
-.article-header,
-.logo,
-.footer,
-.comment-content {
-  opacity: 0;
-}
-
-.fade-in {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
-}
-
-.fade-out {
-  opacity: 0 !important;
-  transform: translateY(15px) !important;
-  transition: opacity 0.2s ease, transform 0.2s ease !important;
-}
-
-.header-container.fade-in,
-.header-container.fade-out {
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-/* !important 需保留：覆盖 .fade-in 的 transform !important */
-.article-card.fade-in,
-.comment-content.fade-in {
-  transform: translateX(-50%) translateY(0) !important;
-}
-.article-card.fade-out,
-.comment-content.fade-out {
-  transform: translateX(-50%) translateY(15px) !important;
-}
-
-.logo.fade-in {
-  transform: translateX(0) !important;
-  opacity: 1 !important;
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
-}
-
-.logo.fade-out {
-  transform: translateX(-20px) !important;
-  opacity: 0 !important;
-  transition: opacity 0.2s ease, transform 0.2s ease !important;
-}
-
-.settings-button-m.fade-in {
-  transform: translateX(0) !important;
-  opacity: 1 !important;
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
-}
-
-.settings-button-m.fade-out {
-  transform: translateX(20px) !important;
-  opacity: 0 !important;
-  transition: opacity 0.2s ease, transform 0.2s ease !important;
-}
-
-/* =========================
-   content
-========================= */
-.content {
-  margin-left: calc(var(--sidebar-width) + 20px);
-  margin-right: 20px;
-  padding-top: calc(var(--navbar-height) + 20px);
-  padding-bottom: 40px;
-  max-width: calc(100% - var(--sidebar-width) - 40px);
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-items: center;
-  gap: 40px 20px;
   box-sizing: border-box;
-  transition: all 0.3s ease;
-}
-
-@media (min-width: 769px) {
-  .content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    justify-items: center;
-    gap: 40px 20px !important;
-  }
-
-  .card {
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-  }
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* =========================
-   home-content
+   播放器变量（默认 — 浅色粉色）
 ========================= */
-.home-content {
-  margin-left: calc(var(--sidebar-width) + 20px);
-  margin-right: 20px;
-  margin-top: 20px;
-  padding-top: 20px;
-  padding-bottom: 40px;
-  max-width: calc(100% - var(--sidebar-width) - 40px);
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-items: center;
-  gap: 40px 20px;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-}
+#xf-MusicPlayer .xf-girlPink {
+  --playerColor-1: #fffbff;
+  --playerColor-2: #1f1a1c;
+  --playerColor-3: #fdd9e7;
+  --playerColor-4: #504348;
+  --playerColor-5: #1C1B1F;
+  --playerColor-6: #ae1d79;
+  --playerColor-7: #fdd9e7;
+  --playerColor-8: #3d0027;
+  --playerColor-9: #f1dee4;
+  --playerColor-10: #7f553a;
+  --playerColor-11: #C27E94;
+  --playerColor-12: #301401;
 
-.content-inner {
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  will-change: transform,opacity;
-}
+  --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
+  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
 
-@media (min-width: 769px) {
-  .home-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    justify-items: center;
-    gap: 40px 20px;
-  }
+  --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05),
+                    0px 1px 3px 0px rgba(0, 0, 0, 0.08);
+  --playerShadow-2: -4px 4px 8px 0px rgba(176, 0, 92, 0.08),
+                    inset -4px 4px 10px 0px rgba(0, 0, 0, 0.03);
+
+  --playerTextShadow-1: 0 0 1px rgba(176, 0, 92, 0.15);
+  --playerTextShadow-2: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 /* =========================
-   一言
+   主面板布局
 ========================= */
-.hitokoto {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 11;
-  width: auto;
-  min-width: 300px;
-  max-width: 90%;
-  text-align: center;
-  background: none;
-  margin: 0;
-}
-.hitokoto .hitokoto-content .a {
-  color: var(--color-text);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
-.hitokoto #hitokoto_text{
-  font-size: 1.3rem;
-  align-self: flex-start;
-}
-.hitokoto .hitokoto-from {
-  align-self: flex-end;
-  margin-top: 6px;
-  color: var(--hitokoto-from-color);
-  font-size: 1rem;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-}
-
-#hitokoto_text {
-  display: inline-block;
-  transform-origin: center;
-  transition:
-    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.4s ease;
-}
-#hitokoto_from {
-  display: inline-block;
-  transition:
-    transform 0.4s ease 0.4s,
-    opacity 0.3s ease 0.4s;
-}
-#hitokoto_text.loading,
-#hitokoto_from.loading {
-  opacity: 0;
-}
-#hitokoto_text.loading {
-  transform: scaleX(0.7);
-}
-#hitokoto_from.loading {
-  transform: translateY(-10px);
-}
-#hitokoto_text:not(.loading) {
-  transform: scaleX(1);
-  opacity: 1;
-}
-#hitokoto_from:not(.loading) {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-@keyframes heroTextIn {
-  from { opacity: 0; transform: translate(-50%, -40%); }
-  to   { opacity: 1; transform: translate(-50%, -50%); }
-}
-@keyframes heroTextOut {
-  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-}
-
-.header-container.fade-in .hitokoto {
-  animation: heroTextIn 0.5s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  animation-fill-mode: backwards;
-}
-
-/* =========================
-    设置弹窗
-========================= */
-.settings-dialog {
+#xf-MusicPlayer .xf-MusicPlayer-Main {
+  --parentWidth: 350;
+  --numParentHeight: 135;
+  --playerRadius-1: 16px;
+  --playerRadius-2: 9999px;
+  --parentWidthRemoveParty24: calc(350px - 24px);
+  --songPictureWidth: calc(135px - 135px / 2.5 - 5px);
+  --musicControlWidth: calc(var(--parentWidthRemoveParty24) - var(--songPictureWidth) - 5px);
+  --SingingSheetWidth: calc(301.9px);
   position: fixed;
-  inset: 0;
-  z-index: var(--z-settings);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  visibility: hidden;
-  transition: visibility 0.2s;
-}
-
-.settings-dialog.open {
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.settings-dialog .dialog-overlay {
-  position: absolute;
-  inset: 0;
-  background: var(--dialog-overlay-bg);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1);
-}
-
-.settings-dialog.open .dialog-overlay {
-  opacity: 1;
-}
-
-.settings-panel {
-  position: relative;
-  width: calc(100% - 32px);
-  max-width: 560px;
-  max-height: 80vh;
-  margin: 0 auto;
-  background: var(--settings-panel-bg);
-  border-radius: 26px;
-  box-shadow: var(--md-sys-elevation-3, 0 8px 24px rgba(0,0,0,0.2));
-  transform: scale(0.9);
-  opacity: 0;
-  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.25s ease;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  color: var(--color-text);
-  box-sizing: border-box;
-  overscroll-behavior: contain;
-}
-
-.settings-dialog.open .settings-panel {
-  transform: scale(1);
-  opacity: 1;
-}
-
-.settings-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant, rgba(0,0,0,0.08));
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.settings-header h2 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin: 0;
-  color: var(--color-text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.close-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--md-sys-color-on-surface-variant, #666);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-  -webkit-tap-highlight-color: transparent;
-  flex-shrink: 0;
-  margin-left: 8px;
-}
-
-.close-button:hover {
-  background: var(--close-btn-hover-bg);
-}
-
-.settings-content {
-  padding: 8px 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: 1;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.md3-list-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  min-height: 56px;
-  background: transparent;
-  transition: background 0.15s;
-  border: none;
-  width: 100%;
-  text-align: left;
-  color: inherit;
-  cursor: pointer;
-  box-sizing: border-box;
-  gap: 16px;
-}
-
-.md3-list-item:hover {
-  background: var(--md-sys-color-surface-variant, rgba(0,0,0,0.03));
-}
-
-.md3-list-item > span:first-child {
-  flex: 1;
-  min-width: 0;
-  word-break: break-word;
-}
-
-.item-label {
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-}
-
-.item-supporting {
-  font-size: 0.875rem;
-  color: var(--md-sys-color-on-surface-variant, #666);
-  margin-top: 2px;
-  word-break: break-word;
-}
-
-.md3-list-item .md3-switch {
-  flex-shrink: 0;
-}
-
-.md3-switch {
-  position: relative;
-  display: inline-block;
-  width: 52px;
-  height: 32px;
-}
-
-.md3-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.md3-switch .slider {
-  position: absolute;
-  cursor: pointer;
-  inset: 0;
-  background: var(--md-sys-color-surface-variant, #e0e0e0);
-  border-radius: 100px;
-  transition: background 0.2s;
-  border: 2px solid var(--md-sys-color-outline, #79747E);
-}
-
-.md3-switch .slider::before {
-  content: "";
-  position: absolute;
-  height: 24px;
-  width: 24px;
-  left: 2px;
-  bottom: 2px;
-  background: var(--md-sys-color-outline, #79747E);
-  border-radius: 50%;
-  transition: transform 0.2s, background 0.2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.md3-switch input:checked + .slider {
-  background: var(--color-pink);
-  border-color: transparent;
-  filter: brightness(1.1);
-}
-
-.md3-switch input:checked + .slider::before {
-  transform: translateX(20px);
-  background: var(--color-white);
-}
-
-.settings-footer-actions {
-  padding: 16px 24px;
-  border-top: 1px solid var(--md-sys-color-outline-variant, rgba(0,0,0,0.08));
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.md3-button {
-  padding: 10px 24px;
-  border-radius: 100px;
-  font-weight: 500;
-  border: none;
-  background: transparent;
-  color: var(--color-pink);
-  cursor: pointer;
-  transition: background 0.2s;
-  white-space: nowrap;
-}
-
-.md3-button.filled {
-  background: var(--color-pink);
-  color: var(--color-white);
-}
-
-.md3-button:hover {
-  background: var(--md-sys-color-primary-container, rgba(255,159,194,0.15));
-}
-
-.md3-button.filled:hover {
-  background: var(--color-pink);
-  filter: brightness(1.1);
-}
-
-.settings-button-m {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: transparent;
-  color: var(--color-svg);
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-  border-radius: 100px;
-  padding: 6px 0;
-  transition: var(--transition);
-  -webkit-tap-highlight-color: transparent;
-  border: none;
-}
-
-.settings-button-m:hover {
-  background: var(--sidebar-a);
-}
-
-/* 主题色选择器 */
-.theme-picker-item {
-  cursor: default !important;
-}
-.theme-picker-item:hover {
-  background: transparent !important;
-}
-.theme-color-options {
-  display: flex;
-  gap: 12px;
-  flex-shrink: 0;
-}
-.theme-color-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.15s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  position: relative;
-  overflow: hidden;
-}
-.theme-color-btn.pink { background: #ff9fc2; }
-.theme-color-btn.blue { background: #7fb4e0; }
-.theme-color-btn.green { background: #8fceb4; }
-.theme-color-btn.purple { background: #c5a3ff; }
-
-.theme-color-btn.active {
-  border-color: var(--color-text);
-  transform: scale(1.1);
-}
-.theme-color-btn:hover {
-  opacity: 0.85;
-}
-
-/* =========================
-    头图
-========================= */
-.article-header {
-  width: calc(100% - var(--sidebar-width));
-  margin: 0 0 0 var(--sidebar-width);
-  display: block;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 0;
-  position: relative;
+  right: 0;
+  bottom: 2em;
+  width: var(--parentWidth);
+  height: var(--numParentHeight);
+  border-top-left-radius: var(--playerRadius-1);
+  border-bottom-left-radius: var(--playerRadius-1);
+  text-shadow: var(--playerTextShadow-1);
+  z-index: 99;
+  transform: scale(0.8) translateX(calc(100% - 24px));
   will-change: transform;
-  z-index: 0;
-  filter: brightness(0.9);
-  mask-image: linear-gradient(to bottom, black 70%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
-  height: 80vh;
+  transition: transform 0.5s;
+  transform-origin: right bottom;
 }
 
-/* =========================
-   article-card
-========================= */
-.article-card {
-  position: relative;
-  left: calc(var(--sidebar-width) + (100% - var(--sidebar-width)) / 2);
-  transform: translateX(-50%);
-  margin-top: -120px;
-  margin-bottom: 40px;
-  width: calc(100% - 40px);
-  max-width: 900px;
-  padding: 30px;
-  border-radius: 20px;
-  background: var(--card-bg);
-  box-sizing: border-box;
-  color: var(--color-text);
-  user-select: text;
-  -webkit-user-select: text;
+/* 滚动条与选区 */
+#xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar {
+  width: 3.5px;
+  display: none;
 }
-
-.article-card img {
-  display: block;
-  margin: 0 auto;
-  max-width: 95%;
-  max-height: 400px;
-  object-fit: cover;
+#xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar-thumb {
+  background-color: transparent;
   border-radius: 10px;
-  background-color: var(--img-placeholder-bg);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main ::selection {
+  background-color: var(--playerColor-7);
+  color: var(--playerColor-1);
 }
 
-.article-card h1 {
-  margin-top: 0;
-  font-size: 2rem;
-}
-
-.article-card .meta {
-  font-size: 0.9rem;
-  opacity: 0.7;
-  margin-bottom: 20px;
-}
-
-.article-card p {
-  margin: 12px 0;
-}
-
-.article-card h2 {
-  margin-top: 25px;
-}
-
-/* 装饰组件直接使用变量，主题切换时自动生效 */
-.slogan {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--slogan-color);
-  text-shadow: var(--slogan-text-shadow);
-  margin: 1.5em 0 1em;
-  letter-spacing: 0.05em;
-  line-height: 1.4;
-}
-
-.thoughts {
-  display: block;
-  font-style: italic;
-  color: var(--thoughts-color);
-  background: var(--thoughts-bg);
-  border-left: 3px solid var(--thoughts-border);
-  padding: 0.5em 1em;
-  margin: 1em 0;
-  border-radius: 0 8px 8px 0;
-  line-height: 1.8;
-}
-
-.announcement {
-  display: block;
-  font-size: 0.95rem;
-  color: var(--announcement-color);
-  background: var(--announcement-bg);
-  border: 1px dashed var(--announcement-border);
-  padding: 0.7em 1.2em;
-  margin: 1.5em 0;
-  border-radius: 6px;
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-
-hr.dot {
-  border-top: 3px dotted var(--color-pink) !important;
-  background: none !important;
-  margin: 2em 0 !important;
-  opacity: var(--dot-hr-opacity);
-  max-width: 500px;
-}
-
-.to-be-continued {
-  text-align: center;
-  font-style: italic;
-  color: var(--to-be-continued-color);
-  font-size: 0.95rem;
-  margin-top: 2.5em;
-  letter-spacing: 0.1em;
-}
-
-/* =========================
-   通用卡片
-========================= */
-.content-card {
-  position: relative;
-  margin: 0 auto 30px auto;
-  width: 100%;
-  min-height: 220px;
-  max-width: 500px;
-  align-items: center;
-  padding: 24px;
-  border-radius: 16px;
-  background: var(--card-bg);
-  box-sizing: border-box;
-  transition: 0.4s;
-}
-
-.content-card.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.content-card h1 {
-  margin-top: 0;
-  font-size: 2rem;
-}
-
-.content-card .meta {
-  font-size: 0.9rem;
-  opacity: 0.7;
-  margin-bottom: 20px;
-}
-
-.content-card p {
-  margin: 12px 0;
-}
-
-.content-card h2 {
-  margin-top: 25px;
-}
-
-/* =========================
-   个人卡片
-========================= */
-.profile-card {
+/* 展开/收起按钮 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: -10px;
+  height: 50px;
+  width: 24px;
   display: flex;
-  grid-column: 1 / -1;
   align-items: center;
-  gap: 20px;
-  background: var(--card-bg);
+  background-color: var(--playerColor-3);
+  color: var(--playerColor-1);
+  border-radius: var(--playerRadius-1);
+  box-shadow: var(--playerShadow-1);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  transition: transform 0.5s;
+  color: var(--playerColor-8);
+  transform: rotate(180deg);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .xf-jiantou1 {
+  transform: rotate(0deg);
+}
+
+/* 歌曲信息区 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong {
+  width: var(--parentWidthRemoveParty24);
+  height: 135px;
+  margin-left: 30px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  border-radius: var(--playerRadius-1);
+  padding-left: 15px;
+  background-color: var(--playerColor-1);
+  box-shadow: var(--playerShadow-1);
+  display: flex;
+}
+
+/* 封面 — 与 topControl 顶部对齐 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture {
+  width: var(--songPictureWidth);
+  height: 135px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-left: 5px;
+  padding-top: 20px;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture .xf-musicPicture {
+  display: block;
+  width: var(--songPictureWidth);
+  height: var(--songPictureWidth);
   border-radius: 16px;
-  padding: 24px;
-  margin: 0 auto 0 auto;
-  max-width: 800px;
-  transition: 0.4s;
-  overflow: hidden;
-}
-
-.profile-card.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.profile-card img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
   object-fit: cover;
 }
 
-.profile-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
+/* 静音按钮 — 隐藏 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-audioFrequency {
+  display: none;
 }
 
-.profile-list li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  height: 15px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--profile-list-bg);
+/* 按钮悬浮提示 — 禁用 */
+.xf-throughDisplay {
+  display: none !important;
 }
 
-/* =========================
-   关于卡片
-========================= */
-.about-card {
-  min-height: 220px;
-  width: 100%;
+/* 控制区 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl {
+  --topControlHeight: calc(135px * (105 / var(--numParentHeight)));
+  --bottomControlHeight: calc(135px - var(--topControlHeight));
+  --rightSideWidth: calc(var(--musicControlWidth) - 24px);
+  --BoxLeftAndRightMargin: 0 0.8em;
+  --iconControlSize: 32px;
+  width: var(--rightSideWidth);
+  height: 135px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 24px;
-  margin: 0 auto 30px auto;
-  max-width: 500px;
-  gap: 10px;
-  transition: 0.4s;
 }
-
-.about-card.fade-in {
-  opacity: 1;
-  transform: translateY(0);
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl {
+  display: flex;
+  width: var(--rightSideWidth);
 }
-
-.about-card img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: -20px !important;
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
+  display: flex;
+  width: 135%;
+  margin-left: -84px !important;
+  margin-bottom: 6px;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl li,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl li {
+  list-style: none;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont {
+  font-size: var(--iconControlSize);
+  color: var(--playerColor-4);
+  transition: color 0.35s;
+}
+#xf-MusicPlayer .xf-iconCircle {
   border-radius: 50%;
-  object-fit: cover;
 }
-
-.about-list {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 7px;
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:hover {
+  color: var(--playerColor-5);
 }
-
-.about-list li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  height: 15px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--profile-list-bg);
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:active {
+  color: var(--playerColor-6);
 }
-
-.about-a {
-  margin-top: auto;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  list-style: none;
-  padding: 0;
-}
-
-.li-a {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 6px 10px;
-  border-radius: 10px;
-  background: var(--li-a-bg);
-  transition: background 0.2s ease;
-}
-
-.li-a:hover {
-  background: var(--li-a-hover-bg);
-}
-
-.li-a svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* =========================
-   卡片
-========================= */
-.card {
-  height: 250px;
-  padding: 20px;
-  border-radius: 16px;
-  display: flex;
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl {
+  height: var(--topControlHeight);
   flex-direction: column;
-  justify-content: center;
-  transition: var(--transition);
-  overflow: hidden;
-}
-
-.card-title {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  min-height: 48px;
+  justify-content: flex-end;
 }
-
-.card-title h3 {
-  margin: 0;
-  font-size: 1.1rem;
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-introduce {
+  --introduceWidth: calc(var(--rightSideWidth) - 30px);
+  width: var(--introduceWidth);
+  margin: var(--BoxLeftAndRightMargin);
+  text-align: center;
 }
-
-.time-badge {
-  font-size: 0.75rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--time-badge-bg);
-  color: var(--time-badge-color);
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-introduce .xf-songName,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-introduce .xf-singer {
+  width: var(--introduceWidth);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
   white-space: nowrap;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-introduce .xf-songName {
+  color: var(--playerColor-8);
+  font-size: 1.5em;
+  line-height: 1.3;
+  font-weight: bold;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-introduce .xf-singer {
+  font-size: 1em;
+  margin-top: 5px;
+  color: var(--playerColor-4);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl {
+  --btnSize: 32px;
+  display: flex;
+  margin-top: 5px;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl li {
+  display: flex;
+  align-items: center;
+  width: var(--btnSize);
+  height: var(--btnSize);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl .xf-playbackControl {
+  margin: 0 1.5em;
+  transition: opacity 0.5s;
+  align-items: center;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
+  --iconControlSize: 24px;
+  --widthAndHeight: 15px;
+  flex: 1;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0px;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl li {
+  display: flex;
+  align-items: center;
+}
+
+/* 进度条 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar {
+  flex: 1;
+  padding: 0 8px;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress .xf-audioProgress {
+  height: 5px;
+  border-radius: var(--playerRadius-1);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress {
+  width: 100%;
+  background-color: var(--playerColor-4);
+}
+/* 拖拽时临时禁用过渡，松手后恢复 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl
+.xf-bottomControl .xf-totalAudioProgress .xf-audioProgress {
+  position: relative;
+  background-color: var(--playerColor-6);
+  transition: width 0.35s;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl
+.xf-bottomControl .xf-totalAudioProgress .xf-audioProgress.xf-no-transition {
+  transition: none !important;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress .xf-audioProgress::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 100%;
+  width: var(--widthAndHeight);
+  height: var(--widthAndHeight);
+  background-color: var(--playerColor-1);
+  box-shadow: var(--playerShadow-1);
+}
+
+/* =========================
+   播放列表抽屉
+========================= */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList {
+  --distance10px: 10px;
+  width: var(--parentWidthRemoveParty24);
+  margin-left: 30px;
+  background-color: var(--playerColor-1);
+  box-shadow: var(--playerShadow-1);
+  border-radius: var(--playerRadius-1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s cubic-bezier(0.2, 0.9, 0.1, 1),
+              opacity 0.3s ease;
+  transform: translateZ(0);
+  will-change: max-height, transform;
+  contain: layout style;
+  backface-visibility: hidden;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongListShow {
+  max-height: 350px;
+  opacity: 1;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList:hover::-webkit-scrollbar-thumb,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList:active::-webkit-scrollbar-thumb {
+  background-color: var(--playerColor-3);
+  border-radius: var(--playerRadius-1);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList:hover::-webkit-scrollbar-track,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList:active::-webkit-scrollbar-track {
+  background-color: var(--playerColor-4);
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs {
+  padding: var(--distance10px);
+  overflow: hidden;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem {
+  --songsItemHeight: calc((350px - 20px) / 4);
+  --imgBoxSize: 45px;
+  --songInformationWidth: calc(var(--SingingSheetWidth) - var(--imgBoxSize) - 20px - var(--distance10px));
+  height: var(--songsItemHeight);
+  width: 101%;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  border-radius: 10px;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-songName {
+  color: var(--playerColor-6);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-songAuthor {
+  color: var(--playerColor-6);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-songLength,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .icon-shijian {
+  color: var(--playerColor-6);
+}
+
+/* 封面容器 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  margin-left: var(--distance10px);
+  overflow: hidden;
+  border-radius: 10px;
   flex-shrink: 0;
 }
 
-.card-list li{
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.4);
-}
-
-.card img {
+/* 封面图片 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-songListSongPictures .xf-playlistImg {
   display: block;
-  width: 300px;
-  height: 180px;
-  min-height: 180px;
-  object-fit: cover;
-  border-radius: 16px;
-  background-color: var(--img-placeholder-bg);
-}
-
-/* =========================
-   横向滚动文章列表
-========================= */
-.article-scroll-list {
-  flex: 1 1 100%;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  margin: 0 0 10px 0;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.scroll-container {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 20px;
-  overflow-x: auto;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-pink-soft) transparent;
-  box-sizing: border-box;
-  border-radius: 16px;
-}
-
-/* 滚动列表标题 */
-.scroll-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--color-text);
-}
-
-.scroll-title-top {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 20px 0 0px 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--color-text);
-}
-
-/* 滚动条 */
-.scroll-container::-webkit-scrollbar {
-  display: none;
-  height: 6px;
-}
-.scroll-container::-webkit-scrollbar-thumb {
-  display: none;
-  background-color: var(--color-pink-soft);
-  border-radius: 10px;
-}
-.scroll-container::-webkit-scrollbar-track {
-  display: none;
-  background: transparent;
-}
-
-.scroll-item {
-  flex: 0 0 auto;
-  width: 240px;
-  min-height: 200px;
-  scroll-snap-align: start;
-  text-decoration: none;
-  color: var(--color-text);
-  background: var(--card-bg);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: flex;
-  flex-direction: column;
-}
-
-.scroll-item-img {
-  width: 100%;
-  height: 140px;
-  overflow: hidden;
-  border-radius: 16px 16px 0 0;
-}
-.scroll-item-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.5s;
+  box-sizing: border-box;
+  border: none;
+  transform: scale(1.08);
 }
-.scroll-item-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 12px 12px 6px 12px;
-  line-height: 1.4;
+
+/* 文字信息区域 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation {
+  width: var(--songInformationWidth);
+  margin-left: var(--distance10px);
+  min-width: 0;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle {
+  --songTitleNameTransition: color 0.35s;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle .xf-songName {
+  color: var(--playerColor-5);
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1.3;
+  margin-bottom: 0.8em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  transition: var(--songTitleNameTransition);
 }
-.scroll-item-date {
-  font-size: 0.8rem;
-  color: var(--color-text);
-  opacity: 0.6;
-  margin: 0 12px 12px 12px;
-}
-
-/* 移动端卡片尺寸 */
-@media (max-width: 768px) {
-  .scroll-item {
-    width: 200px;
-  }
-  .scroll-item-img {
-    height: 120px;
-  }
-}
-
-/* =========================
-   视频
-========================= */
-.responsive-iframe {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%;
-  border-radius: 16px;
-}
-
-.responsive-iframe iframe {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-}
-
-/* =========================
-   codeblock
-========================= */
-code-box {
-  display: block;
-  margin: 20px 0;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: var(--code-box-shadow);
-  background-color: var(--code-box-bg);
-  border: 1px solid var(--code-box-border);
-}
-
-.code-box-header {
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 10px 2px 14px;
-  color: var(--code-box-header-color);
+  padding-right: var(--distance10px);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .xf-songAuthor {
+  color: var(--playerColor-4);
   font-size: 14px;
-}
-
-.code-lang {
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.copy-btn {
-  background: none;
-  border: none;
-  color: var(--code-box-header-color);
-  cursor: pointer;
-  font-size: 12px;
-  padding: 4px 6px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-.copy-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.code-box-content {
-  margin: 0;
-  overflow-x: auto;
-}
-.code-box-content pre {
-  margin: 0;
-  padding: 12px;
-  font-size: 14px;
-  line-height: 1.4;
-  white-space: pre;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(150,150,150,0.5) transparent;
-}
-
-.code-box-content pre code {
-  color: var(--code-box-code-color);
-}
-
-.hljs {
-  background: transparent !important;
-  padding: 0 !important;
-}
-
-.code-box-content pre {
-  background: transparent !important;
-  margin: 0 !important;
-  padding: 12px !important;
-}
-
-/* =========================
-   首页头图
-========================= */
-.header-container {
-  position: relative;
-  border-radius: 16px;
-  box-sizing: border-box;
-  height: 200px;
-  opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.header-container.hero-out .hitokoto {
-  animation: heroTextOut 0.4s ease forwards;
-}
-
-@keyframes heroContainerOut {
-  from { opacity: 1; transform: scale(1); }
-  to   { opacity: 0; transform: scale(0.95); }
-}
-
-@keyframes homeHeaderIn {
-  from { transform: scale(1.8); }
-  to   { transform: scale(1.2); }
-}
-
-@keyframes homeHeaderOut {
-  from { transform: scale(1.2); }
-  to   { transform: scale(1.0); }
-}
-
-.home-header {
-  display: block;
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 16px;
-  transform: none !important;
-}
-
-.header-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--header-overlay-bg);
-  pointer-events: none;
-  z-index: 10;
-}
-
-.header-container > *:not(.header-overlay):not(.home-header):not(.hitokoto) {
-  position: relative;
-  z-index: 2;
-}
-
-/* =========================
-   home Flex 容器
-========================= */
-.home-flex {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 20px;
-  flex-wrap: wrap;
-  max-width: 500px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
   min-width: 0;
-  width: 100%;
-  margin: 0 auto 30px;
-  box-sizing: border-box;
+  transition: var(--songTitleNameTransition);
 }
-
-/* =========================
-   footer 容器
-========================= */
-.footer {
-  margin-left: var(--sidebar-width);
-  margin-right: 0;
-  width: calc(100% - var(--sidebar-width));
-  max-width: 1200px;
-  padding: 24px 20px 120px 20px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text);
-  font-size: 0.85rem;
-  transition: var(--transition);
-}
-
-/* =========================
-    home 个人卡片
-========================= */
-.home-profile {
-  flex-direction: column !important;
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .xf-songLength {
+  color: var(--playerColor-4);
+  font-size: 14px;
+  white-space: nowrap;
   flex-shrink: 0;
-  text-align: center;
-  align-items: center;
-  gap: 10px;
-  padding: 24px;
-  background: var(--card-bg);
-  border-radius: 16px;
-  width: 260px;
+  overflow: visible;
+  transition: var(--songTitleNameTransition);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution {
+  border-radius: 10px;
+  background-color: var(--playerColor-3);
+  border: none;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-playlistImg {
+  border-radius: var(--playerRadius-1);
   box-sizing: border-box;
+
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-songName {
+  color: var(--playerColor-2);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-songAuthor {
+  color: var(--playerColor-2);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-songLength,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .icon-shijian {
+  color: var(--playerColor-2);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-songName {
+  color: var(--playerColor-2);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-songAuthor,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution .xf-songLength {
+  color: var(--playerColor-2);
 }
 
-.home-profile img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.home-profile .profile-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.home-profile .profile-list {
-  justify-content: center;
+#xf-MusicPlayer .xf-playerShow {
+  transform: scale(0.8) translateX(0);
 }
 
 /* =========================
-   右侧链接卡片
-   箭头使用 mask-image，颜色由 --color-svg 变量控制
+   工具类
 ========================= */
-.home-right-cards {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  gap: 20px;
-  min-width: 200px;
-  max-width: 300px;
-  align-self: stretch;
+.xf-singleLineEllipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
 }
 
-.home-link-card {
+/* =========================
+   歌词条 / 弹窗 / 工具提示
+   这些元素在 .xf-girlPink 外部，不能继承其变量
+   必须使用直接色值
+========================= */
+#xf-lyric,
+.xf-music-pop,
+.xf-throughDisplay,
+.xf-lyricHidden {
+  font-size: 16px !important;
+  --color-1: #fff;
+  --color-2: rgba(0,0,0,0.7);
+  --color-3: #ffc0cb;
+  --color-4: rgba(0, 0, 0, 0.75);
+  --text-shadow-1: 1px 1px 1px var(--color-2);
+  --transition-1: left 1s ease 0s;
+  --z-index-100: 1809185784;
+  --height-1: 1.75em;
+  --height-2: -1.75em;
+}
+#xf-lyric li,
+.xf-music-pop li,
+.xf-throughDisplay li,
+.xf-lyricHidden li {
+  list-style: none;
+}
+#xf-lyric *,
+.xf-music-pop *,
+.xf-throughDisplay *,
+.xf-lyricHidden * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+#xf-lyric ::selection,
+.xf-music-pop ::selection,
+.xf-throughDisplay ::selection,
+.xf-lyricHidden ::selection {
+  background-color: var(--color-3);
+  color: var(--color-1);
+}
+
+/* 歌词条 — 默认浅色 */
+#xf-lyric {
+  --width-100B: 100%;
+  position: fixed;
+  left: 0;
+  width: var(--width-100B);
+  height: var(--height-1);
+  background-color: rgba(253, 217, 231, 0.7);
+  z-index: 900;
+  overflow: hidden;
+  transition: all 0.5s;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 768px) {
+  #xf-lyric {
+    border-radius: 9999px !important;
+  }
+  #xf-lyric.xf-lyricShow {
+    width: 96%;
+    left: 2% !important;
+    bottom: 77px !important;
+    z-index: 140;
+  }
+}
+
+#xf-lyric .xf-AllLyric-box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#xf-lyric .xf-AllLyric-box .xf-ly {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: calc(var(--width-100B) - 10%);
+  line-height: var(--height-1);
+  text-align: center;
+  font-size: 1em;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.5s;
+}
+#xf-lyric .xf-AllLyric-box .xf-ly span {
+  display: inline-block;
+  white-space: nowrap;
+  will-change: transform;
+}
+#xf-lyric .xf-AllLyric-box .xf-textShow {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.xf-lyricHidden {
+  bottom: var(--height-2);
+}
+.xf-lyricShow {
+  bottom: 0;
+}
+
+/* 通知弹窗 — 默认浅色 */
+.xf-music-pop {
+  width: auto;
+  max-width: 50vw;
+  min-width: 60px;
+  padding: 10px 10px;
+  background: rgba(253, 217, 231, 0.9);
+  color: #504348;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  bottom: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-index-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+.xf-music-pop.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+/* 工具提示 — 默认浅色 */
+.xf-throughDisplay {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: var(--color-1);
+  font-size: 0.8em;
+  padding: 5px 10px;
+  border-radius: 3px;
+  z-index: 114517;
+  display: none;
+}
+
+/* =========================
+   字体图标
+========================= */
+@font-face {
+  font-family: "iconfont";
+  src: local('iconfont'), url('data:font/ttf;charset=utf-8;base64,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') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yinle:before { content: "\f0036"; }
+.icon-shijian:before { content: "\e854"; }
+.icon-bofang:before { content: "\e63a"; }
+.icon-shangyishou:before { content: "\e63c"; }
+.icon-xiayishou:before { content: "\e63e"; }
+.icon-jiantou2:before { content: "\e501"; }
+.icon-shengyin-guan:before { content: "\e6bf"; }
+.icon-shengyin-kai:before { content: "\e6c0"; }
+.icon-gedan:before { content: "\e6c1"; }
+.icon-zantingtingzhi:before { content: "\e65a"; }
+
+/* =========================
+   深色模式 — 系统偏好
+   仅在用户未手动设置 data-theme 时生效
+   优先级低于 [data-theme] 属性选择器
+========================= */
+@media (prefers-color-scheme: dark) {
+  #xf-MusicPlayer .xf-girlPink {
+    --playerColor-1: #1f1a1c;
+    --playerColor-2: #ebe0e2;
+    --playerColor-3: #59404b;
+    --playerColor-4: #d4c2c8;
+    --playerColor-5: #FFB3C6;
+    --playerColor-6: #ffafd5;
+    --playerColor-7: #5C3A47;
+    --playerColor-8: #ffd8e8;
+    --playerColor-9: #504348;
+    --playerColor-10: #D27B94;
+    --playerColor-11: #F5C2D2;
+    --playerColor-12: #FFDFED;
+    --playerColor-rgab-1: rgba(255, 223, 237, 0.12);
+    --playerColor-rgab-2: rgba(65, 42, 52, 0.7);
+    --playerShadow-1: 0px 4px 8px 3px rgba(0, 0, 0, 0.3), 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+    --playerShadow-2: -4px 4px 8px 0px rgba(0, 0, 0, 0.4), inset -4px 4px 10px 0px rgba(255, 223, 237, 0.05);
+    --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
+    --playerTextShadow-2: 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+  #xf-lyric {
+    background-color: rgba(65, 42, 52, 0.9);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+  }
+  .xf-music-pop {
+    background: rgba(89, 64, 75, 0.9);
+    color: #d4c2c8;
+  }
+  .xf-throughDisplay {
+    background-color: rgba(65, 42, 52, 0.9);
+  }
+}
+
+/* =========================
+   深色模式 — 手动切换
+   特异性 (0,1,2) 高于媒体查询 (0,1,1)
+========================= */
+[data-theme="dark"] #xf-MusicPlayer .xf-girlPink {
+  --playerColor-1: #1f1a1c;
+  --playerColor-2: #ebe0e2;
+  --playerColor-3: #59404b;
+  --playerColor-4: #d4c2c8;
+  --playerColor-5: #FFB3C6;
+  --playerColor-6: #ffafd5;
+  --playerColor-7: #5C3A47;
+  --playerColor-8: #ffd8e8;
+  --playerColor-9: #504348;
+  --playerColor-10: #D27B94;
+  --playerColor-11: #F5C2D2;
+  --playerColor-12: #FFDFED;
+  --playerColor-rgab-1: rgba(255, 223, 237, 0.12);
+  --playerColor-rgab-2: rgba(65, 42, 52, 0.7);
+  --playerShadow-1: 0px 4px 8px 3px rgba(0, 0, 0, 0.3), 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
+  --playerShadow-2: -4px 4px 8px 0px rgba(0, 0, 0, 0.4), inset -4px 4px 10px 0px rgba(255, 223, 237, 0.05);
+  --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
+  --playerTextShadow-2: 0 0 1px rgba(0, 0, 0, 0.5);
+}
+[data-theme="dark"] #xf-lyric {
+  background-color: rgba(65, 42, 52, 0.9);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .xf-music-pop {
+  background: rgba(89, 64, 75, 0.9);
+  color: #d4c2c8;
+}
+[data-theme="dark"] .xf-throughDisplay {
+  background-color: rgba(65, 42, 52, 0.9);
+}
+
+/* =========================
+   浅色模式 — 手动切换
+   系统深色 + 用户手动选浅色时，
+   强制恢复浅色值（覆盖媒体查询）
+========================= */
+[data-theme="light"] #xf-MusicPlayer .xf-girlPink {
+  --playerColor-1: #fffbff;
+  --playerColor-2: #1f1a1c;
+  --playerColor-3: #fdd9e7;
+  --playerColor-4: #504348;
+  --playerColor-5: #1C1B1F;
+  --playerColor-6: #ae1d79;
+  --playerColor-7: #fdd9e7;
+  --playerColor-8: #3d0027;
+  --playerColor-9: #f1dee4;
+  --playerColor-10: #7f553a;
+  --playerColor-11: #C27E94;
+  --playerColor-12: #301401;
+  --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
+  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
+  --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
+  --playerShadow-2: -4px 4px 8px 0px rgba(176, 0, 92, 0.08), inset -4px 4px 10px 0px rgba(0, 0, 0, 0.03);
+  --playerTextShadow-1: 0 0 1px rgba(176, 0, 92, 0.15);
+  --playerTextShadow-2: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+[data-theme="light"] #xf-lyric {
+  background-color: rgba(253, 217, 231, 0.7);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .xf-music-pop {
+  background: rgba(253, 217, 231, 0.9);
+  color: #504348;
+}
+[data-theme="light"] .xf-throughDisplay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+@media (max-width: 768px) {
+  #xf-lyric {z-index: 140;}
+}
+
+/* =========================
+   进度条时间显示
+========================= */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  padding: 28px 48px 28px 24px;
-  border-radius: 16px;
-  background: var(--card-bg);
-  text-decoration: none;
-  color: var(--color-text);
-  transition: var(--transition);
+  gap: 6px;
+  padding: 0 8px;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-currentTime,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalTime {
+  font-size: 11px;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  color: var(--playerColor-4);
+  white-space: nowrap;
+  min-width: 36px;
+  text-align: center;
+  line-height: 1;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress {
+  flex: 1;
+}
+
+/* =========================
+   播放器 Ripple 效果
+========================= */
+#xf-MusicPlayer .xf-ripple {
+  position: absolute;
+  border-radius: 50%;
+  animation: xf-ripple-animation 0.5s ease-out forwards;
+  background: var(--sidebar-a);
+  pointer-events: none;
+}
+
+@keyframes xf-ripple-animation {
+  from { transform: scale(0.25); opacity: 0.8; }
+  to   { transform: scale(2.5);   opacity: 0; }
+}
+
+/* .xf-switchPlayer 已有 position:absolute，只需加 overflow */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer {
   overflow: hidden;
 }
 
-.card-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.home-link-card::after {
-  content: '';
-  position: absolute;
-  right: 20px;
-  left: auto;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  background-color: var(--color-svg);
-  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 6 15 12 9 18'/></svg>") no-repeat center / contain;
-  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 6 15 12 9 18'/></svg>") no-repeat center / contain;
-  opacity: 0.6;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.home-link-card:hover::after {
-  transform: translateY(-50%) translateX(6px);
-  opacity: 1;
-}
-
-.home-link-card h3 {
-  margin: 0 0 8px;
-  font-size: 1.3rem;
-}
-
-.home-link-card p {
-  margin: 0;
-  opacity: 0.7;
-  font-size: 0.95rem;
-}
-
-/* =========================
-    .ui-select (Chrome 135+)
-========================= */
-@supports (appearance: base-select) {
-  .ui-select,
-  .ui-select::picker(select) {
-    appearance: base-select;
-  }
-
-  .ui-select {
-    line-height: 20px;
-    padding: 9px 6px 9px 12px;
-    font-size: var(--ui-font, 14px);
-    font-family: system-ui;
-    color: var(--color-text);
-    background-color: var(--color-bg);
-    border: 1px solid var(--select-border);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ui-select:hover { border-color: var(--color-pink); }
-
-  .ui-select::picker-icon {
-    content: "";
-    display: block;
-    width: 20px;
-    height: 20px;
-    background-color: var(--color-svg);
-    mask: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
-    -webkit-mask: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
-    mask-size: 12px 8px;
-    -webkit-mask-size: 12px 8px;
-  }
-
-  .ui-select:open { border-color: var(--color-pink); border-radius: 20px 20px 0 0; }
-  .ui-select.reverse:open { border-radius: 0 0 20px 20px; }
-
-  .ui-select::picker(select) {
-    padding: 8px 0;
-    background: var(--color-bg);
-    border: 1px solid var(--color-pink);
-    border-top: none;
-    border-radius: 0 0 20px 20px;
-    box-shadow: var(--shadow);
-    max-height: 306px;
-    overflow: auto;
-    overscroll-behavior: none;
-    scrollbar-width: thin;
-    text-align: left;
-    top: calc(anchor(bottom) - 1px);
-    opacity: 0;
-    transform: scaleY(0.8);
-    transform-origin: top center;
-    transition: opacity 0.2s allow-discrete, transform 0.2s allow-discrete;
-  }
-
-  .ui-select.reverse::picker(select) {
-    top: auto;
-    bottom: calc(anchor(top) - 1px);
-    border-top: 1px solid var(--color-pink);
-    border-bottom: none;
-    border-radius: 20px 20px 0 0;
-    transform-origin: bottom center;
-  }
-
-  .ui-select::picker(select):popover-open { opacity: 1; transform: scaleY(1); }
-  @starting-style {
-    .ui-select::picker(select):popover-open { opacity: 0; transform: scaleY(0.8); }
-  }
-
-  .ui-select option {
-    display: block;
-    line-height: 20px;
-    padding: 9px 12px;
-    color: var(--color-text);
-    font-size: var(--ui-font, 14px);
-    background-color: transparent;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    transition: background-color 0.2s;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  .ui-select option:hover { background-color: var(--color-pink-soft); }
-  .ui-select option:checked {
-    background-color: var(--color-pink-soft);
-    color: var(--color-pink);
-    font-weight: 500;
-  }
-  .ui-select option:disabled { opacity: 0.38; background-color: transparent; cursor: default; }
-  .ui-select hr {
-    border: 0;
-    border-top: 1px solid var(--color-text);
-    opacity: 0.2;
-    margin: 0 12px;
-  }
-  .ui-select optgroup[label] { font-size: 0; }
-  .ui-select optgroup[label]::before {
-    content: attr(label);
-    display: block;
-    font-weight: 700;
-    padding: 6px 12px;
-    font-size: var(--ui-font, 14px);
-    margin-bottom: -1.2em;
-    color: var(--color-text);
-  }
-  .ui-select optgroup option { text-indent: 0.5em; }
-  .ui-select optgroup:not([label]):not(:first-child)::before {
-    content: '';
-    display: block;
-    padding: 6px 12px 0;
-    border-top: 1px solid var(--color-text);
-    opacity: 0.2;
-    margin-inline: 12px;
-  }
-  .ui-select option::checkmark { display: none; }
-}
-
-/* =========================
-   日历组件
-========================= */
-.calendar-card {
-  background: var(--calendar-bg);
-  backdrop-filter: var(--blur);
-  box-shadow: 0 6px 20px var(--shadow);
-}
-
-.calendar-header {
-  text-align: center;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-  opacity: 0.8;
-}
-
-.calendar-nav {
-  display: flex;
-  gap: 6px;
-}
-
-.calendar-nav button {
-  border: none;
-  background: var(--color-pink-soft);
-  color: var(--color-text);
-  border-radius: 8px;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.calendar-nav button:hover {
-  background: var(--color-pink);
-  color: var(--color-white);
-}
-
-.calendar-week {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  font-size: 0.75rem;
-  opacity: 0.6;
-  margin-bottom: 6px;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-
-.calendar-day {
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: var(--transition);
-}
-
-.calendar-day:hover {
-  background: var(--color-pink-soft);
-}
-
-.calendar-day.today {
-  background: var(--color-pink);
-  color: var(--color-white);
-}
-
-.calendar-day.other {
-  opacity: 0.3;
-}
-
-/* =========================
-   评论区 content
-========================= */
-.comment-content {
+/* 其余涟漪目标元素 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-playerControl li,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-playlistBtn,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-songsItem {
   position: relative;
-  left: calc(var(--sidebar-width) + (100% - var(--sidebar-width)) / 2);
-  transform: translateX(-50%);
-  margin-top: 0px;
-  margin-bottom: 40px;
-  width: calc(100% - 40px);
-  max-width: 600px;
-  box-sizing: border-box;
-}
-
-/* =========================
-   移动端
-========================= */
-@media (max-width: 768px) {
-  .navbar {
-    left: 0;
-    width: 100%;
-    padding: 20px;
-  }
-
-  .sidebar {
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100vw;
-    height: 70px;
-    box-sizing: border-box;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 0;
-    flex-direction: row;
-    justify-content: center;
-    backdrop-filter: var(--blur);
-    background: var(--sidebar-bg-mobile);
-    box-shadow: var(--sidebar-shadow-mobile);
-  }
-
-  .sidebar a:hover {
-    background: transparent;
-  }
-
-  .sidebar ul {
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
-  }
-
-  .sidebar ul li {
-    position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .sidebar a {
-    flex: none;
-    height: 20px;
-    transition: transform 0.3s ease;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* 选中图标上移 */
-  .sidebar a.active {
-    transform: translateY(-8px);
-  }
-
-  .sidebar-text {
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%) translateY(8px);
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-    white-space: nowrap;
-    font-size: 0.7rem;
-  }
-
-  .sidebar a.active + .sidebar-text {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    pointer-events: auto;
-    font-weight: bold;
-  }
-
-  .content {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 120px;
-    margin: 0 auto 30px;
-    max-width: 1200px;
-    display: grid;
-    gap: 10px !important;
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .content-card {
-    padding: 24px 15px;   /* 原 24px 四边 */
-  }
-  
-  .comment-content {
-    transform: none;
-    width: calc(100% - 30px);
-    left: 15px;
-    max-width: none;
-  }
-  /* !important 保留：覆盖 .comment-content.fade-in 的 transform !important */
-  .comment-content.fade-in { transform: translateY(0) !important; }
-  .comment-content.fade-out { transform: translateY(15px) !important; }
-
-  .spa-link {
-    display: block;
-    width: 100%;
-  }
-
-  .spa-link-home {
-    display: block;
-  }
-
-  .card {
-    max-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .card img {
-    width: 100% !important;
-  }
-
-  .article-header {
-    height: 70vh;
-    width: 100%;
-    margin: 46px 0 0 0px;
-  }
-
-  .article-card {
-    transform: none;
-    width: calc(100% - 12px);
-    margin-top: -80px;
-    left: 6px;
-    padding: 25px;
-    max-width: none;
-  }
-  /* !important 需保留：覆盖 .article-card.fade-in 的 transform !important */
-  .article-card.fade-in { transform: translateY(0) !important; }
-  .article-card.fade-out { transform: translateY(15px) !important; }
-
-  .profile-card {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto 0 auto;
-    box-sizing: border-box;
-  }
-  
-  .about-card {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto 0 auto;
-    box-sizing: border-box;
-    padding: 20px 15px 10px 15px;
-    overflow: hidden;
-  }
-
-  .header-container {
-    position: relative;
-    width: calc(100% - 30px);
-    max-width: 100%;
-    height: 150px !important;
-    margin-top: var(--navbar-height);
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .header-overlay {
-    height: 100% !important;
-    margin: 0 !important;
-  }
-  .home-header {
-    height: 100%;
-    width: 100% !important;
-  }
-  .home-content {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 15px;
-    padding-right: 15px;
-    overflow-x: hidden;
-    box-sizing: border-box;
-  }
-  .home-content > * {
-    max-width: 100vw !important;
-    box-sizing: border-box;
-  }
-
-  .content-inner {
-    overflow: hidden;
-  }
-
-  .home-flex {
-    flex-direction: column;
-    align-items: center;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-  }
-  .home-flex > * {
-    min-width: 0 !important;
-    max-width: 100% !important;
-    width: 100%;
-  }
-
-  /* 横向滚动列表自身限制 */
-  .article-scroll-list {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    overflow: hidden;
-  }
-
-  .home-profile,
-  .home-right-cards {
-    width: 100%;
-    max-width: 400px;
-    min-width: 0;
-  }
-  .home-right-cards {
-    flex-direction: column;
-  }
-
-  .home-link-card {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 20px 48px 20px 20px;
-  }
-  .scroll-title-top {
-    font-size: 1.1rem;
-    margin-bottom: 0px;
-  }
-  .scroll-title {
-    font-size: 1.1rem;
-    margin-bottom: 0px;
-  }
-  .footer { margin-left: 0; width: 100%; padding-bottom: 80px; }
-}
-
-/* =========================
-   桌面端
-========================= */
-@media (min-width: 769px) {
-  .header-container {
-    width: calc(100% - var(--sidebar-width) - 40px);
-    max-width: 904px;
-    margin-left: max(
-      calc((100% + var(--sidebar-width) - 904px) / 2),
-      calc(var(--sidebar-width) + 20px)
-    );
-    margin-right: auto;
-    margin-top: var(--navbar-height);
-    margin-bottom: 0;
-    position: relative;
-    padding: 0 !important;
-  }
-
-  .home-flex {
-    display: grid;
-    grid-template-columns: 280px minmax(0, 600px);
-    grid-template-areas:
-      "profile title1"
-      "profile list1"
-      "links  title2"
-      "links  list2";
-    gap: 24px;
-    align-items: start;
-    max-width: 904px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .home-flex > .profile-card.home-profile {
-    grid-area: profile;
-    width: 100%;
-    margin: 0;
-  }
-
-  .home-flex > .home-right-cards {
-    grid-area: links;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    gap: 20px;
-    width: 100%;
-  }
-
-  /* 第一个标题 */
-  .home-flex > :nth-child(2) { grid-area: title1; }
-  /* 第一个列表 */
-  .home-flex > :nth-child(3) { grid-area: list1; }
-  /* 第二个标题 */
-  .home-flex > :nth-child(4) { grid-area: title2; }
-  /* 第二个列表 */
-  .home-flex > :nth-child(5) { grid-area: list2; }
-
-  .article-scroll-list {
-    width: 100%;
-    min-width: 0;
-  }
-  .scroll-container {
-    width: 100%;
-  }
+  overflow: hidden;
 }
