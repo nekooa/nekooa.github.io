@@ -2,7 +2,7 @@
    常量配置
 ========================= */
 const CONFIG = {
-  GISCUS_REPO: 'sagiriworld/sagiriworld.github.io',
+  GISCUS_REPO: 'nekooa/nekooa.github.io',
   GISCUS_REPO_ID: 'R_kgDORzOqxQ',
   GISCUS_CATEGORY: 'Announcements',
   GISCUS_CATEGORY_ID: 'DIC_kwDORzOqxc4C-uzR',
