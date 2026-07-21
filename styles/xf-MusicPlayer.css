@@ -572,7 +572,7 @@
 /* 通知弹窗 — 默认浅色 */
 .xf-music-pop {
   width: auto;
-  max-width: 90vw;
+  max-width: 50vw;
   min-width: 60px;
   padding: 10px 10px;
   background: rgba(253, 217, 231, 0.9);
@@ -583,7 +583,7 @@
   border-radius: 30px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   position: fixed;
-  bottom: 15%;
+  bottom: 50%;
   left: 50%;
   transform: translateX(-50%);
   z-index: var(--z-index-100);
@@ -593,7 +593,7 @@
   line-height: 1.4;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
 }
 .xf-music-pop.show {
   opacity: 1;
