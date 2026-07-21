@@ -69,6 +69,7 @@
 /* 滚动条与选区 */
 #xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar {
   width: 3.5px;
+  display: none;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main ::-webkit-scrollbar-thumb {
   background-color: transparent;
@@ -182,6 +183,9 @@
   color: var(--playerColor-4);
   transition: color 0.35s;
 }
+#xf-MusicPlayer .xf-iconCircle {
+  border-radius: 50%;
+}
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:hover {
   color: var(--playerColor-5);
 }
@@ -233,6 +237,7 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl .xf-playbackControl {
   margin: 0 1.5em;
   transition: opacity 0.5s;
+  align-items: center;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
   --iconControlSize: 24px;
@@ -341,6 +346,7 @@
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
+  border-radius: 10px;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-songName {
@@ -795,7 +801,7 @@
   position: absolute;
   border-radius: 50%;
   animation: xf-ripple-animation 0.5s ease-out forwards;
-  background: var(--playerColor-rgab-1);
+  background: var(--sidebar-a);
   pointer-events: none;
 }
 
