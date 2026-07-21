@@ -653,33 +653,53 @@ window.addEventListener('DOMContentLoaded', function () {
                     }
                 };
                 playBackAndForth();
-                let isSliding = false;
-                const getClientX = e => e.touches ? e.touches[0].clientX : e.clientX;
-                const startSlide = e => {
-                    isSliding = true;
-                    pauseMusic();
-                    removebePlaying();
-                    slide(e);
-                };
-                const slide = e => {
-                    if (!isSliding) return;
-                    const containerRect = totalAudioProgress.getBoundingClientRect();
-                    const clickX = getClientX(e) - containerRect.left;
-                    const containerWidth = containerRect.width;
-                    const clickProgress = Math.max(0, Math.min(100, (clickX / containerWidth) * 100));
-                    audioProgress.style.width = `${clickProgress}%`;
-                };
-                const endSlide = e => {
-                    if (!isSliding) return;
-                    isSliding = false;
-                    const duration = xfMusicAudio.duration;
-                    if (!isNaN(duration)) {
-                        const width = parseFloat(audioProgress.style.width) || 0;
-                        xfMusicAudio.currentTime = (width / 100) * duration;
-                    }
-                    playMusic();
-                    addPlaying();
-                };
+let isSliding = false;
+let cachedRect = null;  // 缓存进度条尺寸，避免每帧重排
+const getClientX = e => e.touches ? e.touches[0].clientX : e.clientX;
+
+const startSlide = e => {
+    isSliding = true;
+    // 拖拽期间禁用 CSS 过渡，消除延迟
+    audioProgress.classList.add('xf-no-transition');
+    // 缓存进度条位置和尺寸（拖拽期间不会变化）
+    cachedRect = totalAudioProgress.getBoundingClientRect();
+    pauseMusic();
+    removebePlaying();
+    slide(e);
+};
+
+const slide = e => {
+    if (!isSliding || !cachedRect) return;
+    const clickX = getClientX(e) - cachedRect.left;
+    const clickProgress = Math.max(0, Math.min(100, (clickX / cachedRect.width) * 100));
+    audioProgress.style.width = `${clickProgress}%`;
+
+    // 实时显示拖拽位置对应的时间
+    if (currentTimeEl && !isNaN(xfMusicAudio.duration)) {
+        currentTimeEl.textContent = convertTime((clickProgress / 100) * xfMusicAudio.duration);
+    }
+};
+
+const endSlide = e => {
+    if (!isSliding) return;
+    isSliding = false;
+    const duration = xfMusicAudio.duration;
+    if (!isNaN(duration)) {
+        const width = parseFloat(audioProgress.style.width) || 0;
+        xfMusicAudio.currentTime = (width / 100) * duration;
+        // 松手后立即更新当前时间显示
+        if (currentTimeEl) {
+            currentTimeEl.textContent = convertTime(xfMusicAudio.currentTime);
+        }
+    }
+    // 恢复 CSS 过渡（松手后再平滑不影响体验）
+    requestAnimationFrame(() => {
+        audioProgress.classList.remove('xf-no-transition');
+    });
+    cachedRect = null;
+    playMusic();
+    addPlaying();
+};
                 totalAudioProgress.addEventListener('mousedown', startSlide);
                 totalAudioProgress.addEventListener('mousemove', slide);
                 totalAudioProgress.addEventListener('mouseup', endSlide);
