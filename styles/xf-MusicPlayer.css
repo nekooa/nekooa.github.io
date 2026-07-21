@@ -2,6 +2,7 @@
   font-size: 16px !important;
   position: fixed;
   z-index: 150;
+  margin-bottom: 100px;
 }
 #xf-MusicPlayer * {
   margin: 0;
@@ -123,14 +124,15 @@
   display: flex;
 }
 
-/* 封面 */
+/* 封面 — 与 topControl 顶部对齐 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture {
   width: var(--songPictureWidth);
   height: 135px;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-left: 5px;
+  padding-top: 12px;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-songPicture .xf-musicPicture {
   display: block;
@@ -138,6 +140,16 @@
   height: var(--songPictureWidth);
   border-radius: 16px;
   object-fit: cover;
+}
+
+/* 静音按钮 — 隐藏 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-audioFrequency {
+  display: none;
+}
+
+/* 按钮悬浮提示 — 禁用 */
+.xf-throughDisplay {
+  display: none !important;
 }
 
 /* 控制区 */
@@ -149,11 +161,18 @@
   --iconControlSize: 32px;
   width: var(--rightSideWidth);
   height: 135px;
+  display: flex;
+  flex-direction: column;
 }
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl,
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl {
   display: flex;
   width: var(--rightSideWidth);
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
+  display: flex;
+  width: 135%;
+  margin-left: -84px !important;
+  margin-bottom: 10px;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl li,
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl li {
@@ -223,10 +242,12 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl {
   --iconControlSize: 24px;
   --widthAndHeight: 10px;
-  height: var(--bottomControlHeight);
-  padding: var(--BoxLeftAndRightMargin);
+  flex: 1;
+  padding: 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl li {
   display: flex;
@@ -235,8 +256,8 @@
 
 /* 进度条 */
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar {
-  width: 70%;
-  padding: 0 5px;
+  flex: 1;
+  padding: 0 8px;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress,
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress .xf-audioProgress {
