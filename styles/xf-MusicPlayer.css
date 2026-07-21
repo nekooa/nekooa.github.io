@@ -267,10 +267,16 @@
   width: 100%;
   background-color: var(--playerColor-4);
 }
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress .xf-audioProgress {
+/* 拖拽时临时禁用过渡，松手后恢复 */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl
+.xf-bottomControl .xf-totalAudioProgress .xf-audioProgress {
   position: relative;
   background-color: var(--playerColor-6);
   transition: width 0.35s;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl
+.xf-bottomControl .xf-totalAudioProgress .xf-audioProgress.xf-no-transition {
+  transition: none !important;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress .xf-audioProgress::after {
   content: '';
