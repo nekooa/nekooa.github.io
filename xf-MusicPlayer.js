@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', function () {
             ele = ele.body.firstChild;
             mainBox.appendChild(ele);
         };
-        let musicStr = `<div class="xf-MusicPlayer-Main"><div class="xf-switchPlayer"><i class="iconfont icon-jiantou2"></i></div><div class="xf-insideSong"><div class="xf-songPicture"><img src="https://player.xfyun.club/img/playerLoad.gif" alt="加载中..." class="xf-musicPicture"></div><div class="xf-musicControl"><div class="xf-topControl"><div class="xf-introduce"><h3 class="xf-songName">加载歌单中...</h3><p class="xf-singer">请稍候</p></div><ul class="xf-playerControl"><li class="xf-previousSong"><i class="iconfont icon-shangyishou"></i></li><li class="xf-playbackControl"><i class="xf-pause iconfont icon-zantingtingzhi" style="display: none;"></i><i class="xf-playBack iconfont icon-bofang" style="display: block;"></i></li><li class="xf-nextSong"><i class="iconfont icon-xiayishou"></i></li></ul></div><ul class="xf-bottomControl"><li class="xf-audioFrequency"><i class="iconfont icon-shengyin-kai"></i></li><li class="xf-progressBar"><h5 class="xf-totalAudioProgress"><p class="xf-audioProgress" style="width: 0;"></p></h5></li><li class="xf-playlistBtn"><i class="iconfont icon-gedan"></i></li></ul></div></div><div class="xf-outsideSongList"><ul class="xf-listOfSongs"></ul></div></div>`;
+        let musicStr = `<div class="xf-MusicPlayer-Main"><div class="xf-switchPlayer"><i class="iconfont icon-jiantou2"></i></div><div class="xf-insideSong"><div class="xf-songPicture"><img src="https://player.xfyun.club/img/playerLoad.gif" alt="加载中..." class="xf-musicPicture"></div><div class="xf-musicControl"><div class="xf-topControl"><div class="xf-introduce"><h3 class="xf-songName">加载歌单中...</h3><p class="xf-singer">请稍候</p></div><ul class="xf-playerControl"><li class="xf-previousSong"><i class="iconfont icon-shangyishou"></i></li><li class="xf-playbackControl"><i class="xf-pause iconfont icon-zantingtingzhi" style="display: none;"></i><i class="xf-playBack iconfont icon-bofang" style="display: block;"></i></li><li class="xf-nextSong"><i class="iconfont icon-xiayishou"></i></li></ul></div><ul class="xf-bottomControl"><li class="xf-audioFrequency"><i class="iconfont icon-shengyin-kai"></i></li><li class="xf-progressBar"><span class="xf-currentTime">00:00</span><h5 class="xf-totalAudioProgress"><p class="xf-audioProgress" style="width: 0;"></p></h5><span class="xf-totalTime">00:00</span></li><li class="xf-playlistBtn"><i class="iconfont icon-gedan"></i></li></ul></div></div><div class="xf-outsideSongList"><ul class="xf-listOfSongs"></ul></div></div>`;
         let lyricStr = `<div id="xf-lyric"><ul class="xf-AllLyric-box"></ul></div>`;
         characterToElement(musicStr, MusicPlayer);
         allPlayerFeatures();
@@ -115,6 +115,8 @@ window.addEventListener('DOMContentLoaded', function () {
                 outsideSongList = getEle('.xf-outsideSongList'),
                 listOfSongs = getEle('.xf-listOfSongs'),
                 xfLyric = playerBody.querySelector('#xf-lyric');
+            const currentTimeEl = getEle('.xf-currentTime');
+            const totalTimeEl = getEle('.xf-totalTime');
             const themeStyle = MusicPlayer.getAttribute('data-themeColor');
             themeStyle === null ? MusicPlayerMain.classList.add('xf-girlPink') : MusicPlayerMain.classList.add(themeStyle);
             const bottomHeight = MusicPlayer.getAttribute('data-bottomHeight');
@@ -406,6 +408,8 @@ window.addEventListener('DOMContentLoaded', function () {
                             songName.textContent = itemName;
                             singer.textContent = itemAuto;
                             updateMediaMetadata(itemName, itemAuto, itemPic);
+                            if (currentTimeEl) currentTimeEl.textContent = '00:00';
+                            if (totalTimeEl) totalTimeEl.textContent = '00:00';
                             if (pendingAudioLoadTimer) { clearTimeout(pendingAudioLoadTimer); pendingAudioLoadTimer = null; }
                             pendingAudioLoadTimer = setTimeout(() => {
                                 xfMusicAudio.src = itemUrl;
@@ -599,6 +603,9 @@ window.addEventListener('DOMContentLoaded', function () {
                             const currentTime = xfMusicAudio.currentTime;
                             const progress = (currentTime / duration) * 100;
                             audioProgress.style.width = `${progress}%`;
+                            if (currentTimeEl) {
+                                currentTimeEl.textContent = convertTime(currentTime);
+                            }
                             detectionCookies(() => {
                                 cookieData = { musicId: currentSongIndex, musicTime: xfMusicAudio.currentTime };
                                 setCookie(cookieName, JSON.stringify(cookieData), 30);
@@ -606,6 +613,9 @@ window.addEventListener('DOMContentLoaded', function () {
                             if (progress === 100) { nextMusic(); }
                         });
                         const loadedMetadataHandler = () => {
+                            if (totalTimeEl && !isNaN(xfMusicAudio.duration)) {
+                                totalTimeEl.textContent = convertTime(xfMusicAudio.duration);
+                            }
                             detectionCookies(() => {
                                 const freshCookie = getCookie(cookieName);
                                 if (!freshCookie) return;
