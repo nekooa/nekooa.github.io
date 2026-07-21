@@ -1112,6 +1112,30 @@ window.addEventListener('DOMContentLoaded', function () {
 
             clickControl();
 
+            // 播放器 Ripple 效果（事件委托，自动覆盖动态创建的 .xf-songsItem）
+            MusicPlayerMain.addEventListener('pointerdown', function(e) {
+                const target = e.target.closest(
+                    '.xf-switchPlayer, .xf-previousSong, .xf-playbackControl, .xf-nextSong, .xf-playlistBtn, .xf-songsItem'
+                );
+                if (!target) return;
+
+                const rect = target.getBoundingClientRect();
+                const diameter = Math.max(rect.width, rect.height);
+                const radius = diameter / 2;
+
+                const circle = document.createElement('span');
+                circle.classList.add('xf-ripple');
+                circle.style.width = circle.style.height = diameter + 'px';
+                circle.style.left = (e.clientX - rect.left - radius) + 'px';
+                circle.style.top = (e.clientY - rect.top - radius) + 'px';
+
+                const old = target.querySelector('.xf-ripple');
+                if (old) old.remove();
+
+                target.appendChild(circle);
+                setTimeout(() => circle.remove(), 600);
+            });
+            
             /* ---------- 展开/收起播放器面板 ---------- */
             const switchPlayerFun = () => {
                 const playerToggleClasses = () => {
