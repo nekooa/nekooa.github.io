@@ -198,14 +198,14 @@ const ColorThemeManager = {
         }
       },
       dark: {
-        '--color-bg': '#17212b',
+        '--color-bg': '#191C1E',
         '--color-pink': '#91c0f0',
         '--color-pink-soft': 'rgba(145,192,240,0.25)',
         '--color-svg': '#c8ddf0',
         '--sidebar-bg': 'rgba(20,28,36)',
         '--sidebar-a': 'rgba(100,130,160,0.5)',
         '--sidebar-bg-mobile': 'rgba(25,35,45,0.85)',
-        '--card-bg': '#1c2a33',
+        '--card-bg': '#1E2529',
         '--profile-list-bg': 'rgba(30,60,90,0.5)',
         '--time-badge-bg': 'rgba(145,192,240,0.2)',
         '--li-a-bg': 'rgba(145,192,240,0.25)',
