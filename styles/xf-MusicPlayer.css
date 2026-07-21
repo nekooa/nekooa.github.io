@@ -755,3 +755,30 @@
 @media (max-width: 768px) {
   #xf-lyric {z-index: 140;}
 }
+
+/* =========================
+   进度条时间显示
+========================= */
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-currentTime,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalTime {
+  font-size: 11px;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  color: var(--playerColor-4);
+  white-space: nowrap;
+  min-width: 36px;
+  text-align: center;
+  line-height: 1;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-progressBar .xf-totalAudioProgress {
+  flex: 1;
+}
