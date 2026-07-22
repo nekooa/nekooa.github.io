@@ -282,6 +282,9 @@ window.addEventListener('DOMContentLoaded', function () {
                     xfMusicPop = document.createElement('div');
                     xfMusicPop.classList.add('xf-music-pop');
                     playerBody.appendChild(xfMusicPop);
+                    if (typeof ColorThemeManager !== 'undefined') {
+                        ColorThemeManager.applyColor(ColorThemeManager.getColor());
+                    }
                 }
                 xfMusicPop.textContent = musicName;
                 isAnimationInProgress = 1;

@@ -211,7 +211,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
     --color-svg: #fed9e6;
     --sidebar-bg-mobile: rgba(49, 38, 42, 0.8);
     --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.5);
-    --sidebar-a: rgba(106, 106, 106, 0.15);
+    --sidebar-a: rgba(106, 106, 106, 0.25);
 
     --card-bg: #2A2125;
 
@@ -272,7 +272,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
   --color-svg: #fed9e6;
   --sidebar-bg-mobile: rgba(49, 38, 42, 0.8);
   --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.5);
-  --sidebar-a: rgba(106, 106, 106, 0.15);
+  --sidebar-a: rgba(106, 106, 106, 0.25);
 
   --card-bg: #2A2125;
 

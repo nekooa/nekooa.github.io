@@ -11,7 +11,7 @@ main {
   --color-btn-text: #2f4554;
   --color-btn-bg: rgba(195, 232, 255, 0.4);
   --color-btn-border: rgba(91, 155, 213, 0.25);
-  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0.);
   --color-btn-inset-shadow: 0 0 transparent;
   --color-btn-hover-bg: rgba(195, 232, 255, 0.7);
   --color-btn-hover-border: rgba(91, 155, 213, 0.4);
@@ -21,12 +21,12 @@ main {
   --color-btn-primary-text: #ffffff;
   --color-btn-primary-bg: #006689;
   --color-btn-primary-border: transparent;
-  --color-btn-primary-shadow: 0 2px 8px rgba(0,102,137,0.2);
+  --color-btn-primary-shadow: 0 2px 8px rgba(0,102,137,0);
   --color-btn-primary-inset-shadow: 0 0 transparent;
   --color-btn-primary-hover-bg: #00557a;
   --color-btn-primary-hover-border: transparent;
   --color-btn-primary-selected-bg: #006689;
-  --color-btn-primary-selected-shadow: 0 2px 8px rgba(0,102,137,0.25);
+  --color-btn-primary-selected-shadow: 0 2px 8px rgba(0,102,137,0);
   --color-btn-primary-disabled-text: rgba(255,255,255,0.7);
   --color-btn-primary-disabled-bg: rgba(0,102,137,0.5);
   --color-btn-primary-disabled-border: transparent;
@@ -98,10 +98,6 @@ main {
   border-radius: 0 0 16px 16px !important;
 }
 
-.gsc-reply-box {
-  border-radius: 16px !important;
-}
-
 .gsc-replies {
   border-radius: 0 0 16px 16px !important;
   border-color: rgba(195, 232, 255, 0.3) !important;
@@ -128,6 +124,8 @@ main {
   background-color: rgba(195, 232, 255, 0.5) !important;
   border-color: #006689 !important;
   color: #006689 !important;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .gsc-pagination-button {

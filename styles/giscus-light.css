@@ -12,7 +12,7 @@ main {
   --color-btn-text: #3d3d3d;
   --color-btn-bg: rgba(255, 216, 231, 0.4);
   --color-btn-border: rgba(255, 179, 207, 0.3);
-  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0);
   --color-btn-inset-shadow: 0 0 transparent;
   --color-btn-hover-bg: rgba(255, 216, 231, 0.7);
   --color-btn-hover-border: rgba(255, 179, 207, 0.5);
@@ -22,12 +22,12 @@ main {
   --color-btn-primary-text: #ffffff;
   --color-btn-primary-bg: #ff95bc;
   --color-btn-primary-border: transparent;
-  --color-btn-primary-shadow: 0 2px 8px rgba(255,149,188,0.25);
+  --color-btn-primary-shadow: 0 2px 8px rgba(255,149,188,0);
   --color-btn-primary-inset-shadow: 0 0 transparent;
   --color-btn-primary-hover-bg: #ff7aad;
   --color-btn-primary-hover-border: transparent;
   --color-btn-primary-selected-bg: #ff95bc;
-  --color-btn-primary-selected-shadow: 0 2px 8px rgba(255,149,188,0.3);
+  --color-btn-primary-selected-shadow: 0 2px 8px rgba(255,149,188,0);
   --color-btn-primary-disabled-text: rgba(255,255,255,0.7);
   --color-btn-primary-disabled-bg: rgba(255,149,188,0.5);
   --color-btn-primary-disabled-border: transparent;
@@ -45,13 +45,13 @@ main {
   --color-border-default: rgba(255,179,207,0.3);
   --color-border-muted: rgba(255,216,231,0.5);
   --color-neutral-muted: rgba(160,147,154,0.3);
-  --color-accent-fg: #e91e63;
+  --color-accent-fg: #ff95bc;
   --color-accent-emphasis: #ff95bc;
   --color-accent-muted: rgba(255,149,188,0.3);
   --color-accent-subtle: rgba(255,216,231,0.25);
   --color-success-fg: #4f8a6d;
   --color-attention-fg: #b3924a;
-  --color-danger-fg: #e5534b;
+  --color-danger-fg: #e91e63;
   --color-scale-gray-7: #8a7b82;
   --color-social-reaction-bg-hover: rgba(255,216,231,0.5);
   --color-social-reaction-bg-reacted-hover: rgba(255,149,188,0.2);
@@ -100,10 +100,6 @@ main {
   border-radius: 0 0 16px 16px !important;
 }
 
-.gsc-reply-box {
-  border-radius: 16px !important;
-}
-
 .gsc-replies {
   border-radius: 0 0 16px 16px !important;
   border-color: rgba(255, 179, 207, 0.2) !important;
@@ -133,7 +129,9 @@ main {
 .gsc-social-reaction-summary-item.has-reacted {
   background-color: rgba(255, 216, 231, 0.5) !important;
   border-color: #ff95bc !important;
-  color: #e91e63 !important;
+  color: #ff95bc !important;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .gsc-pagination-button {
@@ -149,7 +147,11 @@ main {
 }
 
 a {
-  color: #e91e63 !important;
+  color: #ff95bc !important;
+}
+
+.gsc-comment-box-buttons a {
+  color: #ffffff !important;
 }
 
 .gsc-comment-box-textarea {

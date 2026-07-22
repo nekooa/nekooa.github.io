@@ -93,6 +93,13 @@ const ColorThemeManager = {
         '--thoughts-border': '#f8bbd0',
         '--nav-time-bg': 'rgba(255,216,231,0.8)',
         '--settings-panel-bg': '#FFFBFF',
+        // [新增]
+        lyPop: {
+          '--lyric-bg': 'rgba(253, 217, 231, 0.7)',
+          '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.1)',
+          '--pop-bg': 'rgba(253, 217, 231, 0.9)',
+          '--pop-color': '#504348'
+        },
         player: {
           '--playerColor-1': '#fffbff',
           '--playerColor-2': '#1f1a1c',
@@ -120,7 +127,7 @@ const ColorThemeManager = {
         '--color-pink-soft': 'rgba(255,179,207,0.25)',
         '--color-svg': '#fed9e6',
         '--sidebar-bg': 'rgba(30,30,30)',
-        '--sidebar-a': 'rgba(106,106,106,0.15)',
+        '--sidebar-a': 'rgba(106,106,106,0.25)',
         '--sidebar-bg-mobile': 'rgba(49,38,42,0.8)',
         '--card-bg': '#2A2125',
         '--profile-list-bg': 'rgba(90,63,72,0.5)',
@@ -134,6 +141,13 @@ const ColorThemeManager = {
         '--thoughts-border': '#f06292',
         '--nav-time-bg': 'rgba(255,179,207,0.2)',
         '--settings-panel-bg': '#1F1A1C',
+        // [新增]
+        lyPop: {
+          '--lyric-bg': 'rgba(65, 42, 52, 0.9)',
+          '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.4)',
+          '--pop-bg': 'rgba(89, 64, 75, 0.9)',
+          '--pop-color': '#d4c2c8'
+        },
         player: {
           '--playerColor-1': '#1f1a1c',
           '--playerColor-2': '#ebe0e2',
@@ -163,7 +177,7 @@ const ColorThemeManager = {
         '--color-pink': '#006689',
         '--color-pink-soft': '#C3E8FF',
         '--color-svg': '#2f4554',
-        '--sidebar-bg': '#001E2C',
+        '--sidebar-bg': '#EFF5F8',
         '--sidebar-a': 'rgba(106,106,106,0.2)',
         '--sidebar-bg-mobile': 'rgba(231,240,245,0.8)',
         '--card-bg': '#EFF5F8',
@@ -178,6 +192,13 @@ const ColorThemeManager = {
         '--thoughts-border': '#C3E8FF',
         '--nav-time-bg': 'rgba(195,232,255,0.6)',
         '--settings-panel-bg': '#FBFCFE',
+        // [新增]
+        lyPop: {
+          '--lyric-bg': 'rgba(195, 232, 255, 0.7)',
+          '--lyric-shadow': '0 -2px 10px rgba(91, 155, 213, 0.15)',
+          '--pop-bg': 'rgba(195, 232, 255, 0.9)',
+          '--pop-color': '#1a2a38'
+        },
         player: {
           '--playerColor-1': '#f4f9fd',
           '--playerColor-2': '#1a2a38',
@@ -205,7 +226,7 @@ const ColorThemeManager = {
         '--color-pink-soft': 'rgba(145,192,240,0.25)',
         '--color-svg': '#c8ddf0',
         '--sidebar-bg': 'rgba(20,28,36)',
-        '--sidebar-a': 'rgba(100,130,160,0.15)',
+        '--sidebar-a': 'rgba(100,130,160,0.25)',
         '--sidebar-bg-mobile': 'rgba(25,35,45,0.85)',
         '--card-bg': '#1E2529',
         '--profile-list-bg': 'rgba(30,60,90,0.5)',
@@ -219,6 +240,13 @@ const ColorThemeManager = {
         '--thoughts-border': '#4a7ca5',
         '--nav-time-bg': 'rgba(145,192,240,0.2)',
         '--settings-panel-bg': '#17212b',
+        // [新增]
+        lyPop: {
+          '--lyric-bg': 'rgba(46, 67, 88, 0.9)',
+          '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.4)',
+          '--pop-bg': 'rgba(46, 67, 88, 0.9)',
+          '--pop-color': '#b8d4f0'
+        },
         player: {
           '--playerColor-1': '#17212b',
           '--playerColor-2': '#d4e4f5',
@@ -260,7 +288,8 @@ const ColorThemeManager = {
 
     // 应用全局页面变量
     Object.entries(vars).forEach(([prop, value]) => {
-      if (prop !== 'player') {
+      // [新增] 跳过 lyPop，它不是 CSS 变量
+      if (prop !== 'player' && prop !== 'lyPop') {
         document.documentElement.style.setProperty(prop, value);
       }
     });
@@ -271,6 +300,26 @@ const ColorThemeManager = {
       Object.entries(vars.player).forEach(([prop, value]) => {
         playerEl.style.setProperty(prop, value);
       });
+    }
+
+    // [新增] 应用歌词条 / 弹窗颜色（在 .xf-girlPink 外部，无法继承 CSS 变量）
+    const lp = vars.lyPop;
+    const xfLyric = document.getElementById('xf-lyric');
+    const xfPop = document.querySelector('.xf-music-pop');
+
+    if (lp) {
+      if (xfLyric) {
+        xfLyric.style.backgroundColor = lp['--lyric-bg'];
+        xfLyric.style.boxShadow = lp['--lyric-shadow'];
+      }
+      if (xfPop) {
+        xfPop.style.background = lp['--pop-bg'];
+        xfPop.style.color = lp['--pop-color'];
+      }
+    } else {
+      // fallback：清除内联样式，回退到 CSS 默认值
+      if (xfLyric) { xfLyric.style.backgroundColor = ''; xfLyric.style.boxShadow = ''; }
+      if (xfPop) { xfPop.style.background = ''; xfPop.style.color = ''; }
     }
 
     this.updateActiveButton(name);
@@ -348,15 +397,12 @@ function playEnterAnimation(selectors) {
 /* =========================
    页面加载守卫
 ========================= */
-/* [修改] 防止快速连续点击导致并发加载 */
 let isLoadingPage = false;
 
 async function loadPage(url, addToHistory = true) {
-  /* [修改] 防止并发 */
   if (isLoadingPage) return;
   isLoadingPage = true;
 
-  /* [修改] 如果设置弹窗开着，先关掉 */
   const settingsDialog = document.getElementById('settingsDialog');
   if (settingsDialog && settingsDialog.classList.contains('open')) {
     settingsDialog.classList.remove('open');
@@ -432,7 +478,6 @@ async function loadPage(url, addToHistory = true) {
     // ---------- 3. DOM 替换 ----------
     window.scrollTo({ top: 0, behavior: 'auto' });
 
-    // --- 主内容容器 ---
     if (newContent && currentContent) {
       currentContent.innerHTML = newContent.innerHTML;
       currentContent.className = newContent.className;
@@ -449,7 +494,6 @@ async function loadPage(url, addToHistory = true) {
       currentContent = null;
     }
 
-    // --- 头图容器 ---
     if (currentHeaderContainer && !newHeaderContainer) {
       currentHeaderContainer.remove();
       currentHeaderContainer = null;
@@ -466,7 +510,6 @@ async function loadPage(url, addToHistory = true) {
       currentHeaderContainer = newHeaderContainer;
     }
 
-    // --- 文章头图 ---
     if (newHeader) {
       if (currentHeader) {
         currentHeader.replaceWith(newHeader);
@@ -479,12 +522,10 @@ async function loadPage(url, addToHistory = true) {
       currentHeader = null;
     }
 
-    // --- Logo ---
     if (newLogo && currentLogo) {
       currentLogo.innerHTML = newLogo.innerHTML;
     }
 
-    // --- 文章卡片 ---
     if (newArticleCard) {
       if (currentArticleCard) {
         currentArticleCard.replaceWith(newArticleCard);
@@ -497,7 +538,6 @@ async function loadPage(url, addToHistory = true) {
       currentArticleCard = null;
     }
 
-    // --- 评论区 ---
     if (currentCommentContent) {
       currentCommentContent.remove();
       currentCommentContent = null;
@@ -511,7 +551,6 @@ async function loadPage(url, addToHistory = true) {
       currentCommentContent = newCommentContent;
     }
 
-    // --- Footer ---
     if (newFooter) {
       if (currentFooter) {
         currentFooter.replaceWith(newFooter);
@@ -543,10 +582,8 @@ async function loadPage(url, addToHistory = true) {
       history.pushState(null, '', url);
     }
 
-    /* [BUG#3 修复] 记录最后加载的路径，供 popstate 判断用 */
     window.__lastLoadedPath = url;
 
-    // 更新侧边栏 active 状态
     const currentPath = location.pathname;
     document.querySelectorAll('.sidebar a').forEach(a => {
       a.classList.remove('active');
@@ -560,14 +597,12 @@ async function loadPage(url, addToHistory = true) {
       }
     });
   } catch (err) {
-    /* [修改] 加载失败时恢复页面状态，而不是卡在 fade-out */
     console.error('页面加载失败:', err);
     document.querySelectorAll('.fade-out').forEach(el => {
       el.classList.remove('fade-out');
       el.classList.add('fade-in');
     });
   } finally {
-    /* [修改] 无论成功失败都释放锁 */
     isLoadingPage = false;
   }
 }
@@ -586,7 +621,6 @@ function bindLinks() {
     return normalize(url1) === normalize(url2);
   };
 
-  /* [修改] 判断是否为站内链接 */
   const isInternalLink = (url) => {
     if (!url) return false;
     if (url.startsWith('http://') || url.startsWith('https://')) return false;
@@ -595,7 +629,6 @@ function bindLinks() {
     return true;
   };
 
-  /* [BUG#2 修复] 扩展选择器覆盖文章内容内链，data-spa-bound 防重复绑定 */
   document.querySelectorAll('.sidebar a, .spa-link, .spa-link-home, .content a[href$=".html"], .home-content a[href$=".html"]').forEach(link => {
     if (link.dataset.spaBound === 'true') return;
     link.dataset.spaBound = 'true';
@@ -603,7 +636,6 @@ function bindLinks() {
     link.onclick = e => {
       const url = link.getAttribute('href');
 
-      /* [修改] 外部链接、锚点等不做 SPA 拦截，交给浏览器处理 */
       if (!isInternalLink(url)) return;
 
       e.preventDefault();
@@ -841,7 +873,6 @@ function applyFallback() {
   const mainText = document.getElementById('hitokoto_text');
   if (!mainText) return;
 
-  /* [修改] fallback 数组随机选取 */
   const fallbacks = [
     '愿你的每一天都独特而美好',
     '生活明朗，万物可爱',
@@ -871,7 +902,6 @@ async function initHitokoto(delay = false) {
     return;
   }
 
-  /* [修改] 使用 CONFIG.HITOKOTO_CACHE_DURATION（60s） */
   if (hitokotoCache && (Date.now() - hitokotoCacheTime) < CONFIG.HITOKOTO_CACHE_DURATION) {
     applyHitokoto(hitokotoCache);
     return;
@@ -1020,7 +1050,6 @@ function createSettingsDialog() {
     ThemeManager.setTheme(themeSelect.value);
   });
 
-  // 绑定主题颜色按钮
   document.querySelectorAll('.theme-color-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1028,9 +1057,6 @@ function createSettingsDialog() {
       ColorThemeManager.setColor(color);
     });
   });
-
-  /* [修改] 移除了无效的 window.loadPage 包装（loadPage 不在 window 上）
-     loadPage 开头已内置关闭弹窗的逻辑 */
 
   window.addEventListener('popstate', closeDialog);
 
@@ -1044,7 +1070,6 @@ function openSettingsDialog() {
   dialog.setAttribute('aria-hidden', 'false');
   const themeSelect = document.getElementById('themeSelect');
   if (themeSelect) themeSelect.value = ThemeManager.getTheme();
-  // 刷新颜色按钮状态
   ColorThemeManager.updateActiveButton(ColorThemeManager.getColor());
 }
 
@@ -1070,7 +1095,6 @@ function initImageViewer() {
     if (container.dataset.viewer === 'true') return;
     container.dataset.viewer = 'true';
     new Viewer(container, {
-      /* [修改] 合并为单一 toolbar 对象，修复重复定义导致第一个被覆盖的 bug */
       toolbar: {
         zoomIn: false,
         zoomOut: false,
@@ -1152,7 +1176,6 @@ const Calendar = {
     container.innerHTML = html;
   },
 
-  /* [修改] 使用事件委托，避免每次 render 后重新绑定 */
   bindEvents() {
     const container = document.getElementById('calendar');
     if (!container || container.dataset.bound === 'true') return;
@@ -1174,8 +1197,6 @@ const Calendar = {
    初始化执行
 ========================= */
 function initAll() {
-  /* [修改] 先初始化 ThemeManager，恢复 data-theme 属性，
-     再初始化 ColorThemeManager 读取正确的暗/亮模式 */
   ThemeManager.init();
   ColorThemeManager.init();
 
@@ -1221,9 +1242,7 @@ function initAll() {
   }
 }
 
-// 监听浏览器前进/后退
 window.addEventListener('popstate', () => {
-  /* [BUG#3 修复] 避免重复加载同一页面 */
   const targetPath = location.pathname;
   const normalize = (path) => {
     if (path === '/' || path === '/index.html') return 'index.html';

@@ -11,22 +11,22 @@ main {
   --color-btn-text: #f5f5f5;
   --color-btn-bg: rgba(90, 63, 72, 0.4);
   --color-btn-border: rgba(255, 179, 207, 0.15);
-  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0);
   --color-btn-inset-shadow: 0 0 transparent;
   --color-btn-hover-bg: rgba(90, 63, 72, 0.6);
   --color-btn-hover-border: rgba(255, 179, 207, 0.3);
   --color-btn-active-bg: rgba(90, 63, 72, 0.7);
   --color-btn-active-border: rgba(255, 179, 207, 0.25);
   --color-btn-selected-bg: rgba(90, 63, 72, 0.5);
-  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-text: #4a333c;
   --color-btn-primary-bg: #ffb3cf;
   --color-btn-primary-border: transparent;
-  --color-btn-primary-shadow: 0 2px 8px rgba(255,179,207,0.2);
+  --color-btn-primary-shadow: 0 2px 8px rgba(255,179,207,0);
   --color-btn-primary-inset-shadow: 0 0 transparent;
   --color-btn-primary-hover-bg: #ff9fc2;
   --color-btn-primary-hover-border: transparent;
   --color-btn-primary-selected-bg: #ffb3cf;
-  --color-btn-primary-selected-shadow: 0 2px 8px rgba(255,179,207,0.25);
+  --color-btn-primary-selected-shadow: 0 2px 8px rgba(255,179,207,0);
   --color-btn-primary-disabled-text: rgba(255,255,255,0.5);
   --color-btn-primary-disabled-bg: rgba(255,179,207,0.4);
   --color-btn-primary-disabled-border: transparent;
@@ -98,10 +98,6 @@ main {
   border-radius: 0 0 16px 16px !important;
 }
 
-.gsc-reply-box {
-  border-radius: 16px !important;
-}
-
 .gsc-replies {
   border-radius: 0 0 16px 16px !important;
   border-color: rgba(90, 63, 72, 0.4) !important;
@@ -128,6 +124,8 @@ main {
   background-color: rgba(255, 179, 207, 0.1) !important;
   border-color: #ffb3cf !important;
   color: #ffb3cf !important;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .gsc-pagination-button {
@@ -144,6 +142,10 @@ main {
 
 a {
   color: #ffb3cf !important;
+}
+
+.gsc-comment-box-buttons a {
+  color: #402f36 !important;
 }
 
 .gsc-comment-box-textarea {

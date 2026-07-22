@@ -350,14 +350,15 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs {
   padding: var(--distance10px);
   overflow: hidden;
+  gap: 5px !important;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem {
-  --songsItemHeight: calc((350px - 20px) / 4);
+  --songsItemHeight: calc((350px - 60px) / 4);
   --imgBoxSize: 45px;
   --songInformationWidth: calc(var(--SingingSheetWidth) - var(--imgBoxSize) - 20px - var(--distance10px));
   height: var(--songsItemHeight);
-  width: 101%;
+  width: 100%;
   list-style: none;
   display: flex;
   align-items: center;
@@ -366,6 +367,7 @@
   backface-visibility: hidden;
   border-radius: 10px;
   transition: background 0.3s ease;
+  margin-bottom: 8px;
 }
 
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover {
@@ -425,7 +427,6 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration {
   display: flex;
   justify-content: space-between;
-  padding-right: var(--distance10px);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem .xf-playlistSongInformation .xf-songTitle .xf-authorAndDuration .xf-songAuthor {
   color: var(--playerColor-4);
