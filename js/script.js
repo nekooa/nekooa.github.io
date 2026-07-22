@@ -288,7 +288,7 @@ const ColorThemeManager = {
 
     // 应用全局页面变量
     Object.entries(vars).forEach(([prop, value]) => {
-      // [新增] 跳过 lyPop，它不是 CSS 变量
+      // 跳过 lyPop
       if (prop !== 'player' && prop !== 'lyPop') {
         document.documentElement.style.setProperty(prop, value);
       }
@@ -302,7 +302,7 @@ const ColorThemeManager = {
       });
     }
 
-    // [新增] 应用歌词条 / 弹窗颜色（在 .xf-girlPink 外部，无法继承 CSS 变量）
+    // 应用歌词条 / 弹窗颜色
     const lp = vars.lyPop;
     const xfLyric = document.getElementById('xf-lyric');
     const xfPop = document.querySelector('.xf-music-pop');
@@ -320,6 +320,15 @@ const ColorThemeManager = {
       // fallback：清除内联样式，回退到 CSS 默认值
       if (xfLyric) { xfLyric.style.backgroundColor = ''; xfLyric.style.boxShadow = ''; }
       if (xfPop) { xfPop.style.background = ''; xfPop.style.color = ''; }
+    }
+
+    // 切换主页头图
+    const heroImg = document.querySelector('.home-header');
+    if (heroImg) {
+      const targetSrc = heroImg.getAttribute(`data-${name}-src`);
+      if (targetSrc && heroImg.src !== new URL(targetSrc, location.href).href) {
+        heroImg.src = targetSrc;
+      }
     }
 
     this.updateActiveButton(name);
