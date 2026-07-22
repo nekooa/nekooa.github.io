@@ -140,7 +140,6 @@ window.addEventListener('DOMContentLoaded', function () {
             '        </ul>',
             '      </div>',
             '      <ul class="xf-bottomControl">',
-            '        <li class="xf-audioFrequency"><i class="iconfont icon-shengyin-kai"></i></li>',
             '        <li class="xf-progressBar">',
             '          <span class="xf-currentTime">00:00</span>',
             '          <h5 class="xf-totalAudioProgress">',
@@ -203,7 +202,6 @@ window.addEventListener('DOMContentLoaded', function () {
                   pause              = playbackControl.querySelector('.xf-pause'),
                   playBack           = playbackControl.querySelector('.xf-playBack'),
                   nextSong           = getEle('.xf-nextSong'),
-                  audioFrequency     = getEle('.xf-audioFrequency'),
                   totalAudioProgress = getEle('.xf-totalAudioProgress'),
                   audioProgress      = getEle('.xf-audioProgress'),
                   playlistBtn        = getEle('.xf-playlistBtn'),
@@ -456,20 +454,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 window.addEventListener('keyup', e => {
                     if (e.key === ' ' || e.keyCode === 32) {
                         togglePlayback();
-                    }
-                });
-
-                /* ---------- 静音切换 ---------- */
-                audioFrequency.addEventListener('click', function () {
-                    xfMusicAudio.muted = !xfMusicAudio.muted;
-                    if (xfMusicAudio.muted) {
-                        displayPopup('开启静音');
-                        this.children[0].classList.remove('icon-shengyin-kai');
-                        this.children[0].classList.add('icon-shengyin-guan');
-                    } else {
-                        displayPopup('取消静音');
-                        this.children[0].classList.add('icon-shengyin-kai');
-                        this.children[0].classList.remove('icon-shengyin-guan');
                     }
                 });
 
@@ -1072,7 +1056,7 @@ window.addEventListener('DOMContentLoaded', function () {
                     }
 
                     const throughDisplay = document.querySelector('.xf-throughDisplay');
-                    const arr = [previousSong, playbackControl, nextSong, audioFrequency, playlistBtn];
+                    const arr = [previousSong, playbackControl, nextSong, playlistBtn];
 
                     function handleMouseEnter(event) {
                         const mouseX = event.pageX;
@@ -1084,7 +1068,6 @@ window.addEventListener('DOMContentLoaded', function () {
                             case previousSong:    eleShow('上一首');   break;
                             case playbackControl: eleShow('播放音乐'); break;
                             case nextSong:        eleShow('下一首');   break;
-                            case audioFrequency:  eleShow('音量设置'); break;
                             case playlistBtn:     eleShow('查看歌单'); break;
                             default:              eleHidden();
                         }

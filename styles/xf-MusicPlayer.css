@@ -27,8 +27,8 @@
   --playerColor-11: #C27E94;
   --playerColor-12: #301401;
 
-  --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
+  --playerColor-rgba-1: rgba(176, 0, 92, 0.08);
+  --playerColor-rgba-2: rgba(255, 255, 255, 0.8);
 
   --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05),
                     0px 1px 3px 0px rgba(0, 0, 0, 0.08);
@@ -97,6 +97,10 @@
   color: var(--playerColor-1);
   border-radius: var(--playerRadius-1);
   box-shadow: var(--playerShadow-1);
+  transition: filter 0.3s ease, box-shadow 0.3s ease;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer:hover {
+  filter: brightness(0.85);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer .icon-jiantou2 {
   display: block;
@@ -142,10 +146,6 @@
   object-fit: cover;
 }
 
-/* 静音按钮 — 隐藏 */
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-audioFrequency {
-  display: none;
-}
 
 /* 按钮悬浮提示 — 禁用 */
 .xf-throughDisplay {
@@ -181,13 +181,13 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont {
   font-size: var(--iconControlSize);
   color: var(--playerColor-4);
-  transition: color 0.35s;
+  transition: color 0.35s, background 0.3s ease;
 }
 #xf-MusicPlayer .xf-iconCircle {
   border-radius: 50%;
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:hover {
-  color: var(--playerColor-5);
+  background: var(--sidebar-a);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:active {
   color: var(--playerColor-6);
@@ -347,17 +347,11 @@
   will-change: transform;
   backface-visibility: hidden;
   border-radius: 10px;
+  transition: background 0.3s ease;
 }
 
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-songName {
-  color: var(--playerColor-6);
-}
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-songAuthor {
-  color: var(--playerColor-6);
-}
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .xf-songLength,
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover .icon-shijian {
-  color: var(--playerColor-6);
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover {
+  background: var(--sidebar-a);
 }
 
 /* 封面容器 */
@@ -442,6 +436,9 @@
   border-radius: var(--playerRadius-1);
   box-sizing: border-box;
 
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover {
+  background: var(--sidebar-a);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover .xf-songName {
   color: var(--playerColor-2);
@@ -670,8 +667,8 @@
     --playerColor-10: #D27B94;
     --playerColor-11: #F5C2D2;
     --playerColor-12: #FFDFED;
-    --playerColor-rgab-1: rgba(255, 223, 237, 0.12);
-    --playerColor-rgab-2: rgba(65, 42, 52, 0.7);
+    --playerColor-rgba-1: rgba(255, 223, 237, 0.12);
+    --playerColor-rgba-2: rgba(65, 42, 52, 0.7);
     --playerShadow-1: 0px 4px 8px 3px rgba(0, 0, 0, 0.3), 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
     --playerShadow-2: -4px 4px 8px 0px rgba(0, 0, 0, 0.4), inset -4px 4px 10px 0px rgba(255, 223, 237, 0.05);
     --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
@@ -707,8 +704,8 @@
   --playerColor-10: #D27B94;
   --playerColor-11: #F5C2D2;
   --playerColor-12: #FFDFED;
-  --playerColor-rgab-1: rgba(255, 223, 237, 0.12);
-  --playerColor-rgab-2: rgba(65, 42, 52, 0.7);
+  --playerColor-rgba-1: rgba(255, 223, 237, 0.12);
+  --playerColor-rgba-2: rgba(65, 42, 52, 0.7);
   --playerShadow-1: 0px 4px 8px 3px rgba(0, 0, 0, 0.3), 0px 1px 3px 0px rgba(0, 0, 0, 0.4);
   --playerShadow-2: -4px 4px 8px 0px rgba(0, 0, 0, 0.4), inset -4px 4px 10px 0px rgba(255, 223, 237, 0.05);
   --playerTextShadow-1: 0 0 1px rgba(255, 179, 198, 0.4);
@@ -744,8 +741,8 @@
   --playerColor-10: #7f553a;
   --playerColor-11: #C27E94;
   --playerColor-12: #301401;
-  --playerColor-rgab-1: rgba(176, 0, 92, 0.08);
-  --playerColor-rgab-2: rgba(255, 255, 255, 0.8);
+  --playerColor-rgba-1: rgba(176, 0, 92, 0.08);
+  --playerColor-rgba-2: rgba(255, 255, 255, 0.8);
   --playerShadow-1: 0px 4px 8px 3px rgba(176, 0, 92, 0.05), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
   --playerShadow-2: -4px 4px 8px 0px rgba(176, 0, 92, 0.08), inset -4px 4px 10px 0px rgba(0, 0, 0, 0.03);
   --playerTextShadow-1: 0 0 1px rgba(176, 0, 92, 0.15);
@@ -765,6 +762,20 @@
 
 @media (max-width: 768px) {
   #xf-lyric {z-index: 140;}
+
+  /* 移除移动端 hover 效果 */
+  #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer:hover {
+    filter: none;
+  }
+  #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:hover {
+    background: transparent;
+  }
+  #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover {
+    background: transparent;
+  }
+  #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-inExecution:hover {
+    background: var(--playerColor-3);
+  }
 }
 
 /* =========================

@@ -211,7 +211,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
     --color-svg: #fed9e6;
     --sidebar-bg-mobile: rgba(49, 38, 42, 0.8);
     --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.5);
-    --sidebar-a: rgba(106, 106, 106, 0.6);
+    --sidebar-a: rgba(106, 106, 106, 0.25);
 
     --card-bg: #2A2125;
 
@@ -272,7 +272,7 @@ img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-car
   --color-svg: #fed9e6;
   --sidebar-bg-mobile: rgba(49, 38, 42, 0.8);
   --sidebar-shadow-mobile: 0 -2px 8px rgba(0,0,0,0.5);
-  --sidebar-a: rgba(106, 106, 106, 0.6);
+  --sidebar-a: rgba(106, 106, 106, 0.25);
 
   --card-bg: #2A2125;
 
@@ -621,13 +621,13 @@ button, .sidebar, .navbar, .settings-button-m,
 .fade-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s ease !important;
 }
 
 .fade-out {
   opacity: 0 !important;
   transform: translateY(15px) !important;
-  transition: opacity 0.2s ease, transform 0.2s ease !important;
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.3s ease !important;
 }
 
 .header-container.fade-in,
@@ -659,13 +659,13 @@ button, .sidebar, .navbar, .settings-button-m,
 .settings-button-m.fade-in {
   transform: translateX(0) !important;
   opacity: 1 !important;
-  transition: opacity 0.4s ease, transform 0.4s ease !important;
+  transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s ease !important;
 }
 
 .settings-button-m.fade-out {
   transform: translateX(20px) !important;
   opacity: 0 !important;
-  transition: opacity 0.2s ease, transform 0.2s ease !important;
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.3s ease !important;
 }
 
 /* =========================
@@ -915,7 +915,7 @@ button, .sidebar, .navbar, .settings-button-m,
 }
 
 .close-button:hover {
-  background: var(--close-btn-hover-bg);
+  background: var(--sidebar-a);
 }
 
 .settings-content {
@@ -945,7 +945,7 @@ button, .sidebar, .navbar, .settings-button-m,
 }
 
 .md3-list-item:hover {
-  background: var(--md-sys-color-surface-variant, rgba(0,0,0,0.03));
+  background: var(--sidebar-a);
 }
 
 .md3-list-item > span:first-child {
@@ -1046,7 +1046,7 @@ button, .sidebar, .navbar, .settings-button-m,
 }
 
 .md3-button:hover {
-  background: var(--md-sys-color-primary-container, rgba(255,159,194,0.15));
+  background: var(--sidebar-a);
 }
 
 .md3-button.filled:hover {
@@ -1079,9 +1079,10 @@ button, .sidebar, .navbar, .settings-button-m,
 /* 主题色选择器 */
 .theme-picker-item {
   cursor: default !important;
+  transition: var(--transition);
 }
 .theme-picker-item:hover {
-  background: transparent !important;
+  background: var(--sidebar-a) !important;
 }
 .theme-color-options {
   display: flex;
@@ -1402,7 +1403,7 @@ hr.dot {
 }
 
 .li-a:hover {
-  background: var(--li-a-hover-bg);
+  background: var(--sidebar-a);
 }
 
 .li-a svg {
@@ -1422,6 +1423,10 @@ hr.dot {
   justify-content: center;
   transition: var(--transition);
   overflow: hidden;
+}
+
+.card:hover {
+  background: var(--sidebar-a);
 }
 
 .card-title {
@@ -1538,9 +1543,13 @@ hr.dot {
   background: var(--card-bg);
   border-radius: 16px;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
   display: flex;
   flex-direction: column;
+}
+
+.scroll-item:hover {
+  background: var(--sidebar-a);
 }
 
 .scroll-item-img {
@@ -1637,7 +1646,7 @@ code-box {
   transition: background-color 0.2s;
 }
 .copy-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: var(--sidebar-a);
 }
 
 .code-box-content {
@@ -1822,6 +1831,10 @@ code-box {
   color: var(--color-text);
   transition: var(--transition);
   overflow: hidden;
+}
+
+.home-link-card:hover {
+  background: var(--sidebar-a);
 }
 
 .card-content {
@@ -2016,8 +2029,7 @@ code-box {
 }
 
 .calendar-nav button:hover {
-  background: var(--color-pink);
-  color: var(--color-white);
+  background: var(--sidebar-a);
 }
 
 .calendar-week {
@@ -2046,7 +2058,7 @@ code-box {
 }
 
 .calendar-day:hover {
-  background: var(--color-pink-soft);
+  background: var(--sidebar-a);
 }
 
 .calendar-day.today {
@@ -2378,5 +2390,32 @@ code-box {
   }
   .scroll-container {
     width: 100%;
+  }
+}
+
+/* =========================
+   移动端移除所有 hover 效果
+========================= */
+@media (max-width: 768px) {
+  .close-button:hover,
+  .md3-list-item:hover,
+  .md3-button:hover,
+  .li-a:hover,
+  .copy-btn:hover,
+  .settings-button-m:hover,
+  .calendar-nav button:hover,
+  .calendar-day:hover,
+  .card:hover,
+  .theme-picker-item:hover,
+  .scroll-item:hover,
+  .home-link-card:hover {
+    background: transparent;
+  }
+  .md3-button.filled:hover {
+    filter: none;
+  }
+  .home-link-card:hover::after {
+    transform: translateY(-50%);
+    opacity: 0.6;
   }
 }
