@@ -744,7 +744,7 @@ function initGiscus() {
   container.querySelectorAll('iframe').forEach(f => f.remove());
 
   const script = document.createElement('script');
-  script.src = 'https://giscus.app/client.js';
+  script.src = './js/giscus-client.js';
   script.setAttribute('data-repo', CONFIG.GISCUS_REPO);
   script.setAttribute('data-repo-id', CONFIG.GISCUS_REPO_ID);
   script.setAttribute('data-category', CONFIG.GISCUS_CATEGORY);
