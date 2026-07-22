@@ -165,3 +165,8 @@ a {
 .BtnGroup-item.BtnGroup-item--selected {
   border-radius: 16px;
 }
+
+.color-bg-tertiary {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
