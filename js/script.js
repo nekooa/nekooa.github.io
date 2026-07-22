@@ -404,7 +404,7 @@ function playEnterAnimation(selectors) {
 }
 
 /* =========================
-   页面加载守卫
+   页面加载
 ========================= */
 let isLoadingPage = false;
 
@@ -586,6 +586,7 @@ async function loadPage(url, addToHistory = true) {
     bindSettingsTrigger();
     Calendar.init();
     initGiscus();
+    ColorThemeManager.applyColor(ColorThemeManager.getColor());
 
     if (addToHistory) {
       history.pushState(null, '', url);

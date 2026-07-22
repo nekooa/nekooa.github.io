@@ -144,6 +144,10 @@ a {
   color: #91c0f0 !important;
 }
 
+.gsc-comment-box-buttons a {
+  color: #ffffff !important;
+}
+
 .gsc-comment-box-textarea {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
