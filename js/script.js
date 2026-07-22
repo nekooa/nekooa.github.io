@@ -784,6 +784,11 @@ function initGiscus() {
   const oldScript = document.querySelector('script[data-giscus]');
   if (oldScript) oldScript.remove();
   container.querySelectorAll('iframe').forEach(f => f.remove());
+  container.querySelectorAll('.giscus-error').forEach(e => e.remove());
+
+  // 清除上一轮的定时器
+  if (window.__giscusWatchTimer) { clearInterval(window.__giscusWatchTimer); }
+  if (window.__giscusTimeoutTimer) { clearTimeout(window.__giscusTimeoutTimer); }
 
   const script = document.createElement('script');
   script.src = './js/giscus-client.js';
@@ -804,6 +809,84 @@ function initGiscus() {
 
   container.innerHTML = '';
   container.appendChild(script);
+
+  // 等待 iframe 创建并监听加载状态
+  let handled = false;
+
+  function showError() {
+    if (handled) return;
+    handled = true;
+    clearInterval(window.__giscusWatchTimer);
+    clearTimeout(window.__giscusTimeoutTimer);
+
+    // 移除已有的 iframe 和加载中状态
+    container.querySelectorAll('iframe').forEach(f => f.remove());
+    container.classList.remove('giscus-loading');
+
+    if (container.querySelector('.giscus-error')) return;
+
+    const errDiv = document.createElement('div');
+    errDiv.className = 'giscus-error';
+    errDiv.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<circle cx="12" cy="12" r="10"/>' +
+        '<line x1="12" y1="8" x2="12" y2="12"/>' +
+        '<line x1="12" y1="16" x2="12.01" y2="16"/>' +
+      '</svg>' +
+      '<p class="giscus-error-title">评论区加载失败</p>' +
+      '<p class="giscus-error-desc">网络连接异常，请稍后再试</p>' +
+      '<button class="giscus-error-btn" onclick="initGiscus()">重新加载</button>';
+    container.appendChild(errDiv);
+  }
+
+  function onSuccess() {
+    if (handled) return;
+    handled = true;
+    clearInterval(window.__giscusWatchTimer);
+    clearTimeout(window.__giscusTimeoutTimer);
+    container.classList.remove('giscus-loading');
+  }
+
+  container.classList.add('giscus-loading');
+
+  // 轮询等待 iframe 出现，绑定 load/error 事件
+  window.__giscusWatchTimer = setInterval(() => {
+    const iframe = container.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+
+    clearInterval(window.__giscusWatchTimer);
+
+    // 检查 iframe 是否已加载完成（异步插入时可能已经 loaded）
+    try {
+      // 如果能读到 contentWindow 且已 load，直接成功
+      if (iframe.contentWindow && iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+        onSuccess();
+        return;
+      }
+    } catch (e) { /* 跨域正常 */ }
+
+    iframe.addEventListener('load', () => {
+      onSuccess();
+    });
+
+    iframe.addEventListener('error', () => {
+      showError();
+    });
+  }, 100);
+
+  // 10 秒超时兜底：如果 iframe 始终未出现或未触发 load，判定失败
+  window.__giscusTimeoutTimer = setTimeout(() => {
+    if (handled) return;
+    // 如果 iframe 已存在但仍未 load，说明加载卡住
+    const iframe = container.querySelector('iframe.giscus-frame');
+    if (!iframe) {
+      showError();
+    }
+    // iframe 存在但没 load → 再等 5 秒
+    window.__giscusTimeoutTimer = setTimeout(() => {
+      if (!handled) showError();
+    }, 5000);
+  }, 10000);
 }
 
 /* =========================
