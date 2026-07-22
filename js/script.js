@@ -8,6 +8,8 @@ const CONFIG = {
   GISCUS_CATEGORY_ID: 'DIC_kwDORzOqxc4C-uzR',
   GISCUS_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-dark.css',
   GISCUS_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-light.css',
+  GISCUS_BLUE_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-dark.css',
+  GISCUS_BLUE_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-light.css',
   HITOKOTO_CACHE_DURATION: 5 * 1000,
   MIN_LOAD_TIME: 3000,
 };
@@ -30,7 +32,7 @@ const ThemeManager = {
     localStorage.setItem(this.STORAGE_KEY, theme);
     this.updateMetaThemeColor();
     if (document.querySelector('.giscus')) {
-      initGiscus();
+      updateGiscusTheme();
     }
     // 安全调用：若 ColorThemeManager 已定义，则重新应用颜色
     if (typeof ColorThemeManager !== 'undefined') {
@@ -104,8 +106,8 @@ const ColorThemeManager = {
           '--playerColor-10': '#7f553a',
           '--playerColor-11': '#C27E94',
           '--playerColor-12': '#301401',
-          '--playerColor-rgab-1': 'rgba(176,0,92,0.08)',
-          '--playerColor-rgab-2': 'rgba(255,255,255,0.8)',
+          '--playerColor-rgba-1': 'rgba(176,0,92,0.08)',
+          '--playerColor-rgba-2': 'rgba(255,255,255,0.8)',
           '--playerShadow-1': '0px 4px 8px 3px rgba(176,0,92,0.05),0px 1px 3px 0px rgba(0,0,0,0.08)',
           '--playerShadow-2': '-4px 4px 8px 0px rgba(176,0,92,0.08),inset -4px 4px 10px 0px rgba(0,0,0,0.03)',
           '--playerTextShadow-1': '0 0 1px rgba(176,0,92,0.15)',
@@ -118,7 +120,7 @@ const ColorThemeManager = {
         '--color-pink-soft': 'rgba(255,179,207,0.25)',
         '--color-svg': '#fed9e6',
         '--sidebar-bg': 'rgba(30,30,30)',
-        '--sidebar-a': 'rgba(106,106,106,0.6)',
+        '--sidebar-a': 'rgba(106,106,106,0.15)',
         '--sidebar-bg-mobile': 'rgba(49,38,42,0.8)',
         '--card-bg': '#2A2125',
         '--profile-list-bg': 'rgba(90,63,72,0.5)',
@@ -145,8 +147,8 @@ const ColorThemeManager = {
           '--playerColor-10': '#D27B94',
           '--playerColor-11': '#F5C2D2',
           '--playerColor-12': '#FFDFED',
-          '--playerColor-rgab-1': 'rgba(255,223,237,0.12)',
-          '--playerColor-rgab-2': 'rgba(65,42,52,0.7)',
+          '--playerColor-rgba-1': 'rgba(255,223,237,0.12)',
+          '--playerColor-rgba-2': 'rgba(65,42,52,0.7)',
           '--playerShadow-1': '0px 4px 8px 3px rgba(0,0,0,0.3),0px 1px 3px 0px rgba(0,0,0,0.4)',
           '--playerShadow-2': '-4px 4px 8px 0px rgba(0,0,0,0.4),inset -4px 4px 10px 0px rgba(255,223,237,0.05)',
           '--playerTextShadow-1': '0 0 1px rgba(255,179,198,0.4)',
@@ -189,8 +191,8 @@ const ColorThemeManager = {
           '--playerColor-10': '#7f553a',
           '--playerColor-11': '#6c8ebf',
           '--playerColor-12': '#301401',
-          '--playerColor-rgab-1': 'rgba(91,155,213,0.08)',
-          '--playerColor-rgab-2': 'rgba(255,255,255,0.8)',
+          '--playerColor-rgba-1': 'rgba(91,155,213,0.08)',
+          '--playerColor-rgba-2': 'rgba(255,255,255,0.8)',
           '--playerShadow-1': '0px 4px 8px 3px rgba(91,155,213,0.05),0px 1px 3px 0px rgba(0,0,0,0.08)',
           '--playerShadow-2': '-4px 4px 8px 0px rgba(91,155,213,0.08),inset -4px 4px 10px 0px rgba(0,0,0,0.03)',
           '--playerTextShadow-1': '0 0 1px rgba(91,155,213,0.15)',
@@ -203,7 +205,7 @@ const ColorThemeManager = {
         '--color-pink-soft': 'rgba(145,192,240,0.25)',
         '--color-svg': '#c8ddf0',
         '--sidebar-bg': 'rgba(20,28,36)',
-        '--sidebar-a': 'rgba(100,130,160,0.5)',
+        '--sidebar-a': 'rgba(100,130,160,0.15)',
         '--sidebar-bg-mobile': 'rgba(25,35,45,0.85)',
         '--card-bg': '#1E2529',
         '--profile-list-bg': 'rgba(30,60,90,0.5)',
@@ -230,8 +232,8 @@ const ColorThemeManager = {
           '--playerColor-10': '#a4c2d8',
           '--playerColor-11': '#8ab8e0',
           '--playerColor-12': '#e4f0f8',
-          '--playerColor-rgab-1': 'rgba(145,192,240,0.12)',
-          '--playerColor-rgab-2': 'rgba(23,33,43,0.7)',
+          '--playerColor-rgba-1': 'rgba(145,192,240,0.12)',
+          '--playerColor-rgba-2': 'rgba(23,33,43,0.7)',
           '--playerShadow-1': '0px 4px 8px 3px rgba(0,0,0,0.3),0px 1px 3px 0px rgba(0,0,0,0.4)',
           '--playerShadow-2': '-4px 4px 8px 0px rgba(0,0,0,0.4),inset -4px 4px 10px 0px rgba(145,192,240,0.05)',
           '--playerTextShadow-1': '0 0 1px rgba(145,192,240,0.4)',
@@ -277,6 +279,9 @@ const ColorThemeManager = {
   setColor(name) {
     localStorage.setItem(this.STORAGE_KEY, name);
     this.applyColor(name);
+    if (document.querySelector('.giscus')) {
+      updateGiscusTheme();
+    }
   },
 
   updateActiveButton(name) {
@@ -704,14 +709,10 @@ function fallbackCopyText(text, copyBtn) {
 /* =========================
    Giscus
 ========================= */
-function initGiscus() {
-  const container = document.querySelector('.giscus');
-  if (!container) return;
-
-  /* [BUG#4 修复] 清除旧的 Giscus script 和 iframe，防止累积 */
-  const oldScript = document.querySelector('script[data-giscus]');
-  if (oldScript) oldScript.remove();
-  container.querySelectorAll('iframe').forEach(f => f.remove());
+function getGiscusThemeUrl() {
+  const color = (typeof ColorThemeManager !== 'undefined')
+    ? ColorThemeManager.getColor()
+    : 'pink';
 
   const isDark = (() => {
     const theme = ThemeManager.getTheme();
@@ -720,8 +721,27 @@ function initGiscus() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   })();
 
-  /* [修改] 使用 CONFIG 常量 */
-  const themeUrl = isDark ? CONFIG.GISCUS_DARK_THEME : CONFIG.GISCUS_LIGHT_THEME;
+  if (color === 'blue') {
+    return isDark ? CONFIG.GISCUS_BLUE_DARK_THEME : CONFIG.GISCUS_BLUE_LIGHT_THEME;
+  }
+  return isDark ? CONFIG.GISCUS_DARK_THEME : CONFIG.GISCUS_LIGHT_THEME;
+}
+
+function updateGiscusTheme() {
+  const iframe = document.querySelector('iframe.giscus-frame');
+  if (!iframe) return;
+  iframe.contentWindow.postMessage({
+    giscus: { setConfig: { theme: getGiscusThemeUrl() } }
+  }, 'https://giscus.app');
+}
+
+function initGiscus() {
+  const container = document.querySelector('.giscus');
+  if (!container) return;
+
+  const oldScript = document.querySelector('script[data-giscus]');
+  if (oldScript) oldScript.remove();
+  container.querySelectorAll('iframe').forEach(f => f.remove());
 
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
@@ -734,7 +754,7 @@ function initGiscus() {
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
   script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', themeUrl);
+  script.setAttribute('data-theme', getGiscusThemeUrl());
   script.setAttribute('data-lang', 'zh-CN');
   script.setAttribute('crossorigin', 'anonymous');
   script.async = true;

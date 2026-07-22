@@ -126,6 +126,7 @@
   background-color: var(--playerColor-1);
   box-shadow: var(--playerShadow-1);
   display: flex;
+  overflow: hidden;
 }
 
 /* 封面 — 与 topControl 顶部对齐 */
@@ -181,12 +182,29 @@
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont {
   font-size: var(--iconControlSize);
   color: var(--playerColor-4);
-  transition: color 0.35s, background 0.3s ease;
+  transition: color 0.35s;
 }
-#xf-MusicPlayer .xf-iconCircle {
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl li,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-playlistBtn {
+  position: relative;
+  overflow: visible;
+}
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl li::after,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-playlistBtn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
+  background: transparent;
+  transition: background 0.3s ease;
+  pointer-events: none;
 }
-#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:hover {
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl li:hover::after,
+#xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-playlistBtn:hover::after {
   background: var(--sidebar-a);
 }
 #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:active {
@@ -767,7 +785,8 @@
   #xf-MusicPlayer .xf-MusicPlayer-Main .xf-switchPlayer:hover {
     filter: none;
   }
-  #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .iconfont:hover {
+  #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-topControl .xf-playerControl li:hover::after,
+  #xf-MusicPlayer .xf-MusicPlayer-Main .xf-insideSong .xf-musicControl .xf-bottomControl .xf-playlistBtn:hover::after {
     background: transparent;
   }
   #xf-MusicPlayer .xf-MusicPlayer-Main .xf-outsideSongList .xf-listOfSongs .xf-songsItem:hover {
