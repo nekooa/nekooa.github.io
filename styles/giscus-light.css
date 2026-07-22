@@ -151,3 +151,21 @@ main {
 a {
   color: #e91e63 !important;
 }
+
+.gsc-comment-box-textarea {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+#__next .rounded-t {
+  border-start-end-radius: 10px;
+  border-start-start-radius: 10px;
+}
+
+#__next .rounded-md {
+  border-radius: 16px;
+}
+
+.BtnGroup-item.BtnGroup-item--selected {
+  border-radius: 16px;
+}
