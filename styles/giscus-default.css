@@ -11,6 +11,9 @@
   opacity: 0;
 }
 
-.gsc-comment-box{
-  overflow: hidden;
+.gsc-comment-box {
+  font-size: .875rem;
+  line-height: 1.25rem;
+  width: 100%;
+  overflow: hidden !important
 }
