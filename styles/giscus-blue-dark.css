@@ -92,3 +92,12 @@ main {
   font-family: 'MyFont', sans-serif;
   color: #d4e4f5;
 }
+
+/* 圆角覆盖 */
+.btn,
+.BtnGroup,
+.form-control,
+.gsc-comment-box,
+.gsc-reply-box {
+  border-radius: 16px !important;
+}
