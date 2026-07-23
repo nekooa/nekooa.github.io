@@ -1,7 +1,7 @@
 /* Giscus 浅色主题 */
 @font-face {
   font-family: 'MyFont';
-  src: url('https://neneneko.pages.dev/styles/font.woff2') format('woff2');
+  src: url('https://cdn.jsdelivr.net/gh/nekooa/nekooa.github.io/styles/font.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
