@@ -2094,8 +2094,21 @@ code-box {
   justify-content: center;
   background: var(--card-bg);
   border-radius: 16px;
+  position: relative;
+  overflow: hidden;
 }
 
+/* 不透明遮罩：盖住 iframe，阻止浏览器原生错误页面显示 */
+.giscus-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--card-bg);
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* 旋转加载指示器（在遮罩之上） */
 .giscus-loading::after {
   content: '';
   width: 28px;
@@ -2104,6 +2117,8 @@ code-box {
   border-top-color: var(--color-pink);
   border-radius: 50%;
   animation: giscus-spin 0.8s linear infinite;
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes giscus-spin {
