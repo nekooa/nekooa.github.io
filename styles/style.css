@@ -2727,6 +2727,10 @@ code-box {
     background: var(--color-pink-soft) !important;
   }
 
+  .project {
+    background: var(--color-pink-soft);
+  }
+
   .md3-button.filled:hover {
     filter: none;
   }
