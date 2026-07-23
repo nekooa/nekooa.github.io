@@ -895,6 +895,7 @@ function initGiscus() {
 function addRippleEffect() {
   const rippleElements = document.querySelectorAll(`
     .sidebar a,
+    .footer a,
     .li-a,
     .card,
     .home-link-card,
@@ -902,7 +903,8 @@ function addRippleEffect() {
     .close-button,
     .md3-button,
     .md3-list-item,
-    .spa-link-home
+    .spa-link-home,
+    .project
   `);
 
   rippleElements.forEach(element => {

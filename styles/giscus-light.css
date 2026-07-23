@@ -12,7 +12,7 @@ main {
   --color-btn-text: #3d3d3d;
   --color-btn-bg: rgba(255, 216, 231, 0.4);
   --color-btn-border: rgba(255, 179, 207, 0.3);
-  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0);
+  --color-btn-shadow: 0 1px 3px rgba(0, 0, 0, 0);
   --color-btn-inset-shadow: 0 0 transparent;
   --color-btn-hover-bg: rgba(255, 216, 231, 0.7);
   --color-btn-hover-border: rgba(255, 179, 207, 0.5);
@@ -22,49 +22,52 @@ main {
   --color-btn-primary-text: #ffffff;
   --color-btn-primary-bg: #ff95bc;
   --color-btn-primary-border: transparent;
-  --color-btn-primary-shadow: 0 2px 8px rgba(255,149,188,0);
+  --color-btn-primary-shadow: 0 2px 8px rgba(255, 149, 188, 0);
   --color-btn-primary-inset-shadow: 0 0 transparent;
   --color-btn-primary-hover-bg: #ff7aad;
   --color-btn-primary-hover-border: transparent;
   --color-btn-primary-selected-bg: #ff95bc;
-  --color-btn-primary-selected-shadow: 0 2px 8px rgba(255,149,188,0);
-  --color-btn-primary-disabled-text: rgba(255,255,255,0.7);
-  --color-btn-primary-disabled-bg: rgba(255,149,188,0.5);
+  --color-btn-primary-selected-shadow: 0 2px 8px rgba(255, 149, 188, 0);
+  --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.7);
+  --color-btn-primary-disabled-bg: rgba(255, 149, 188, 0.5);
   --color-btn-primary-disabled-border: transparent;
-  --color-action-list-item-default-hover-bg: rgba(255,149,188,0.08);
-  --color-segmented-control-bg: rgba(255,216,231,0.3);
+  --color-action-list-item-default-hover-bg: rgba(255, 149, 188, 0.08);
+  --color-segmented-control-bg: rgba(255, 216, 231, 0.3);
   --color-segmented-control-button-bg: #ffffff;
-  --color-segmented-control-button-selected-border: rgba(255,149,188,0.4);
+  --color-segmented-control-button-selected-border: rgba(255, 149, 188, 0.4);
   --color-fg-default: #3d3d3d;
   --color-fg-muted: #8a7b82;
   --color-fg-subtle: #b0a3aa;
   --color-canvas-default: #FAF2F8;
   --color-canvas-overlay: #ffffff;
-  --color-canvas-inset: rgba(255,216,231,0.3);
-  --color-canvas-subtle: rgba(255,216,231,0.2);
-  --color-border-default: rgba(255,179,207,0.3);
-  --color-border-muted: rgba(255,216,231,0.5);
-  --color-neutral-muted: rgba(160,147,154,0.3);
+  --color-canvas-inset: rgba(255, 216, 231, 0.3);
+  --color-canvas-subtle: rgba(255, 216, 231, 0.2);
+  --color-border-default: rgba(255, 179, 207, 0.3);
+  --color-border-muted: rgba(255, 216, 231, 0.5);
+  --color-neutral-muted: rgba(160, 147, 154, 0.3);
   --color-accent-fg: #ff95bc;
   --color-accent-emphasis: #ff95bc;
-  --color-accent-muted: rgba(255,149,188,0.3);
-  --color-accent-subtle: rgba(255,216,231,0.25);
+  --color-accent-muted: rgba(255, 149, 188, 0.3);
+  --color-accent-subtle: rgba(255, 216, 231, 0.25);
   --color-success-fg: #4f8a6d;
   --color-attention-fg: #b3924a;
   --color-danger-fg: #e91e63;
   --color-scale-gray-7: #8a7b82;
-  --color-social-reaction-bg-hover: rgba(255,216,231,0.5);
-  --color-social-reaction-bg-reacted-hover: rgba(255,149,188,0.2);
+  --color-social-reaction-bg-hover: rgba(255, 216, 231, 0.5);
+  --color-social-reaction-bg-reacted-hover: rgba(255, 149, 188, 0.2);
   font-family: 'MyFont', sans-serif;
   color: #3d3d3d;
 }
 
 /* ===== 直接样式覆盖 ===== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   font-family: 'MyFont', sans-serif !important;
 }
 
-.btn, .BtnGroup {
+.btn,
+.BtnGroup {
   border-radius: 16px !important;
 }
 

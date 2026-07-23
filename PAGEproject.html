@@ -8,11 +8,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-  <link rel="preload" as="font" href="./styles/font-subset.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="https://neneneko.pages.dev/styles/font.woff2" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/viewer.css">
 </head>
-
 
 <body>
 
@@ -23,8 +22,16 @@
     </div>
   </div>
 
+  <!-- navbar -->
   <div class="navbar">
-    <div class="logo">以前写的HSL后续<span class="nav-time">2026-05-29</span></div>
+    <div class="logo">
+      <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+        transform="scale(1.02) translate(0, -0.2)">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M2 6C2 3.79086 3.79086 2 6 2C8.20914 2 10 3.79086 10 6C10 7.86384 8.72523 9.42994 7 9.87398V14.126C8.40561 14.4878 9.5122 15.5944 9.87398 17H12.008C13.2201 17 14.1293 16.9373 14.82 16.7919C15.5022 16.6483 15.9041 16.4376 16.1667 16.1889C16.702 15.6818 17 14.6924 17 12.3242V9.87398C15.2748 9.42994 14 7.86384 14 6C14 3.79086 15.7909 2 18 2C20.2091 2 22 3.79086 22 6C22 7.86384 20.7252 9.42994 19 9.87398V12.3242C19 14.63 18.7692 16.4785 17.5421 17.6409C16.9235 18.2268 16.1359 18.5587 15.232 18.749C14.3366 18.9375 13.2631 19 12.008 19H9.87398C9.42994 20.7252 7.86384 22 6 22C3.79086 22 2 20.2091 2 18C2 16.1362 3.27477 14.5701 5 14.126V9.87398C3.27477 9.42994 2 7.86384 2 6Z"
+          fill="currentColor"></path>
+      </svg> &nbsp;项目
+    </div>
     <button id="settings-nav" class="settings-button-m" aria-label="设置">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path
@@ -32,7 +39,6 @@
       </svg>
     </button>
   </div>
-  <img src="bg7.jpg" alt="头图" class="article-header">
 
   <!-- sidebar -->
   <div class="sidebar">
@@ -80,7 +86,7 @@
         <span class="sidebar-text">影音</span>
       </li>
       <li>
-        <a href="PAGEproject.html" class="sidebar-link">
+        <a href="PAGEproject.html" class="active">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.02) translate(0, -0.2)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -104,55 +110,40 @@
     </ul>
   </div>
 
-
-
-  <div class="article-card">
-    <p>从旧手机里翻出了以前写的 Happy Sugar Life 后续，还没写完，先发在这吧</p>
-
-    <h2>《前情提要》</h2>
-
-    <p>「等从机场到了国外，找到新的场所也许会很困难...两个人一起努力吧！」</p>
-    <p>「不过...盐酱在自己能做到的范围内努力就行了。」</p>
-    <p>砂糖紧紧地牵着盐酱的手，仿佛怕这柔软的触感会消失不见。</p>
-    <p>「我会努力的！我们约定过的！」</p>
-    <p>「也是呢」</p>
-
-    <p>「但是啊，砂糖酱」</p>
-    <p>盐盯着砂糖的眼睛。</p>
-    <p>「嗯？」</p>
-
-    <p>「我，只要砂糖酱在，哪里都无所谓的！」</p>
-    <p>「无论在哪里，都是幸福！」</p>
-
-    <p>「......」</p>
-    <p>「嗯！」</p>
-    <p>少女的眼角划过几颗晶莹的泪滴，她明白，自己再也不会松开这只手，放开这束暖意。</p>
-
-    <p>「砂糖酱哭了吗？」</p>
-    <p>「嗯~高兴的眼泪」</p>
-    <p>「诶~~」</p>
-    <p>盐放开砂糖的手，围着她转起圈来。</p>
-    <p>「别哭啦砂糖酱！我更喜欢笑着的砂糖酱！」</p>
-    <p>「谢谢你，盐酱」</p>
-
-    <p>「那么——走吧！」</p>
-    <p>「向着我们崭新的——」</p>
-
-    <p class="slogan">「Happy Sugar Life！」</p>
-    <p>两人无名指上的戒指，闪闪发光</p>
+  <!-- 内容区域 -->
+  <div class="content">
+    <div class="content-card">
+      <h2>一些项目</h2>
+      <p class="thoughts">还没想好写些什么东西，先部署个mikutap看看吧。原仓库地址：<a class="a" href="https://github.com/AYJCSGM/mikutap"
+          target="_blank">https://github.com/AYJCSGM/mikutap</a></p>
+      <code-box data-lang="mikutap版权说明">
+        daniwell@aidn.jp
+※ 本サイトにて公開している楽曲は非営利かつ公序良俗に反しない限り、連絡なしにご自由にお使いいただいて構いません。
+※ エグジットチューンズ管理楽曲（「Nyan Cat」や「ねこみみスイッチ」など）の商用利用につきましては、下記お問い合わせ窓口よりご連絡ください。
+http://exittunes.com/license/
+      </code-box>
+      <a href="mikutap/" target="_blank">
+        <div class="project"><img src="mikutap/icon.png">Mikutap</div>
+      </a>
+    </div>
   </div>
 
+  <div class="footer">
+    <footer>
+      <a href="https://icp.gov.moe/?keyword=20263334" target="_blank">萌ICP备20263334号</a>
+    </footer>
+  </div>
 
-
-  <!-- SPA 脚本 -->
-  <script src="js/script.js"></script>
-  <div class="content"></div>
-
-  <div id="xf-MusicPlayer" data-cdnName="./styles" data-themeColor="xf-girlPink" data-bottomHeight="5em"
+  <!-- 音乐播放器 -->
+  <div id="xf-MusicPlayer" data-cdnName="./styles" data-themeColor="xf-girlPink" data-bottomHeight="7em"
     data-songList="18004217713">
   </div>
 
+  <!-- JS脚本 -->
+  <script src="js/script.js"></script>
+  <script src="js/viewer.js"></script>
   <script src="./xf-MusicPlayer.js"></script>
+
 </body>
 
 </html>

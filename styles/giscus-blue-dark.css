@@ -11,7 +11,7 @@ main {
   --color-btn-text: #d4e4f5;
   --color-btn-bg: rgba(30, 60, 90, 0.4);
   --color-btn-border: rgba(145, 192, 240, 0.12);
-  --color-btn-shadow: 0 1px 3px rgba(0,0,0,0);
+  --color-btn-shadow: 0 1px 3px rgba(0, 0, 0, 0);
   --color-btn-inset-shadow: 0 0 transparent;
   --color-btn-hover-bg: rgba(30, 60, 90, 0.6);
   --color-btn-hover-border: rgba(145, 192, 240, 0.25);
@@ -21,48 +21,51 @@ main {
   --color-btn-primary-text: #ffffff;
   --color-btn-primary-bg: #5b9bd5;
   --color-btn-primary-border: transparent;
-  --color-btn-primary-shadow: 0 2px 8px rgba(91,155,213,0);
+  --color-btn-primary-shadow: 0 2px 8px rgba(91, 155, 213, 0);
   --color-btn-primary-inset-shadow: 0 0 transparent;
   --color-btn-primary-hover-bg: #4a8ec8;
   --color-btn-primary-hover-border: transparent;
   --color-btn-primary-selected-bg: #5b9bd5;
-  --color-btn-primary-selected-shadow: 0 2px 8px rgba(91,155,213,0);
-  --color-btn-primary-disabled-text: rgba(255,255,255,0.5);
-  --color-btn-primary-disabled-bg: rgba(91,155,213,0.4);
+  --color-btn-primary-selected-shadow: 0 2px 8px rgba(91, 155, 213, 0);
+  --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.5);
+  --color-btn-primary-disabled-bg: rgba(91, 155, 213, 0.4);
   --color-btn-primary-disabled-border: transparent;
-  --color-action-list-item-default-hover-bg: rgba(145,192,240,0.06);
-  --color-segmented-control-bg: rgba(30,60,90,0.3);
+  --color-action-list-item-default-hover-bg: rgba(145, 192, 240, 0.06);
+  --color-segmented-control-bg: rgba(30, 60, 90, 0.3);
   --color-segmented-control-button-bg: #1E2529;
-  --color-segmented-control-button-selected-border: rgba(145,192,240,0.25);
+  --color-segmented-control-button-selected-border: rgba(145, 192, 240, 0.25);
   --color-fg-default: #d4e4f5;
   --color-fg-muted: #8aa4b4;
   --color-fg-subtle: #5a7a8a;
   --color-canvas-default: #191C1E;
   --color-canvas-overlay: #1E2529;
   --color-canvas-inset: #1E2529;
-  --color-canvas-subtle: rgba(30,60,90,0.3);
-  --color-border-default: rgba(145,192,240,0.1);
-  --color-border-muted: rgba(30,60,90,0.5);
-  --color-neutral-muted: rgba(138,164,180,0.3);
+  --color-canvas-subtle: rgba(30, 60, 90, 0.3);
+  --color-border-default: rgba(145, 192, 240, 0.1);
+  --color-border-muted: rgba(30, 60, 90, 0.5);
+  --color-neutral-muted: rgba(138, 164, 180, 0.3);
   --color-accent-fg: #91c0f0;
   --color-accent-emphasis: #5b9bd5;
-  --color-accent-muted: rgba(91,155,213,0.2);
-  --color-accent-subtle: rgba(145,192,240,0.1);
+  --color-accent-muted: rgba(91, 155, 213, 0.2);
+  --color-accent-subtle: rgba(145, 192, 240, 0.1);
   --color-success-fg: #57ab5a;
   --color-attention-fg: #c69026;
   --color-danger-fg: #e5534b;
   --color-scale-gray-7: #1e3040;
-  --color-social-reaction-bg-hover: rgba(30,60,90,0.5);
-  --color-social-reaction-bg-reacted-hover: rgba(91,155,213,0.15);
+  --color-social-reaction-bg-hover: rgba(30, 60, 90, 0.5);
+  --color-social-reaction-bg-reacted-hover: rgba(91, 155, 213, 0.15);
   font-family: 'MyFont', sans-serif;
   color: #d4e4f5;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   font-family: 'MyFont', sans-serif !important;
 }
 
-.btn, .BtnGroup {
+.btn,
+.BtnGroup {
   border-radius: 16px !important;
 }
 
