@@ -286,7 +286,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         ColorThemeManager.applyColor(ColorThemeManager.getColor());
                     }
                 }
-                xfMusicPop.textContent = musicName;
+                xfMusicPop.innerHTML = musicName.replace(/\n/g, '<br>');
                 isAnimationInProgress = 1;
                 xfMusicPop.classList.add('show');
                 await setTimeoutPromise(800);
@@ -302,7 +302,7 @@ window.addEventListener('DOMContentLoaded', function () {
                     console.warn('您的浏览器不支持自动播放音乐，请手动点击播放器继续欣赏歌曲吧~');
                     removebePlaying();
                 } else {
-                    displayPopup(`正在播放\n${songName.textContent}`);
+                    displayPopup(`正在播放 ${songName.textContent}`);
                     addPlaying();
                 }
             };
@@ -446,7 +446,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         pauseMusic();
                         removebePlaying();
                     } else {
-                        displayPopup(`正在播放\n${songName.textContent}`);
+                        displayPopup(`正在播放 ${songName.textContent}`);
                         playMusic();
                         addPlaying();
                         isFunctionTriggered = true;
@@ -454,11 +454,16 @@ window.addEventListener('DOMContentLoaded', function () {
                 };
 
                 playbackControl.addEventListener('click', togglePlayback);
-                window.addEventListener('keyup', e => {
+                // 键盘事件：存储引用，SPA 切换时可清理
+                if (window.__xfKeyupHandler) {
+                    window.removeEventListener('keyup', window.__xfKeyupHandler);
+                }
+                window.__xfKeyupHandler = e => {
                     if (e.key === ' ' || e.keyCode === 32) {
                         togglePlayback();
                     }
-                });
+                };
+                window.addEventListener('keyup', window.__xfKeyupHandler);
 
                 MusicPlayerMain.style.opacity = 0;
 
@@ -509,14 +514,18 @@ window.addEventListener('DOMContentLoaded', function () {
                             })
                         );
 
-                        // 轮询等待 DOM 渲染完成
+                        // 轮询等待 DOM 渲染完成（带 10 秒超时保护）
                         const checkSongsItemLength = () => {
-                            return new Promise(resolve => {
+                            return new Promise((resolve, reject) => {
                                 const startTime = Date.now();
                                 const intervalId = setInterval(() => {
                                     const lisNum = MusicPlayer.querySelectorAll('.xf-songsItem').length;
                                     if (lisNum === expectedSongCount) {
                                         clearInterval(intervalId);
+                                        resolve(Date.now() - startTime);
+                                    } else if (Date.now() - startTime > 10000) {
+                                        clearInterval(intervalId);
+                                        console.warn('歌曲列表渲染超时，继续执行');
                                         resolve(Date.now() - startTime);
                                     }
                                 }, 30);
@@ -637,7 +646,7 @@ window.addEventListener('DOMContentLoaded', function () {
                                 if (isFunctionTriggered || MusicPlayer.getAttribute('data-fadeOutAutoplay') !== null) {
                                     playMusic();
                                     addPlaying();
-                                    displayPopup(`正在播放\n${itemName}`);
+                                    displayPopup(`正在播放 ${itemName}`);
                                 }
 
                                 // 歌词显示开关
@@ -820,6 +829,27 @@ window.addEventListener('DOMContentLoaded', function () {
                             }, 0);
                         };
 
+                        /* ---------- 元数据加载完成 ---------- */
+                        const loadedMetadataHandler = () => {
+                            if (totalTimeEl && !isNaN(xfMusicAudio.duration)) {
+                                totalTimeEl.textContent = convertTime(xfMusicAudio.duration);
+                            }
+
+                            detectionCookies(() => {
+                                const freshCookie = getCookie(cookieName);
+                                if (!freshCookie) return;
+                                const { musicTime } = JSON.parse(freshCookie);
+                                const duration = xfMusicAudio.duration;
+                                xfMusicAudio.currentTime = musicTime >= duration ? 0 : musicTime;
+                                playMusic();
+                            });
+
+                            xfMusicAudio.removeEventListener('loadedmetadata', loadedMetadataHandler);
+                        };
+
+                        // 先绑定监听器，再加载歌曲，防止缓存音频的 loadedmetadata 在绑定前触发
+                        xfMusicAudio.addEventListener('loadedmetadata', loadedMetadataHandler);
+
                         // 首次加载歌曲
                         updateSong(currentSongIndex);
 
@@ -873,6 +903,8 @@ window.addEventListener('DOMContentLoaded', function () {
                         });
 
                         /* ---------- 进度条自动更新（播放中） ---------- */
+                        let lastCookieWriteTime = 0;
+
                         xfMusicAudio.addEventListener('timeupdate', () => {
                             if (isSliding) return;
 
@@ -886,37 +918,27 @@ window.addEventListener('DOMContentLoaded', function () {
                                 currentTimeEl.textContent = convertTime(currentTime);
                             }
 
-                            detectionCookies(() => {
-                                cookieData = { musicId: currentSongIndex, musicTime: xfMusicAudio.currentTime };
-                                setCookie(cookieName, JSON.stringify(cookieData), 30);
-                            });
-
-                            if (progress === 100) {
-                                nextMusic();
+                            // 兜底：loadedmetadata 未触发时，从 timeupdate 补救总时长
+                            if (totalTimeEl && !isNaN(duration) && totalTimeEl.textContent === '00:00') {
+                                totalTimeEl.textContent = convertTime(duration);
                             }
+
+                            // Cookie 节流：每 5 秒写一次，避免每秒多次写入
+                            const now = Date.now();
+                            if (now - lastCookieWriteTime >= 5000) {
+                                lastCookieWriteTime = now;
+                                detectionCookies(() => {
+                                    cookieData = { musicId: currentSongIndex, musicTime: xfMusicAudio.currentTime };
+                                    setCookie(cookieName, JSON.stringify(cookieData), 30);
+                                });
+                            }
+
                         });
 
-                        /* ---------- 元数据加载完成 ---------- */
-                        const loadedMetadataHandler = () => {
-                            if (totalTimeEl && !isNaN(xfMusicAudio.duration)) {
-                                totalTimeEl.textContent = convertTime(xfMusicAudio.duration);
-                            }
+                        // 歌曲自然播放结束 → 自动下一首（用 ended 事件替代浮点比较）
+                        xfMusicAudio.addEventListener('ended', nextMusic);
 
-                            detectionCookies(() => {
-                                const freshCookie = getCookie(cookieName);
-                                if (!freshCookie) return;
-                                const { musicTime } = JSON.parse(freshCookie);
-                                const duration = xfMusicAudio.duration;
-                                xfMusicAudio.currentTime = musicTime >= duration ? 0 : musicTime;
-                                playMusic();
-                            });
 
-                            xfMusicAudio.removeEventListener('loadedmetadata', loadedMetadataHandler);
-                        };
-
-                        xfMusicAudio.addEventListener('loadedmetadata', loadedMetadataHandler);
-
-                        /* ---------- 当前歌曲有效性检查 ---------- */
                         const currentMusic = () => {
                             if (musicPicture.src === '' || songName.textContent === '') {
                                 nextMusic();
@@ -1004,13 +1026,16 @@ window.addEventListener('DOMContentLoaded', function () {
                     if (!isSliding) return;
                     isSliding = false;
 
-                    // 将播放进度跳转到拖拽结束位置
+                    // 将播放进度跳转到拖拽结束位置（使用 cachedRect 避免 parseFloat 空字符串）
                     const duration = xfMusicAudio.duration;
-                    if (!isNaN(duration)) {
-                        const width = parseFloat(audioProgress.style.width) || 0;
-                        xfMusicAudio.currentTime = (width / 100) * duration;
-                        if (currentTimeEl) {
-                            currentTimeEl.textContent = convertTime(xfMusicAudio.currentTime);
+                    if (!isNaN(duration) && cachedRect) {
+                        const clickX = parseFloat(audioProgress.style.width) || 0;
+                        const newTime = (clickX / 100) * duration;
+                        if (!isNaN(newTime)) {
+                            xfMusicAudio.currentTime = newTime;
+                            if (currentTimeEl) {
+                                currentTimeEl.textContent = convertTime(newTime);
+                            }
                         }
                     }
 
@@ -1140,8 +1165,6 @@ window.addEventListener('DOMContentLoaded', function () {
             };
 
             switchPlayerFun();
-
-            xfMusicAudio.remove();
 
         } // end allPlayerFeatures
 
