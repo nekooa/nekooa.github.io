@@ -326,7 +326,7 @@ const ColorThemeManager = {
     const mode = this.isDarkMode() ? 'dark' : 'light';
     const vars = this.themes[name]?.[mode] || this.themes.pink[mode];
 
-    // 应用全局页面变量 - 批量设置减少重排
+    // 应用全局页面变量
     const cssText = Object.entries(vars)
       .filter(([prop]) => prop !== 'player' && prop !== 'lyPop')
       .map(([prop, value]) => `${prop}:${value}`)
@@ -343,7 +343,7 @@ const ColorThemeManager = {
       });
     }
 
-    // 应用歌词条 / 弹窗颜色
+    // 应用歌词条颜色
     const lp = vars.lyPop;
     const xfLyric = document.getElementById('xf-lyric');
     const xfPop = document.querySelector('.xf-music-pop');
@@ -409,7 +409,7 @@ function playEnterAnimation(selectors) {
   const elements = document.querySelectorAll(selectors);
   if (!elements.length) return;
 
-  // 动画关闭时：直接呈现最终状态（fade-in），不设置初始帧、不播放过渡
+  // 动画关闭时：直接呈现最终状态
   if (document.documentElement.classList.contains('animations-off')) {
     elements.forEach(el => {
       el.classList.remove('fade-out');
@@ -420,7 +420,7 @@ function playEnterAnimation(selectors) {
 
   const isMobile = mobileMQ.matches;
 
-  // 一：清除旧类，设置内联初始状态
+  // 1.清除旧类，设置内联初始状态
   elements.forEach(el => {
     el.classList.remove('fade-out', 'fade-in');
     if (el.matches('.header-container')) return;
@@ -438,10 +438,10 @@ function playEnterAnimation(selectors) {
     }
   });
 
-  // 二：强制重排
+  // 1.强制重排
   void document.body.offsetWidth;
 
-  // 三：移除内联样式并添加 .fade-in
+  // 3.移除内联样式并添加 .fade-in
   elements.forEach(el => {
     if (el.matches('.header-container')) {
       el.classList.add('fade-in');
@@ -495,7 +495,7 @@ async function loadPage(url, addToHistory = true) {
     let currentFooter = document.querySelector('.footer');
     let currentCommentContent = document.querySelector('.comment-content');
 
-    // ---------- 1. 其他元素通用退场 ----------
+    // 1.其他元素通用退场
     const outElements = [
       currentContent,
       currentLogo,
@@ -511,7 +511,7 @@ async function loadPage(url, addToHistory = true) {
       el.classList.add('fade-out');
     });
 
-    // ---------- 2. 头图专属退场动画 ----------
+    // 2.头图专属退场动画
     const heroOutPromise = new Promise(resolve => {
       if (currentHeaderContainer) {
         currentHeaderContainer.classList.remove('fade-in', 'fade-out');
@@ -535,7 +535,7 @@ async function loadPage(url, addToHistory = true) {
       await new Promise(resolve => setTimeout(resolve, 250));
     }
 
-    // ---------- 3. DOM 替换 ----------
+    // 3.DOM 替换
     window.scrollTo({ top: 0, behavior: 'auto' });
 
     if (newContent && currentContent) {
@@ -623,7 +623,7 @@ async function loadPage(url, addToHistory = true) {
       currentFooter = null;
     }
 
-    // ---------- 4. 初始化新页面内容 ----------
+    // 4.初始化新页面内容
     initCodeBoxes();
     playEnterAnimation(
       '.content, .home-content, .card, .home-link-card, .about-card, ' +
@@ -916,7 +916,7 @@ function initGiscus() {
 
   container.classList.add('giscus-loading');
 
-  // 用 MutationObserver 监听 iframe 插入（替代 setInterval 轮询）
+  // 用 MutationObserver 监听 iframe 插入
   let giscusObserver = null;
 
   const bindIframe = () => {
@@ -928,7 +928,7 @@ function initGiscus() {
       giscusObserver = null;
     }
 
-    // 检查 iframe 是否已加载完成（异步插入时可能已经 loaded）
+    // 检查 iframe 是否已加载完成
     try {
       if (iframe.contentWindow && iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
         onSuccess();
@@ -953,15 +953,15 @@ function initGiscus() {
     giscusObserver.observe(container, { childList: true, subtree: true });
   }
 
-  // 10 秒超时兜底：如果 iframe 始终未出现或未触发 load，判定失败
+  // 10 秒超时
   window.__giscusTimeoutTimer = setTimeout(() => {
     if (handled) return;
-    // 如果 iframe 已存在但仍未 load，说明加载卡住
+    // iframe 存在但仍未 load
     const iframe = container.querySelector('iframe.giscus-frame');
     if (!iframe) {
       showError();
     }
-    // iframe 存在但没 load → 再等 5 秒
+    // iframe 存在但没 load 再等 5 秒
     window.__giscusTimeoutTimer = setTimeout(() => {
       if (!handled) showError();
     }, 5000);
@@ -990,7 +990,7 @@ function addRippleEffect() {
     .article-nav a
   `;
 
-  // 为当前所有匹配元素设置必要的样式
+  // 为所有匹配元素设置必要样式
   document.querySelectorAll(rippleSelector).forEach(el => {
     if (el.dataset.rippleStyled === 'true') return;
     el.dataset.rippleStyled = 'true';
@@ -1000,12 +1000,11 @@ function addRippleEffect() {
   });
 
   document.body.addEventListener('pointerdown', (e) => {
-    // 动画关闭时禁用水波纹（普通 hover 效果保留，由 CSS hover 规则提供）
+    // 动画关闭时禁用水波纹
     if (document.documentElement.classList.contains('animations-off')) return;
     const target = e.target.closest(rippleSelector);
     if (!target) return;
 
-    // 确保样式已设置（可能为新插入元素）
     if (target.dataset.rippleStyled !== 'true') {
       target.dataset.rippleStyled = 'true';
       const pos = window.getComputedStyle(target).position;
@@ -1211,14 +1210,13 @@ function createSettingsDialog() {
   // 低性能模式开关：默认关闭
   animationToggle.checked = localStorage.getItem('low-performance-mode') === 'true';
 
-  // 低性能模式：点击立即全局生效并保存（去除动画与模糊）
   animationToggle.addEventListener('change', () => {
     const enabled = animationToggle.checked;
     applyPerformanceMode(enabled);
     localStorage.setItem('low-performance-mode', enabled);
   });
 
-  // 隐藏歌词开关：默认关闭（显示歌词）
+  // 隐藏歌词开关：默认关闭
   hideLyricToggle.checked = localStorage.getItem('hide-lyric') === 'true';
   hideLyricToggle.addEventListener('change', () => {
     const hidden = hideLyricToggle.checked;
@@ -1290,7 +1288,7 @@ function createSettingsDialog() {
    低性能模式
 ========================= */
 function applyPerformanceMode(enabled) {
-  // enabled = true（低性能模式开启）→ 去除动画与模糊
+  // 去除动画与模糊
   document.documentElement.classList.toggle('animations-off', enabled);
   document.documentElement.classList.toggle('no-blur', enabled);
   // 同步更新图片查看器：Viewer 依赖 transitionend 回调，
@@ -1301,7 +1299,7 @@ function applyPerformanceMode(enabled) {
     });
   }
   if (enabled) {
-    // 清理页面上残留的水波纹元素（含播放器 .xf-ripple）
+    // 清理页面上残留的水波纹元素
     document.querySelectorAll('.ripple, .xf-ripple').forEach(el => el.remove());
   }
 }
@@ -1512,3 +1510,36 @@ window.addEventListener('popstate', () => {
 });
 
 initAll();
+
+/* =========================
+  锚点平滑滚动
+========================= */
+(function () {
+  var prefersReducedMotion =
+    window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.addEventListener('click', function (e) {
+    // 只处理站内锚点链接 a[href^="#"]
+    var link = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!link) return;
+
+    var href = link.getAttribute('href');
+    // 占位空锚点（href="#"）不拦截
+    if (!href || href === '#') return;
+
+    var target = document.getElementById(href.slice(1));
+    // 目标不在当前页交给默认行为
+    if (!target) return;
+
+    e.preventDefault();
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start'
+    });
+    // 更新地址栏 hash
+    if (history.replaceState) {
+      history.replaceState(null, '', href);
+    }
+  });
+})();
