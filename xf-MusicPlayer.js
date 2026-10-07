@@ -1,3 +1,25 @@
+/*!
+ * xf-MusicPlayer — 小枫音乐播放器（旧版 / legacy 原生 JS 实现）
+ *
+ * 原作者：小枫 <1809185784@qq.com>
+ *   官网：https://musicplayer.xfyun.club
+ *   上游仓库：
+ *     https://gitee.com/xfwlclub/xf-MusicPlayer   （master 分支 = 本副本所属的旧版）
+ *     https://github.com/s33806/music-player      （main 分支 = 已重写的新版）
+ *   上游旧版：911 行 / 44,874 字节，文件本身未附许可证头
+ * Copyright (C) 小枫（上游作品）
+ * Copyright (C) 2026 ねねねこ / holo-world（本站的修改部分）
+ *
+ * 许可证：GNU GPL v3.0（旧版随附 GPL-3.0；上游新版已改为 LGPL-3.0）
+ *   全文见仓库根目录 LICENSE（本仓库代码整体为 GPL-3.0），
+ *   说明见 LICENSING.md 与 THIRD-PARTY-NOTICES.md
+ *
+ * ⚠️ 本文件是被修改过的版本，并非上游原样。按 GPL-3.0 §5 要求在此声明：
+ *   本站作者自 2026 年引入后持续修改（最近一次 2026-10），改动包括站点主题联动、
+ *   歌单封面懒加载、歌词滚动与高亮、低性能模式适配、第三方 API 数据转义
+ *   （escapeHTML / safeURL，防 XSS）等，篇幅较上游增加约三分之一。
+ *   本文件为 GPL-3.0 作品，不提供任何担保。
+ */
 "use strict";
 window.addEventListener('DOMContentLoaded', function () {
     var playerEle = document.querySelectorAll('#xf-MusicPlayer');
@@ -22,6 +44,28 @@ window.addEventListener('DOMContentLoaded', function () {
 
     const xfHead = document.head;
     const playerBody = document.body;
+
+    /* =========================
+       安全工具
+       播放器的歌曲名/歌手/封面/歌词均来自第三方 API，
+       这些数据属于不可信输入，拼接进 innerHTML 前必须转义，
+       否则被投毒的歌单可注入 <img onerror=...> 之类载荷执行脚本。
+    ========================= */
+    const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[ch]));
+
+    // 仅拦截明确的危险协议，其余（http/https/相对路径/blob 等）原样放行，避免影响正常播放
+    const safeURL = value => {
+        const url = String(value ?? '').trim();
+        if (/^(?:javascript|vbscript|file)\s*:/i.test(url)) { return ''; }
+        if (/^data\s*:(?!image\/)/i.test(url)) { return ''; }
+        return url;
+    };
 
     // 确保 viewport meta 存在
     const metaViewport = document.querySelector('meta[name="viewport"]');
@@ -113,7 +157,10 @@ window.addEventListener('DOMContentLoaded', function () {
         const characterToElement = (str, mainBox) => {
             const parser = new DOMParser();
             let ele = parser.parseFromString(str, 'text/html');
+            // 防御性过滤：即使模板拼接出现疏漏，也不允许第三方数据带入可执行脚本
+            ele.body.querySelectorAll('script').forEach(script => script.remove());
             ele = ele.body.firstChild;
+            if (!ele) { return; }
             mainBox.appendChild(ele);
         };
 
@@ -288,7 +335,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         ColorThemeManager.applyColor(ColorThemeManager.getColor());
                     }
                 }
-                xfMusicPop.innerHTML = musicName.replace(/\n/g, '<br>');
+                xfMusicPop.innerHTML = escapeHTML(musicName).replace(/\n/g, '<br>');
                 isAnimationInProgress = 1;
                 xfMusicPop.classList.add('show');
                 await setTimeoutPromise(800);
@@ -327,16 +374,16 @@ window.addEventListener('DOMContentLoaded', function () {
             /* ---------- 渲染歌曲列表项 ---------- */
             const playerMusicItem = (index, music, picture, Title, Author, loadingTime) => {
                 let lis = [
-                    `<li class="xf-songsItem" data-index="${index}" data-mp3url="${music}">`,
+                    `<li class="xf-songsItem" data-index="${escapeHTML(index)}" data-mp3url="${escapeHTML(safeURL(music))}">`,
                     '  <div class="xf-songListSongPictures">',
-                    `    <img data-musicLjz-src="${picture + '?param=200x200'}" src="https://a1.boltp.com/2026/08/04/6a717cac1618a.jpg" alt="songPicture" class="xf-playlistImg">`,
+                    `    <img data-musicLjz-src="${escapeHTML(safeURL(picture) + '?param=200x200')}" src="https://a1.boltp.com/2026/08/04/6a717cac1618a.jpg" alt="songPicture" class="xf-playlistImg">`,
                     '  </div>',
                     '  <div class="xf-playlistSongInformation">',
                     '    <div class="xf-songTitle">',
-                    `      <h5 class="xf-songName">${Title}</h5>`,
+                    `      <h5 class="xf-songName">${escapeHTML(Title)}</h5>`,
                     '      <p class="xf-authorAndDuration">',
-                    `        <span class="xf-songAuthor">${Author}</span>`,
-                    `        <span class="xf-songLength iconfont icon-shijian">\t${loadingTime}</span>`,
+                    `        <span class="xf-songAuthor">${escapeHTML(Author)}</span>`,
+                    `        <span class="xf-songLength iconfont icon-shijian">\t${escapeHTML(loadingTime)}</span>`,
                     '      </p>',
                     '    </div>',
                     '  </div>',
@@ -630,7 +677,7 @@ window.addEventListener('DOMContentLoaded', function () {
                             const itemName = item.querySelector('.xf-songName').textContent;
                             const itemAuto = item.querySelector('.xf-songAuthor').textContent;
 
-                            musicPicture.src = itemPic;
+                            musicPicture.src = safeURL(itemPic);
                             musicPicture.alt = itemName;
                             songName.textContent = itemName;
                             singer.textContent = itemAuto;
@@ -647,7 +694,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
                             pendingAudioLoadTimer = setTimeout(() => {
 
-                                xfMusicAudio.src = itemUrl;
+                                xfMusicAudio.src = safeURL(itemUrl);
 
                                 if (isFunctionTriggered || MusicPlayer.getAttribute('data-fadeOutAutoplay') !== null) {
                                     playMusic();
@@ -729,7 +776,10 @@ window.addEventListener('DOMContentLoaded', function () {
                                             lyricsArray.forEach(lyric => {
                                                 const lisEle = document.createElement('li');
                                                 lisEle.classList.add('xf-ly');
-                                                lisEle.innerHTML = `<span>${lyric.text}</span>`;
+                                                // 用 textContent 写入歌词，避免第三方歌词文本被当作 HTML 解析
+                                                const lyricSpan = document.createElement('span');
+                                                lyricSpan.textContent = lyric.text;
+                                                lisEle.appendChild(lyricSpan);
                                                 xfAllLyri.appendChild(lisEle);
                                             });
 

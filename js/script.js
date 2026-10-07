@@ -1,3 +1,11 @@
+/*!
+ * ねねねこ —— 站点主脚本
+ * Copyright (C) 2026 ねねねこ (holo-world / sagiri-world / nekooa)
+ *
+ * 本文件是自由软件：你可以依据 GNU 通用公共许可证（GPL）第 3 版
+ * （或你选择的任何更新版本）的条款重新发布和/或修改它。
+ * 本文件按"无任何担保"分发，详见仓库根目录的 LICENSE。
+ */
 /* =========================
    常量配置
 ========================= */
@@ -454,6 +462,36 @@ function playEnterAnimation(selectors) {
 }
 
 /* =========================
+   页面元信息同步
+========================= */
+// SPA 切页只替换 body 内的区块，<head> 不会随之改变，
+// 因此必须在这里把新页面的标题与 SEO 元信息同步过来，
+// 否则浏览器标签页会一直停留在上一页的标题上。
+const PAGE_META_FIELDS = [
+  ['meta[name="description"]', 'content'],
+  ['link[rel="canonical"]', 'href'],
+  ['meta[property="og:title"]', 'content'],
+  ['meta[property="og:description"]', 'content'],
+  ['meta[property="og:url"]', 'content'],
+  ['meta[property="og:type"]', 'content'],
+  ['meta[name="twitter:title"]', 'content'],
+  ['meta[name="twitter:description"]', 'content'],
+];
+
+function syncPageMeta(doc) {
+  if (doc.title && doc.title !== document.title) {
+    document.title = doc.title;
+  }
+  PAGE_META_FIELDS.forEach(([selector, attr]) => {
+    const incoming = doc.querySelector(selector);
+    const local = document.querySelector(selector);
+    if (!incoming || !local) return;
+    const value = incoming.getAttribute(attr);
+    if (value !== null) local.setAttribute(attr, value);
+  });
+}
+
+/* =========================
    页面加载
 ========================= */
 let isLoadingPage = false;
@@ -624,6 +662,7 @@ async function loadPage(url, addToHistory = true) {
     }
 
     // 4.初始化新页面内容
+    syncPageMeta(doc);
     initCodeBoxes();
     playEnterAnimation(
       '.content, .home-content, .card, .home-link-card, .about-card, ' +
@@ -902,8 +941,11 @@ function initGiscus() {
       '</svg>' +
       '<p class="giscus-error-title">评论区加载失败</p>' +
       '<p class="giscus-error-desc">网络连接异常，请稍后再试</p>' +
-      '<button class="giscus-error-btn" onclick="initGiscus()">重新加载</button>';
+      '<button class="giscus-error-btn">重新加载</button>';
     container.appendChild(errDiv);
+    // 用事件监听代替内联 onclick，以便 CSP 无需放开 script-src 'unsafe-inline'
+    const retryBtn = errDiv.querySelector('.giscus-error-btn');
+    if (retryBtn) retryBtn.addEventListener('click', () => initGiscus());
   }
 
   function onSuccess() {
@@ -983,8 +1025,8 @@ function addRippleEffect() {
     .home-link-card,
     .settings-button,
     .close-button,
-    .md3-button,
-    .md3-list-item,
+    .button,
+    .list-item,
     .spa-link-home,
     .project,
     .article-nav a
@@ -1141,7 +1183,7 @@ function createSettingsDialog() {
           </button>
         </div>
         <div class="settings-content">
-          <div class="md3-list-item" style="cursor: default;">
+          <div class="list-item" style="cursor: default;">
             <span>
               <div class="item-label">主题模式</div>
               <div class="item-supporting">切换浅色/深色外观</div>
@@ -1152,27 +1194,27 @@ function createSettingsDialog() {
               <option value="dark">深色模式</option>
             </select>
           </div>
-          <label class="md3-list-item">
+          <label class="list-item">
             <span>
               <div class="item-label">低性能模式</div>
               <div class="item-supporting">关闭所有动画与模糊效果</div>
             </span>
-            <span class="md3-switch">
+            <span class="switch">
               <input type="checkbox" id="animationToggle">
               <span class="slider"></span>
             </span>
           </label>
-          <label class="md3-list-item">
+          <label class="list-item">
             <span>
               <div class="item-label">隐藏歌词</div>
               <div class="item-supporting">隐藏播放器歌词条</div>
             </span>
-            <span class="md3-switch">
+            <span class="switch">
               <input type="checkbox" id="hideLyricToggle">
               <span class="slider"></span>
             </span>
           </label>
-          <div class="md3-list-item theme-picker-item">
+          <div class="list-item theme-picker-item">
             <span>
               <div class="item-label">主题颜色（beta）</div>
             </span>
@@ -1181,13 +1223,13 @@ function createSettingsDialog() {
               <span class="theme-color-btn blue" data-color="blue"></span>
             </span>
           </div>
-          <div class="md3-list-item" id="clearCacheBtn">
+          <div class="list-item" id="clearCacheBtn">
             <span class="item-label">清除缓存</span>
           </div>
         </div>
         <div class="settings-footer-actions">
-          <button class="md3-button" id="resetSettingsBtn">重置</button>
-          <button class="md3-button" id="saveSettingsBtn">完成</button>
+          <button class="button" id="resetSettingsBtn">重置</button>
+          <button class="button" id="saveSettingsBtn">完成</button>
         </div>
       </div>
     </div>

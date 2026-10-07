@@ -3,12 +3,28 @@
 
 <head>
   <meta charset="UTF-8">
+  <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ねねねこ</title>
+  <title>你看看发布日期呢 | ねねねこ</title>
+  <meta name="description" content="一篇发布于 2026 年 7 月 21 日的随笔。">
+  <meta name="author" content="holo-world">
+  <link rel="canonical" href="https://0u0.l.cd/article0721.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ねねねこ">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="你看看发布日期呢 | ねねねこ">
+  <meta property="og:description" content="一篇发布于 2026 年 7 月 21 日的随笔。">
+  <meta property="og:url" content="https://0u0.l.cd/article0721.html">
+  <meta property="og:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="你看看发布日期呢 | ねねねこ">
+  <meta name="twitter:description" content="一篇发布于 2026 年 7 月 21 日的随笔。">
+  <meta name="twitter:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
   <link rel="icon" href="/favicon.png" type="image/svg+xml">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <link rel="stylesheet" href="vendor/highlight.js/11.9.0/atom-one-dark.min.css">
+  <script defer src="vendor/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="vendor/highlight.js/11.9.0/javascript.min.js"></script>
   <link rel="preload" as="font" href="./styles/font.woff2" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/article-typography.css">
@@ -110,7 +126,7 @@
 
 
   <div class="article-card">
-    <h1 class="article-title">你再看看日期呢</h1>
+    <h1 class="article-title">你看看发布日期呢</h1>
     <div class="article-meta">
       <time datetime="2026-07-21">2026-07-21</time>
     </div>
@@ -146,14 +162,14 @@
   </div>
   <footer class="footer"><a href="https://icp.gov.moe/?keyword=20263334" target="_blank">萌ICP备20263334号</a></footer>
   <!-- SPA 脚本 -->
-  <script src="js/script.min.js"></script>
-  <script src="js/viewer.js"></script>
+  <script defer src="js/script.min.js"></script>
+  <script defer src="js/viewer.js"></script>
 
   <div id="xf-MusicPlayer" data-cdnName="./styles" data-themeColor="xf-girlPink" data-bottomHeight="7em"
     data-songList="18004217713">
   </div>
 
-  <script src="./xf-MusicPlayer.min.js"></script>
+  <script defer src="./xf-MusicPlayer.min.js"></script>
 </body>
 
 </html>

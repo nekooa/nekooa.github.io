@@ -1,0 +1,14 @@
+{
+  "name": "nekooa.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ねねねこ —— 纯 HTML / CSS / JS 编写的个人博客",
+  "scripts": {
+    "build": "node build.js",
+    "check": "node --check js/script.js && node --check xf-MusicPlayer.js && node --check build.js"
+  },
+  "devDependencies": {
+    "terser": "^5.31.0"
+  },
+  "license": "GPL-3.0-or-later"
+}

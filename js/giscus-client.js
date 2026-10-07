@@ -1,3 +1,9 @@
+/*!
+ * giscus client (giscus-client.js)
+ * 来源：https://github.com/giscus/giscus （官方客户端脚本的压缩版本）
+ * 许可证：MIT
+ * 本站未作修改，仅为补齐署名信息而添加本注释头。
+ */
 (function(){function h(a){return'[giscus] An error occurred. Error message: "'.concat(a,'".')}function l(a,f){void 0===f&&(f=!1);f=f?"meta[property='og:".concat(a,"'],"):"";return(a=document.querySelector(f+"meta[name='".concat(a,"']")))?a.content:""}function p(){delete c.session;var a="".concat(k).concat(q,"/widget?").concat(new URLSearchParams(c));e.src=a}var m=document.currentScript,k="https://giscus.app",b=new URL(location.href),d=b.searchParams.get("giscus")||"",n=localStorage.getItem("giscus-session");
 b.searchParams.delete("giscus");b.hash="";var g=b.toString();if(d)localStorage.setItem("giscus-session",JSON.stringify(d)),history.replaceState(void 0,document.title,g);else if(n)try{d=JSON.parse(n)}catch(a){localStorage.removeItem("giscus-session"),console.warn("".concat(h(null===a||void 0===a?void 0:a.message)," Session has been cleared."))}b=m.dataset;var c={};c.origin=g;c.session=d;c.theme=b.theme;c.reactionsEnabled=b.reactionsEnabled||"1";c.emitMetadata=b.emitMetadata||"0";c.inputPosition=b.inputPosition||
 "bottom";c.repo=b.repo;c.repoId=b.repoId;c.category=b.category||"";c.categoryId=b.categoryId;c.strict=b.strict||"0";c.description=l("description",!0);c.backLink=l("giscus:backlink")||g;switch(b.mapping){case "url":c.term=g;break;case "title":c.term=document.title;break;case "og:title":c.term=l("title",!0);break;case "specific":c.term=b.term;break;case "number":c.number=b.term;break;default:c.term=2>location.pathname.length?"index":location.pathname.substring(1).replace(/\.\w+$/,"")}var r=(d=document.querySelector(".giscus"))&&

@@ -3,12 +3,28 @@
 
 <head>
   <meta charset="UTF-8">
+  <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ねねねこ</title>
+  <title>文章列表 | ねねねこ</title>
+  <meta name="description" content="ねねねこ 的全部文章：网站更新日志、EdgeTunnel 搭建教程、日常随笔与折腾记录。">
+  <meta name="author" content="holo-world">
+  <link rel="canonical" href="https://0u0.l.cd/PAGEarticle.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ねねねこ">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="文章列表 | ねねねこ">
+  <meta property="og:description" content="ねねねこ 的全部文章：网站更新日志、EdgeTunnel 搭建教程、日常随笔与折腾记录。">
+  <meta property="og:url" content="https://0u0.l.cd/PAGEarticle.html">
+  <meta property="og:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="文章列表 | ねねねこ">
+  <meta name="twitter:description" content="ねねねこ 的全部文章：网站更新日志、EdgeTunnel 搭建教程、日常随笔与折腾记录。">
+  <meta name="twitter:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
   <link rel="icon" href="/favicon.png" type="image/svg+xml">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <link rel="stylesheet" href="vendor/highlight.js/11.9.0/atom-one-dark.min.css">
+  <script defer src="vendor/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="vendor/highlight.js/11.9.0/javascript.min.js"></script>
   <link rel="preload" as="font" href="styles/font.woff2" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/article-typography.css">
@@ -229,9 +245,9 @@
   </div>
 
   <!-- JS脚本 -->
-  <script src="js/script.min.js"></script>
-  <script src="js/viewer.js"></script>
-  <script src="./xf-MusicPlayer.min.js"></script>
+  <script defer src="js/script.min.js"></script>
+  <script defer src="js/viewer.js"></script>
+  <script defer src="./xf-MusicPlayer.min.js"></script>
 
 </body>
 

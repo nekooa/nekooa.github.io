@@ -1,0 +1,5 @@
+# ねねねこ
+User-agent: *
+Allow: /
+
+Sitemap: https://0u0.l.cd/sitemap.xml

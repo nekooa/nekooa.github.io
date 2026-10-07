@@ -1,3 +1,11 @@
+/*!
+ * ねねねこ —— 站点主样式
+ * Copyright (C) 2026 ねねねこ (holo-world / sagiri-world / nekooa)
+ *
+ * 本文件是自由软件：你可以依据 GNU 通用公共许可证（GPL）第 3 版
+ * （或你选择的任何更新版本）的条款重新发布和/或修改它。
+ * 本文件按"无任何担保"分发，详见仓库根目录的 LICENSE。
+ */
 /* =========================
    全局变量（浅色默认）
 ========================= */
@@ -86,7 +94,7 @@
 button,
 .sidebar a,
 .nav-link,
-.md3-list-item {
+.list-item {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -401,7 +409,7 @@ button,
 .navbar,
 .settings-button,
 .nav-time,
-.md3-list-item,
+.list-item,
 .calendar-nav button {
   user-select: none;
   -webkit-user-select: none;
@@ -908,7 +916,7 @@ button,
   width: 100%;
 }
 
-.md3-list-item {
+.list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -925,11 +933,11 @@ button,
   gap: 16px;
 }
 
-.md3-list-item:hover {
+.list-item:hover {
   background: var(--sidebar-a);
 }
 
-.md3-list-item>span:first-child {
+.list-item>span:first-child {
   flex: 1;
   min-width: 0;
   word-break: break-word;
@@ -948,24 +956,24 @@ button,
   word-break: break-word;
 }
 
-.md3-list-item .md3-switch {
+.list-item .switch {
   flex-shrink: 0;
 }
 
-.md3-switch {
+.switch {
   position: relative;
   display: inline-block;
   width: 52px;
   height: 32px;
 }
 
-.md3-switch input {
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.md3-switch .slider {
+.switch .slider {
   position: absolute;
   cursor: pointer;
   inset: 0;
@@ -975,7 +983,7 @@ button,
   border: 2px solid var(--md-sys-color-outline, #79747E);
 }
 
-.md3-switch .slider::before {
+.switch .slider::before {
   content: "";
   position: absolute;
   height: 24px;
@@ -988,13 +996,13 @@ button,
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.md3-switch input:checked+.slider {
+.switch input:checked+.slider {
   background: var(--color-pink);
   border-color: transparent;
   filter: brightness(1.1);
 }
 
-.md3-switch input:checked+.slider::before {
+.switch input:checked+.slider::before {
   transform: translateX(20px);
   background: var(--color-white);
 }
@@ -1009,7 +1017,7 @@ button,
   flex-shrink: 0;
 }
 
-.md3-button {
+.button {
   padding: 10px 24px;
   border-radius: 100px;
   font-weight: 500;
@@ -1021,16 +1029,16 @@ button,
   white-space: nowrap;
 }
 
-.md3-button.filled {
+.button.filled {
   background: var(--color-pink);
   color: var(--color-white);
 }
 
-.md3-button:hover {
+.button:hover {
   background: var(--sidebar-a);
 }
 
-.md3-button.filled:hover {
+.button.filled:hover {
   background: var(--color-pink);
   filter: brightness(1.1);
 }
@@ -1534,38 +1542,6 @@ button,
 
 .header-container.hero-out .hitokoto {
   animation: heroTextOut 0.4s ease forwards;
-}
-
-@keyframes heroContainerOut {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-}
-
-@keyframes homeHeaderIn {
-  from {
-    transform: scale(1.8);
-  }
-
-  to {
-    transform: scale(1.2);
-  }
-}
-
-@keyframes homeHeaderOut {
-  from {
-    transform: scale(1.2);
-  }
-
-  to {
-    transform: scale(1.0);
-  }
 }
 
 .home-header {
@@ -2447,8 +2423,8 @@ button,
 ========================= */
 @media (max-width: 768px) {
   .close-button:hover,
-  .md3-list-item:hover,
-  .md3-button:hover,
+  .list-item:hover,
+  .button:hover,
   .copy-btn:hover,
   .settings-button:hover,
   .calendar-day:hover,
@@ -2477,7 +2453,7 @@ button,
     background: var(--color-pink-soft) !important;
   }
 
-  .md3-button.filled:hover {
+  .button.filled:hover {
     filter: none;
   }
 
