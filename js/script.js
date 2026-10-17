@@ -1,6 +1,6 @@
 /*!
  * ねねねこ —— 站点主脚本
- * Copyright (C) 2026 ねねねこ (holo-world / sagiri-world / nekooa)
+ * Copyright (C) 2026 holo-world (sagiri-world / nekooa)
  *
  * 本文件是自由软件：你可以依据 GNU 通用公共许可证（GPL）第 3 版
  * （或你选择的任何更新版本）的条款重新发布和/或修改它。
@@ -1185,6 +1185,18 @@ function createSettingsDialog() {
         <div class="settings-content">
           <div class="list-item" style="cursor: default;">
             <span>
+              <div class="item-label">桌宠</div>
+              <div class="item-supporting" id="mascotSupporting">可爱的 Neuro 和 Evil</div>
+            </span>
+            <select id="mascotSelect" class="ui-select">
+              <option value="off">关闭</option>
+              <option value="neuron">仅 Neuro</option>
+              <option value="eviling">仅 Evil</option>
+              <option value="both">两只都有</option>
+            </select>
+          </div>
+          <div class="list-item" style="cursor: default;">
+            <span>
               <div class="item-label">主题模式</div>
               <div class="item-supporting">切换浅色/深色外观</div>
             </span>
@@ -1194,16 +1206,15 @@ function createSettingsDialog() {
               <option value="dark">深色模式</option>
             </select>
           </div>
-          <label class="list-item">
+          <div class="list-item theme-picker-item">
             <span>
-              <div class="item-label">低性能模式</div>
-              <div class="item-supporting">关闭所有动画与模糊效果</div>
+              <div class="item-label">主题颜色（beta）</div>
             </span>
-            <span class="switch">
-              <input type="checkbox" id="animationToggle">
-              <span class="slider"></span>
+            <span class="theme-color-options">
+              <span class="theme-color-btn pink" data-color="pink"></span>
+              <span class="theme-color-btn blue" data-color="blue"></span>
             </span>
-          </label>
+          </div>
           <label class="list-item">
             <span>
               <div class="item-label">隐藏歌词</div>
@@ -1214,15 +1225,16 @@ function createSettingsDialog() {
               <span class="slider"></span>
             </span>
           </label>
-          <div class="list-item theme-picker-item">
+          <label class="list-item">
             <span>
-              <div class="item-label">主题颜色（beta）</div>
+              <div class="item-label">低性能模式</div>
+              <div class="item-supporting">关闭所有动画与模糊效果，以及桌宠</div>
             </span>
-            <span class="theme-color-options">
-              <span class="theme-color-btn pink" data-color="pink"></span>
-              <span class="theme-color-btn blue" data-color="blue"></span>
+            <span class="switch">
+              <input type="checkbox" id="animationToggle">
+              <span class="slider"></span>
             </span>
-          </div>
+          </label>
           <div class="list-item" id="clearCacheBtn">
             <span class="item-label">清除缓存</span>
           </div>
@@ -1245,6 +1257,7 @@ function createSettingsDialog() {
   const animationToggle = document.getElementById('animationToggle');
   const hideLyricToggle = document.getElementById('hideLyricToggle');
   const resetBtn = document.getElementById('resetSettingsBtn');
+  const mascotSelect = document.getElementById('mascotSelect');
 
   themeSelect.addEventListener('click', (e) => e.stopPropagation());
 
@@ -1266,6 +1279,15 @@ function createSettingsDialog() {
     localStorage.setItem('hide-lyric', hidden);
   });
 
+  // 桌宠：选项由 js/mascot.js（ESM 模块）负责实际挂载/卸载
+  mascotSelect.addEventListener('click', (e) => e.stopPropagation());
+  syncMascotLock();
+  mascotSelect.addEventListener('change', () => {
+    // 低性能模式下下拉框是禁用的，这里再挡一道，避免程序化改动绕过锁定
+    if (mascotSelect.disabled) return;
+    if (window.__mascot) window.__mascot.setPreference(mascotSelect.value);
+  });
+
   const closeDialog = () => {
     dialog.classList.remove('open');
     dialog.setAttribute('aria-hidden', 'true');
@@ -1277,6 +1299,11 @@ function createSettingsDialog() {
   saveBtn.addEventListener('click', () => {
     ThemeManager.setTheme(themeSelect.value);
     localStorage.setItem('low-performance-mode', animationToggle.checked);
+    // 锁定状态下下拉框显示的是被强制写入的 off，不能把它当成用户选择存起来，
+    // 否则关闭低性能模式后就再也恢复不了原来的桌宠了
+    if (!mascotSelect.disabled && window.__mascot) {
+      window.__mascot.setPreference(mascotSelect.value);
+    }
     closeDialog();
   });
 
@@ -1286,6 +1313,8 @@ function createSettingsDialog() {
     applyPerformanceMode(false);
     hideLyricToggle.checked = false;
     applyLyricVisibility(false);
+    if (window.__mascot) window.__mascot.reset();
+    syncMascotLock();
   });
 
   dialog.querySelector('.settings-panel').addEventListener('click', (e) => e.stopPropagation());
@@ -1305,6 +1334,8 @@ function createSettingsDialog() {
       applyPerformanceMode(false);
       hideLyricToggle.checked = false;
       applyLyricVisibility(false);
+      if (window.__mascot) window.__mascot.reset();
+      syncMascotLock();
       alert('缓存已清除');
     }
   });
@@ -1344,6 +1375,8 @@ function applyPerformanceMode(enabled) {
     // 清理页面上残留的水波纹元素
     document.querySelectorAll('.ripple, .xf-ripple').forEach(el => el.remove());
   }
+  // 低性能模式强制关闭桌宠，并锁住设置里的下拉框
+  syncMascotLock();
 }
 
 /* =========================
@@ -1351,6 +1384,38 @@ function applyPerformanceMode(enabled) {
 ========================= */
 function applyLyricVisibility(hidden) {
   document.documentElement.classList.toggle('hide-lyric', hidden);
+}
+
+/**
+ * 桌宠偏好值（移动端/桌面端默认值已由 js/mascot.js 解析）。
+ * 该模块是 ESM，传统脚本拿不到它的导出，因此通过 window.__mascot 这个
+ * 约定接口通信；模块尚未就绪时退化为 off。
+ */
+function mascotPreference() {
+  return window.__mascot ? window.__mascot.getPreference() : 'off';
+}
+
+/**
+ * 同步桌宠下拉框的锁定状态。
+ *
+ * 低性能模式下桌宠必须关闭，且不允许在这个状态下改动选项：
+ * 下拉框被置为「关闭」并禁用。用户原本的选择仍保存在 localStorage 里，
+ * 关闭低性能模式后会自动恢复显示（不会因为被锁而丢失偏好）。
+ */
+function syncMascotLock() {
+  const select = document.getElementById('mascotSelect');
+  if (!select) return;
+
+  const lowPerf = document.documentElement.classList.contains('animations-off');
+  select.disabled = lowPerf;
+  select.value = lowPerf ? 'off' : mascotPreference();
+
+  const supporting = document.getElementById('mascotSupporting');
+  if (supporting) {
+    supporting.textContent = lowPerf
+      ? '低性能模式已开启，桌宠已关闭'
+      : '可爱的 Neuro 和 Evil';
+  }
 }
 
 function openSettingsDialog() {
@@ -1364,6 +1429,8 @@ function openSettingsDialog() {
   dialog.setAttribute('aria-hidden', 'false');
   const themeSelect = document.getElementById('themeSelect');
   if (themeSelect) themeSelect.value = ThemeManager.getTheme();
+  const mascotSelect = document.getElementById('mascotSelect');
+  if (mascotSelect) syncMascotLock();
   ColorThemeManager.updateActiveButton(ColorThemeManager.getColor());
 }
 
@@ -1492,6 +1559,182 @@ const Calendar = {
 };
 
 /* =========================
+   横向滚动区：垂直滚轮驱动
+========================= */
+// .scroll-container 是 overflow-x:auto 的横向卡片列表，并且启用了
+// scroll-snap-type: x mandatory。浏览器原生只认横向手势（Shift+滚轮 /
+// 触控板横扫），垂直滚轮不会驱动它，所以这里把容器内的垂直滚轮转成横向滚动。
+//
+// 三个要点：
+// 1) 吸附：滚动过程中先关掉 scroll-snap，否则每个 wheel 事件都会被立刻吸回
+//    最近的卡片，连续滚动会变成一格一格的跳；到位后再恢复吸附。
+// 2) 平滑：每格滚轮不是瞬间跳过去，而是像页面纵向滚动那样用 rAF 缓动跟随，
+//    滚轮只负责推进"目标位置"，实际位置以指数缓动逼近目标。
+// 3) 末尾：卡片吸附点可能超出可滚范围（例如吸附点在 1040，而 max 只有 680），
+//    浏览器的做法是把越界吸附点夹到滚动末端，所以落点取
+//    min(栅格位置, 末卡偏移, max)，否则会停在倒数第二张。
+
+const WHEEL_FOLLOW = 0.28;      // 每帧向目标靠拢的比例（以 60fps 为基准）
+const MIN_WHEEL_STEP_PX = 100;  // 超过这个距离至少前进一张卡片（约一格滚轮）
+const FOLLOW_EPSILON = 0.6;     // 与目标距离小于此值即视为到位
+
+const wheelStates = new WeakMap();  // container -> { start, accum, desired, pos, raf }
+let horizontalWheelBound = false;
+
+function normalizedWheelDelta(event, container) {
+  const d = event.deltaY;
+  if (event.deltaMode === 1) return d * 16;                     // 以行为单位
+  if (event.deltaMode === 2) return d * container.clientWidth;  // 以页为单位
+  return d;                                                     // 以像素为单位
+}
+
+/** 相邻卡片的间距（含 gap）；取不到时返回 0 */
+function cardPitch(container) {
+  const items = container.querySelectorAll('.scroll-item');
+  if (items.length > 1) {
+    const pitch = items[1].offsetLeft - items[0].offsetLeft;
+    if (pitch > 0) return pitch;
+  }
+  if (items.length === 1) {
+    const w = items[0].getBoundingClientRect().width;
+    if (w > 0) return w;
+  }
+  return 0;
+}
+
+/**
+ * 可滚动范围，以及"最后一张卡片"的吸附位置。
+ * 越界的吸附点按浏览器的方式夹到滚动末端，所以 last = min(max, 末卡偏移)。
+ */
+function snapRange(container) {
+  const max = Math.max(0, container.scrollWidth - container.clientWidth);
+  const items = container.querySelectorAll('.scroll-item');
+  if (!items.length) return { max, last: max };
+  const first = items[0].offsetLeft;
+  const tail = items[items.length - 1].offsetLeft - first;
+  return { max, last: Math.min(max, Math.max(0, tail)) };
+}
+
+function wheelStateFor(container) {
+  let state = wheelStates.get(container);
+  if (!state) {
+    state = {
+      start: container.scrollLeft,    // 本轮滚动的起点（栅格对齐）
+      accum: 0,                       // 本轮累计的原始滚轮位移
+      desired: container.scrollLeft,  // 目标位置（栅格对齐）
+      pos: container.scrollLeft,      // 当前渲染位置（浮点，避免累积误差）
+      raf: 0,
+    };
+    wheelStates.set(container, state);
+  }
+  return state;
+}
+
+/** 用 rAF 缓动把 scrollLeft 推向 state.desired；到位后恢复吸附 */
+function followWheelTarget(container, state) {
+  const reduceMotion = document.documentElement.classList.contains('animations-off');
+
+  const finish = () => {
+    state.raf = 0;
+    state.pos = state.desired;
+    state.start = state.desired;
+    state.accum = 0;
+    container.scrollLeft = state.desired;
+    // 落点本身就是吸附点，恢复吸附不会产生二次跳动
+    container.style.scrollSnapType = '';
+  };
+
+  if (reduceMotion) {
+    finish();
+    return;
+  }
+  if (state.raf) return;  // 已在跟随，新目标由同一个循环接管
+
+  let lastTime = performance.now();
+  const step = (now) => {
+    const dt = Math.min(64, Math.max(1, now - lastTime));
+    lastTime = now;
+
+    const remaining = state.desired - state.pos;
+    if (Math.abs(remaining) < FOLLOW_EPSILON) {
+      finish();
+      return;
+    }
+    // 指数缓动，帧率无关：每帧固定比例靠拢，快进慢出
+    state.pos += remaining * (1 - Math.pow(1 - WHEEL_FOLLOW, dt / 16.667));
+    container.scrollLeft = state.pos;
+    state.raf = requestAnimationFrame(step);
+  };
+  state.raf = requestAnimationFrame(step);
+}
+
+function onHorizontalWheel(event) {
+  // Ctrl+滚轮是页面缩放；Shift+滚轮浏览器已原生横向滚动，
+  // 这里跳过以免和原生行为叠加成双倍速度
+  if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return;
+
+  const target = event.target;
+  const container =
+    target instanceof Element ? target.closest('.scroll-container') : null;
+  if (!container) return;
+
+  // 横向手势（触控板横扫）保持浏览器原生处理
+  if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+
+  const range = snapRange(container);
+  if (range.max <= 1) return;   // 没有溢出（窄容器/内容不足）不接管
+
+  const pitch = cardPitch(container);
+  if (!pitch) return;
+
+  const delta = normalizedWheelDelta(event, container);
+  if (!delta) return;
+
+  const state = wheelStateFor(container);
+
+  // 容器被其它方式滚动过（原生 Shift+滚轮 / 触摸）：以当前实际位置重新开一轮
+  if (!state.raf && Math.abs(container.scrollLeft - state.desired) > 1) {
+    state.start = container.scrollLeft;
+    state.accum = 0;
+    state.desired = container.scrollLeft;
+    state.pos = container.scrollLeft;
+  }
+
+  state.accum += delta;
+
+  const dir = state.accum > 0 ? 1 : -1;
+  // 用 round 而不是 trunc：一格滚轮（约 100~120px）不足一张卡片（约 260px），
+  // trunc 会让连续快滚时的中间几格完全不动；round 让累计位移更公平地兑现成卡片数。
+  let steps = Math.round(Math.abs(state.accum) / pitch);
+  // 一格滚轮通常不到半张卡片，但用户确实动了滚轮，就至少给一张
+  if (steps === 0 && Math.abs(state.accum) >= MIN_WHEEL_STEP_PX) steps = 1;
+
+  let desired = Math.round((state.start + dir * steps * pitch) / pitch) * pitch;
+  // 末尾夹到"最后一张卡片"：这样一直往右滚会真正停在最后一张
+  desired = Math.max(0, Math.min(desired, range.last));
+
+  // 已经到头：不拦截，让页面继续纵向滚动，避免"滚到底就卡住"
+  if ((dir > 0 && state.desired >= range.last - 0.5) ||
+      (dir < 0 && state.desired <= 0.5)) {
+    return;
+  }
+
+  event.preventDefault();
+
+  state.desired = desired;
+  container.style.scrollSnapType = 'none';
+  followWheelTarget(container, state);
+}
+
+function bindHorizontalWheel() {
+  if (horizontalWheelBound) return;
+  horizontalWheelBound = true;
+  // 挂在 document 上用事件委托：SPA 切页会整体替换 .home-content，
+  // 监听器若绑在容器节点上会随节点一起失效。
+  document.addEventListener('wheel', onHorizontalWheel, { passive: false });
+}
+
+/* =========================
    初始化执行
 ========================= */
 function initAll() {
@@ -1501,6 +1744,7 @@ function initAll() {
   bindLinks();
   addRippleEffect();
   bindSettingsTrigger();
+  bindHorizontalWheel();
   Calendar.init();
   initGiscus();
 

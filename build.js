@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /*!
  * ねねねこ —— 压缩构建脚本
- * Copyright (C) 2026 ねねねこ (holo-world / sagiri-world / nekooa)
+ * Copyright (C) 2026 holo-world (sagiri-world / nekooa)
  *
  * 本文件是自由软件：你可以依据 GNU 通用公共许可证（GPL）第 3 版
  * （或你选择的任何更新版本）的条款重新发布和/或修改它。

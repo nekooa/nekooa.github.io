@@ -15,6 +15,8 @@
 | [giscus](https://github.com/giscus/giscus) | — | MIT | `js/giscus-client.js` | 评论系统的官方客户端脚本（压缩版） |
 | [highlight.js](https://highlightjs.org/) | 11.9.0 | BSD-3-Clause | `vendor/highlight.js/11.9.0/` | 代码语法高亮，版权头保留在文件顶部 |
 | [小枫音乐播放器](https://github.com/s33806/music-player) | 旧版（legacy） | **GPL-3.0** | 见下方专条 | 音乐播放器，作者小枫；本副本已大幅修改 |
+| [web-mascot](https://github.com/CommentOut64/web-mascot) | 0.0.3 | **GPL-3.0-or-later** | `vendor/web-mascot/`、`js/mascot.js` | 网页桌宠引擎，移植自 libshijima；本仓库接入层亦为 GPL |
+| **桌宠素材** Neuron / Eviling | — | **CC-BY-NC-SA-4.0** ⚠️ | `mascot_pack/` | 仅限非商业；美术 Paccha，配置 @promote. |
 | [jQuery](https://jquery.com/) | 2.2.4 | MIT | 仅 `mikutap/index.html` 经 CDN 加载 | Mikutap 依赖 |
 | [Pixi.js](https://pixijs.com/) | 3.0.11 | MIT | 仅 `mikutap/index.html` 经 CDN 加载 | Mikutap 依赖 |
 | [GSAP / TweenMax](https://greensock.com/) | 1.19.1 | GreenSock 标准免费许可（非 OSI 认证） | 仅 `mikutap/index.html` 经 CDN 加载 | Mikutap 依赖 |
@@ -71,6 +73,41 @@
 
 `xf-MusicPlayer.js` 文件顶部保留了修改声明与许可证信息，`xf-MusicPlayer.min.js`
 由 `npm run build` 从该源码生成，注释经压缩后仍保留。
+
+---
+
+## 桌宠：web-mascot（引擎 GPL-3.0-or-later / 素材 CC-BY-NC-SA-4.0）
+
+站点的桌宠功能基于 **web-mascot**：<https://github.com/CommentOut64/web-mascot>
+（作者 CommentOut64，v0.0.3）。接入层 `js/mascot.js` 由本站作者编写。
+
+### 引擎代码 —— GPL-3.0-or-later
+
+`vendor/web-mascot/`（`index.js` + `chunks/MascotEngine-*.js`）与 `js/mascot.js`
+均适用 **GPL-3.0-or-later**，与本仓库代码整体一致，**不存在授权冲突**。
+
+它之所以是 GPL：该引擎是 `libshijima`（Copyright (C) 2024-2025 pixelomer,
+GPL-3.0-or-later）的 Web 移植，链路上还涉及 Shijima-Qt、qingchenyou 的代码。
+完整的出处、版权与修改声明见 **`vendor/web-mascot/NOTICE`**，代码与素材的
+许可全文见 **`vendor/web-mascot/LICENSE`**（含 PART 1 软件 / PART 2 素材两部分）。
+
+### 宠物素材 —— CC-BY-NC-SA-4.0（非商业）
+
+`mascot_pack/Neuron/` 与 `mascot_pack/Eviling/` 是**独立的美术作品**，
+**不在** GPL-3.0 的覆盖范围内，适用 **CC BY-NC-SA 4.0**：
+
+- **NC（非商业）**：不得用于任何商业用途。若本站将来引入广告、赞助或收费，
+  **必须先替换掉这两套素材**（引擎支持任何 Shimeji 格式的 pack 目录）。
+- **BY（署名）**：
+  - 美术：**Paccha** — <https://linktr.ee/paccha_>
+  - 动作配置：**@promote.** — <https://z.ne1.co>、<https://neuro.us.to>
+- **SA（相同方式共享）**：对素材的修改也须以 CC BY-NC-SA 4.0 提供。
+
+两套素材目录内的 `LICENSE` 与 `LICENSE-CC-BY-NC-SA-4.0.txt` 已原样保留，
+**请勿删除**。
+
+> 桌面端默认挂载单只 Neuron，移动端默认关闭；可在站点设置里切换
+> 关闭 / 仅 Neuron / 仅 Eviling / 两只都有。低性能模式下自动关闭。
 
 ---
 

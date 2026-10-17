@@ -61,6 +61,8 @@ Copyright (C) 2026 nekooa
 | 组件 | 许可证 |
 |---|---|
 | 小枫音乐播放器（旧版，本仓库大幅修改） | GPL-3.0 |
+| web-mascot 桌宠引擎 + 本站接入层 `js/mascot.js` | GPL-3.0-or-later |
+| 桌宠素材 Neuron / Eviling（`mascot_pack/`） | CC BY-NC-SA 4.0（**非商业**） |
 | Viewer.js / giscus / highlight.js / jQuery / Pixi.js | MIT 或 BSD-3-Clause |
 | GSAP / TweenMax | GreenSock 标准免费许可（非 OSI 认证） |
 | mikutap | 非营利免费使用，商用需授权 |
@@ -72,6 +74,7 @@ Copyright (C) 2026 nekooa
 
 - 本站程序代码（GPL-3.0）
 - 本站原创图文（CC BY-NC-SA 4.0）
+- **桌宠素材 Neuron / Eviling（第三方，CC BY-NC-SA 4.0，非商业）**
 - **第三方画作（版权归原画师，本站未获授权时不得由本站转授）**
 - 第三方组件（各自的许可证，其中 mikutap 为"仅限非营利"）
 

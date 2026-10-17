@@ -1,6 +1,6 @@
 /*!
  * ねねねこ —— 站点主样式
- * Copyright (C) 2026 ねねねこ (holo-world / sagiri-world / nekooa)
+ * Copyright (C) 2026 holo-world (sagiri-world / nekooa)
  *
  * 本文件是自由软件：你可以依据 GNU 通用公共许可证（GPL）第 3 版
  * （或你选择的任何更新版本）的条款重新发布和/或修改它。
@@ -161,6 +161,29 @@ p {
 /* 图片占位背景 */
 img:not(.article-header):not(.home-header):not(.profile-card img):not(.about-card img):not(.player img) {
   background-color: var(--img-placeholder-bg);
+}
+
+/* 桌宠挂载层（由 js/mascot.js 创建）
+   引擎的精灵是透明 PNG，必须排除上面那条全局占位灰底，
+   否则每只宠物背后都会出现一个灰色方块。 */
+#mascot-layer {
+  position: fixed;
+  /* 必须铺满视口：引擎的 isOnScreen() 用 container 的矩形判断是否在屏内，
+     若这里给 0×0，bottom 恒为 0，会被判定为"离开屏幕"而暂停模拟，
+     表现就是桌宠不动、也点不中（isOpaqueAt 全部失败）。 */
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+#mascot-layer img,
+#mascot-layer canvas {
+  background: transparent;
+}
+
+/* 桌宠根节点：触摸拖动要独占手势，否则会被页面滚动抢走 */
+#mascot-layer > div {
+  touch-action: none;
 }
 
 /* =========================
@@ -954,6 +977,10 @@ button,
   color: var(--md-sys-color-on-surface-variant, #666);
   margin-top: 2px;
   word-break: break-word;
+  /* 必须显式给行高：`normal` 由实际命中的字体度量决定，
+     中英混排与纯中文会算出不同的行盒（实测 15px vs 20px），
+     换一段文案就会在文字上方凭空多出几像素的空隙。 */
+  line-height: 1.5;
 }
 
 .list-item .switch {
@@ -1725,6 +1752,13 @@ button,
 /* =========================
     .ui-select (Chrome 135+)
 ========================= */
+/* 禁用态（例如低性能模式锁住桌宠选项）：明确表现出"不可改"而非坏掉 */
+select.ui-select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
 @supports (appearance: base-select) {
 
   .ui-select,
@@ -1734,6 +1768,7 @@ button,
 
   .ui-select {
     line-height: 20px;
+    width: 120px;
     padding: 9px 6px 9px 12px;
     font-size: var(--ui-font, 14px);
     font-family: system-ui;

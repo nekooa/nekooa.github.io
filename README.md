@@ -57,7 +57,8 @@ npm run build   # 重新生成 js/script.min.js 与 xf-MusicPlayer.min.js
 | `video*.html` | 影音页 |
 | `js/` | 站点脚本与其压缩产物 |
 | `styles/` | 样式（含主题变量、文章排版、播放器、giscus 主题） |
-| `vendor/` | 自托管的第三方库（highlight.js） |
+| `vendor/` | 自托管的第三方库（highlight.js、web-mascot 桌宠引擎） |
+| `mascot_pack/` | 桌宠素材 Neuron / Eviling（CC BY-NC-SA 4.0，非商业） |
 | `mikutap/` | 第三方音游玩具（原样收录） |
 | `build.js` | 压缩构建脚本 |
 | `robots.txt` / `sitemap.xml` | 搜索引擎配置 |
@@ -66,6 +67,8 @@ npm run build   # 重新生成 js/script.min.js 与 xf-MusicPlayer.min.js
 
 - **程序代码**（HTML / CSS / JS / 构建脚本）：**GNU GPL v3.0** — 见 [LICENSE](LICENSE)
 - **本站原创图文**（文章、小说、自制截图）：**CC BY-NC-SA 4.0**
+- **桌宠素材** `mascot_pack/`（Neuron / Eviling，第三方）：**CC BY-NC-SA 4.0，
+  仅限非商业**；美术 Paccha，配置 @promote.
 - **第三方画作**（pixiv 等平台的插画，用于头图/封面/头像）：**版权归原画师，
   不在本仓库授权范围内**
 
