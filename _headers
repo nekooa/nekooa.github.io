@@ -1,0 +1,47 @@
+# Cloudflare Pages 的 _headers 配置
+#
+# 背景：Pages 默认给静态资源返回
+#   cache-control: public, max-age=0, must-revalidate
+# 它的含义是「缓存必须每次都向服务器校验」。桌宠启动时会预载整个素材包
+# （Neuron 97 张 + Eviling 100 张 = 197 张精灵图），于是每次打开页面都是
+# 197 次网络往返；排队靠后的图（例如拖拽时用的姿势）要等 1~2 秒才到位，
+# 表现就是"提起宠物后很久才换成被拖拽的样子"。
+#
+# 下面把"内容几乎不变"的静态素材改成可长期复用的缓存。
+# 注意：改完之后需要重新部署才会生效，可用
+#   curl -sI https://0u0.l.cd/mascot_pack/Neuron/img/shime1.webp | grep -i cache-control
+# 验证。
+
+# 桌宠素材：内容稳定，7 天浏览器缓存 + 过期后在后台更新。
+# 如果之后要替换同名精灵图，请改文件名或部署后清一次 Cloudflare 缓存，
+# 否则老访客可能最多 7 天仍用旧图。
+/mascot_pack/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# 第三方库：目录本身带版本号（如 highlight.js/11.9.0），可以长期缓存
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 自托管字体
+# （woff2 仅在开启"筑紫A丸字体"时才请求；ttf 是播放器的图标字体）
+/styles/font.woff2
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/styles/iconfont.ttf
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# 站点自身的图片
+/imgs/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/favicon.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/mikutap/icon.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# 刻意不加长缓存的部分：
+# - HTML / CSS / JS（/js/*、/styles/*.css）都是不带哈希的固定路径，
+#   必须保持 must-revalidate，否则部署后访客会拿着旧版本跑。
+# - 文章里的插画大多是外链（如 a1.boltp.com），响应头由对方控制，
+#   本站的 _headers 管不到；要优化只能去那个图床配置缓存。
