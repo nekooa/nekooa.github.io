@@ -1445,7 +1445,14 @@ function applyCustomFont(enabled) {
  * 约定接口通信；模块尚未就绪时退化为 off。
  */
 function mascotPreference() {
-  return window.__mascot ? window.__mascot.getPreference() : 'off';
+  if (window.__mascot) return window.__mascot.getPreference();
+  // 桌宠模块是延迟加载的：还没就绪时按同一规则推出默认值，
+  // 避免设置面板短暂显示成"关闭"。
+  try {
+    const stored = localStorage.getItem('mascot-mode');
+    if (stored) return stored;
+  } catch (e) { /* 隐私模式下可能读不到，忽略 */ }
+  return mobileMQ.matches ? 'off' : 'neuron';
 }
 
 /**
@@ -1610,6 +1617,36 @@ const Calendar = {
     });
   }
 };
+
+/* =========================
+   桌宠模块（延迟加载）
+========================= */
+// js/mascot.js 会连带加载 web-mascot 引擎（index.js + 约 131 KB 的 chunk）。
+// 模块脚本会阻塞 DOMContentLoaded，而加载屏正是挂在 DOMContentLoaded 上收起；
+// 且这三段 import 是串行发现的（mascot.js → index.js → chunk），
+// 弱网下每段都是一次独立往返，能把首屏拖到十几秒。
+// 改为页面 load 之后再空闲加载，完全不占关键路径。
+function loadMascotModule() {
+  import(new URL('js/mascot.js', document.baseURI).href).catch(() => {});
+}
+
+function scheduleMascotModule() {
+  const run = () => {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadMascotModule, { timeout: 4000 });
+    } else {
+      setTimeout(loadMascotModule, 1500);
+    }
+  };
+  // 不能等 window.load：站内文章图多是外链（a1.boltp.com），
+  // 那张图慢一点 load 就迟迟不来，桌宠会一直不出现。
+  // 动态 import 不会阻塞 DOMContentLoaded，所以挂在 DCL 上是安全的。
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run, { once: true });
+  } else {
+    run();
+  }
+}
 
 /* =========================
    横向滚动区：垂直滚轮驱动
@@ -1836,6 +1873,10 @@ function initAll() {
     document.addEventListener('DOMContentLoaded', hidePreloader);
   }
 }
+
+
+// 桌宠模块体积大，放到页面 load 之后空闲时再加载
+scheduleMascotModule();
 
 window.addEventListener('popstate', () => {
   const targetPath = location.pathname;
