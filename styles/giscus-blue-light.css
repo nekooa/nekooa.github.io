@@ -1,12 +1,4 @@
 /* Giscus 蓝色浅色主题 */
-@font-face {
-  font-family: 'MyFont';
-  src: url('https://neneneko.pages.dev/styles/font.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 main {
   --color-btn-text: #2f4554;
   --color-btn-bg: rgba(195, 232, 255, 0.4);
@@ -54,14 +46,14 @@ main {
   --color-scale-gray-7: #6a8a9e;
   --color-social-reaction-bg-hover: rgba(195, 232, 255, 0.5);
   --color-social-reaction-bg-reacted-hover: rgba(0, 102, 137, 0.15);
-  font-family: 'MyFont', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
   color: #2f4554;
 }
 
 *,
 *::before,
 *::after {
-  font-family: 'MyFont', sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif !important;
 }
 
 .btn,

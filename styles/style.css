@@ -87,8 +87,24 @@
   font-display: swap;
 }
 
+/* 默认走系统字体栈。
+   关键点：只要没有任何元素引用 'MyFont'，浏览器就不会下载 font.woff2
+   （约 1 MB）——@font-face 声明本身不产生网络请求。
+   只有 <html class="custom-font">（设置里开启"筑紫A丸"）才会引用它，
+   那时才开始下载。 */
+:root {
+  --app-font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Noto Sans CJK SC', sans-serif;
+  --app-font: var(--app-font-system);
+}
+
+html.custom-font {
+  --app-font: 'MyFont', var(--app-font-system);
+}
+
 * {
-  font-family: 'MyFont', sans-serif !important;
+  font-family: var(--app-font) !important;
 }
 
 button,

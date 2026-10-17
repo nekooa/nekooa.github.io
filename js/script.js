@@ -36,6 +36,8 @@ localStorage.removeItem('animations-enabled');
 applyPerformanceMode(lowPerfMode === 'true');
 // 隐藏歌词（默认关闭 = 显示歌词）：html 添加 hide-lyric 类后由 CSS 强制隐藏 #xf-lyric
 applyLyricVisibility(localStorage.getItem('hide-lyric') === 'true');
+// 筑紫A丸字体（默认关闭）：开启时才引用 'MyFont' 并下载 font.woff2
+applyCustomFont(localStorage.getItem('custom-font') === 'true');
 
 /* =========================
    加载屏
@@ -58,7 +60,6 @@ const LOADER_TIPS = [
   ' ｡ﾟ･ (>﹏<) ･ﾟ｡ 快好了',
   ' 右下角有音乐播放器哦',
   ' 若加载时间过长请打开梯子喵~',
-  ' 加载慢主要是因为这个字体太大了::>_<::',
 ];
 
 (function injectLoaderTips() {
@@ -844,6 +845,21 @@ function fallbackCopyText(text, copyBtn) {
 /* =========================
    Giscus
 ========================= */
+/** 筑紫A丸字体是否开启（以 <html> 上的 class 为准，单一真相源） */
+function isCustomFontEnabled() {
+  return document.documentElement.classList.contains('custom-font');
+}
+
+/**
+ * 评论区主题 URL。
+ * giscus 跑在 giscus.app 的 iframe 里，读不到页面的 class 和 localStorage，
+ * 所以"是否用筑紫A丸"只能通过主题文件区分：
+ * 基础主题默认系统字体，`*-myfont.css` 变体才带 @font-face。
+ */
+function giscusThemeFor(baseUrl) {
+  return isCustomFontEnabled() ? baseUrl.replace(/\.css$/, '-myfont.css') : baseUrl;
+}
+
 function getGiscusThemeUrl() {
   const color = (typeof ColorThemeManager !== 'undefined')
     ? ColorThemeManager.getColor()
@@ -857,9 +873,11 @@ function getGiscusThemeUrl() {
   })();
 
   if (color === 'blue') {
-    return isDark ? CONFIG.GISCUS_BLUE_DARK_THEME : CONFIG.GISCUS_BLUE_LIGHT_THEME;
+    return giscusThemeFor(
+      isDark ? CONFIG.GISCUS_BLUE_DARK_THEME : CONFIG.GISCUS_BLUE_LIGHT_THEME
+    );
   }
-  return isDark ? CONFIG.GISCUS_DARK_THEME : CONFIG.GISCUS_LIGHT_THEME;
+  return giscusThemeFor(isDark ? CONFIG.GISCUS_DARK_THEME : CONFIG.GISCUS_LIGHT_THEME);
 }
 
 function updateGiscusTheme() {
@@ -1227,6 +1245,16 @@ function createSettingsDialog() {
           </label>
           <label class="list-item">
             <span>
+              <div class="item-label">筑紫A丸字体</div>
+              <div class="item-supporting">使用个性化字体（首次开启需下载约 1 MB）</div>
+            </span>
+            <span class="switch">
+              <input type="checkbox" id="customFontToggle">
+              <span class="slider"></span>
+            </span>
+          </label>
+          <label class="list-item">
+            <span>
               <div class="item-label">低性能模式</div>
               <div class="item-supporting">关闭所有动画与模糊效果，以及桌宠</div>
             </span>
@@ -1256,6 +1284,7 @@ function createSettingsDialog() {
   const themeSelect = document.getElementById('themeSelect');
   const animationToggle = document.getElementById('animationToggle');
   const hideLyricToggle = document.getElementById('hideLyricToggle');
+  const customFontToggle = document.getElementById('customFontToggle');
   const resetBtn = document.getElementById('resetSettingsBtn');
   const mascotSelect = document.getElementById('mascotSelect');
 
@@ -1277,6 +1306,16 @@ function createSettingsDialog() {
     const hidden = hideLyricToggle.checked;
     applyLyricVisibility(hidden);
     localStorage.setItem('hide-lyric', hidden);
+  });
+
+  // 筑紫A丸字体开关：默认关闭；关闭状态下不会请求 font.woff2
+  customFontToggle.checked = localStorage.getItem('custom-font') === 'true';
+  customFontToggle.addEventListener('change', () => {
+    const enabled = customFontToggle.checked;
+    applyCustomFont(enabled);
+    localStorage.setItem('custom-font', enabled);
+    // 评论区的字体由主题文件决定，已加载时需要重建 iframe 才能换主题
+    if (document.querySelector('.giscus iframe')) initGiscus();
   });
 
   // 桌宠：选项由 js/mascot.js（ESM 模块）负责实际挂载/卸载
@@ -1313,6 +1352,8 @@ function createSettingsDialog() {
     applyPerformanceMode(false);
     hideLyricToggle.checked = false;
     applyLyricVisibility(false);
+    customFontToggle.checked = false;
+    applyCustomFont(false);
     if (window.__mascot) window.__mascot.reset();
     syncMascotLock();
   });
@@ -1334,6 +1375,8 @@ function createSettingsDialog() {
       applyPerformanceMode(false);
       hideLyricToggle.checked = false;
       applyLyricVisibility(false);
+      customFontToggle.checked = false;
+      applyCustomFont(false);
       if (window.__mascot) window.__mascot.reset();
       syncMascotLock();
       alert('缓存已清除');
@@ -1384,6 +1427,16 @@ function applyPerformanceMode(enabled) {
 ========================= */
 function applyLyricVisibility(hidden) {
   document.documentElement.classList.toggle('hide-lyric', hidden);
+}
+
+/* =========================
+   筑紫A丸字体
+========================= */
+// 默认不加载该字体。CSS 里 --app-font 默认是系统字体栈，
+// 没有任何元素引用 'MyFont'，浏览器就不会去下载 font.woff2（约 1 MB）。
+// 开启后给 <html> 加 custom-font，CSS 才把它排进字体栈并触发下载。
+function applyCustomFont(enabled) {
+  document.documentElement.classList.toggle('custom-font', enabled);
 }
 
 /**

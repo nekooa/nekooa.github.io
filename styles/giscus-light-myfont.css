@@ -1,0 +1,23 @@
+/* Giscus 浅色主题 —— 筑紫A丸字体变体
+   仅当设置里开启"筑紫A丸字体"时才使用：iframe 读不到页面的 class，
+   只能由 js/script.js 按开关切换主题 URL。
+   @import 必须放在最前面，@font-face 才能跟在其后。 */
+@import url('giscus-light.css');
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('https://neneneko.pages.dev/styles/font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+main {
+  font-family: 'MyFont', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  font-family: 'MyFont', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif !important;
+}
