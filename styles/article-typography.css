@@ -15,7 +15,7 @@
   --article-link-color: var(--color-pink);
   --article-link-hover: var(--color-pink);
   --article-blockquote-border: var(--color-pink);
-  --article-blockquote-bg: var(--card-bg);
+  --article-blockquote-bg: var(--profile-list-bg);
   --article-hr-color: var(--color-pink-soft);
   --article-table-border: rgba(0, 0, 0, 0.1);
   --article-table-header-bg: var(--card-bg);
@@ -209,7 +209,7 @@
 code-box {
   display: block;
   margin: 20px 0;
-  border-radius: 14px;
+  border-radius: 10px;
   overflow: hidden;
   background-color: var(--code-box-bg);
   border: 1px solid var(--code-box-border);
@@ -512,7 +512,7 @@ code-box {
   border-radius: 0 10px 10px 0;
   background: var(--article-blockquote-bg);
   color: var(--color-text);
-  opacity: 0.9;
+  opacity: 0.7;
 }
 
 .article-body blockquote p:last-child {
@@ -617,14 +617,17 @@ code-box {
    ============================================================ */
 
 .article-body table {
-  width: 100%;
+  display: block;
+  width: fit-content;          /* 按内容收缩，不再强制 100% */
+  max-width: 100%;             /* 内容过宽时限制在容器内，交给 overflow 滚动 */
   margin: 1.5em 0;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--article-table-border);
+  border-radius: 10px;
+  overflow-x: auto;
   font-size: 0.9375rem;
   line-height: 1.6;
-  overflow-x: auto;
-  display: block;
-  /* 移动端允许水平滚动 */
 }
 
 .article-body thead {
@@ -634,9 +637,20 @@ code-box {
 .article-body th,
 .article-body td {
   padding: 0.65em 1em;
-  border: 1px solid var(--article-table-border);
+  border: none;
+  border-right: 1px solid var(--article-table-border);
+  border-bottom: 1px solid var(--article-table-border);
   text-align: left;
   white-space: nowrap;
+}
+
+.article-body th:last-child,
+.article-body td:last-child {
+  border-right: none;
+}
+
+.article-body tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .article-body th {
@@ -695,7 +709,7 @@ code-box {
   background: var(--thoughts-bg);
   padding: 0.6em 1em;
   margin: 1.2em 0;
-  border-radius: 8px;
+  border-radius: 10px;
   line-height: 1.8;
 }
 
@@ -708,7 +722,7 @@ code-box {
   border: 1px dashed var(--announcement-border);
   padding: 0.7em 1.2em;
   margin: 1.5em 0;
-  border-radius: 6px;
+  border-radius: 10px;
   text-align: center;
   letter-spacing: 0.02em;
 }
