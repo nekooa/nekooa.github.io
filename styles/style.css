@@ -2561,3 +2561,57 @@ html.hide-lyric #xf-lyric {
 .article-body [id] {
   scroll-margin-top: var(--navbar-height);
 }
+/* =========================
+   站内切页反馈（进度条 / 提示条）
+   说明：这两个元素由 js/script.js 动态创建，只在需要时出现
+========================= */
+#nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(90deg, #7dd3fc, #a78bfa);
+  box-shadow: 0 0 8px rgba(125, 211, 252, 0.55);
+  transition: width 0.4s ease, opacity 0.25s ease, background 0.2s ease;
+}
+
+#nav-progress.visible {
+  opacity: 0.95;
+}
+
+#nav-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 2.2rem;
+  z-index: 10000;
+  max-width: min(90vw, 26rem);
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  background: rgba(28, 28, 32, 0.94);
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  text-align: center;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(0.6rem);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+#nav-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #nav-progress,
+  #nav-toast {
+    transition: none;
+  }
+}

@@ -19,7 +19,11 @@ const CONFIG = {
   GISCUS_BLUE_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-dark.css',
   GISCUS_BLUE_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-light.css',
   HITOKOTO_CACHE_DURATION: 5 * 1000,
-  MIN_LOAD_TIME: 1000,
+  // 加载屏最短停留时间。原来 1000ms 是纯等待——网速再快也要干等一秒，
+  // 体感上就是"点了没反应"，这里压到 450ms，动画仍然完整。
+  MIN_LOAD_TIME: 450,
+  // 代码高亮按需加载：首页/列表页不再下载 120KB 的 highlight.js
+  HIGHLIGHT_BASE: 'vendor/highlight.js/11.9.0/',
 };
 
 const prefersDarkMQ = window.matchMedia('(prefers-color-scheme: dark)');
@@ -495,12 +499,140 @@ function syncPageMeta(doc) {
 /* =========================
    页面加载
 ========================= */
-let isLoadingPage = false;
 let giscusInitialized = false;
 
+/* 切页用的短时缓存：来回翻同一篇文章不再等一次往返 */
+const PAGE_CACHE_TTL = 60 * 1000;
+/* 单次导航的硬超时：卡住就报错并解锁，绝不"点了没反应" */
+const PAGE_FETCH_TIMEOUT = 12000;
+const pageCache = new Map();        // pathname -> { text, time }
+const inflightFetches = new Map();  // pathname -> Promise（同一个页面只发一次请求）
+let navSeq = 0;                     // 导航序号：后一次点击顶掉前一次
+let navProgressTimer = null;
+
+/**
+ * 把各种写法归一成同一个"页面键"，用来判断是不是同一页。
+ * '/', '/index', '/index.html', 'index.html'   -> 'index'
+ * '/article10', '/article10.html', 'article10' -> 'article10'
+ */
+function pageKey(path) {
+  if (!path) return 'index';
+  let p = String(path);
+  if (/^[a-z][a-z0-9+.-]*:/i.test(p)) {
+    try { p = new URL(p, location.href).pathname; } catch (err) { return p; }
+  }
+  p = p.split('#')[0].split('?')[0];
+  p = p.replace(/\.html$/i, '').replace(/^\/+|\/+$/g, '');
+  return (p === '' || p === 'index') ? 'index' : p;
+}
+
+/* 顶部 2px 进度条：任何一次点击都立刻有视觉反馈 */
+function showNavProgress() {
+  let bar = document.getElementById('nav-progress');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'nav-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+  }
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  bar.style.background = '';       // 上一次失败留下的红色要清掉
+  void bar.offsetWidth;            // 强制回流，让 0% 立即生效
+  bar.style.transition = '';
+  bar.classList.add('visible');
+  requestAnimationFrame(() => { bar.style.width = '72%'; });
+
+  clearTimeout(navProgressTimer);
+  navProgressTimer = setTimeout(() => {
+    showNavToast('网络有点慢，还在加载喵…', 3500);
+  }, 6000);
+}
+
+function finishNavProgress(success) {
+  clearTimeout(navProgressTimer);
+  const bar = document.getElementById('nav-progress');
+  if (!bar) return;
+  bar.style.width = '100%';
+  setTimeout(() => {
+    bar.classList.remove('visible');
+    setTimeout(() => {
+      bar.style.transition = 'none';
+      bar.style.width = '0%';
+      bar.style.transition = '';
+    }, 260);
+  }, 180);
+  if (!success) bar.style.background = '#ff6b6b';
+}
+
+/* 轻量提示条：加载失败时告诉用户发生了什么，而不是静静地卡住 */
+let navToastTimer = null;
+function showNavToast(message, timeout = 4000) {
+  let toast = document.getElementById('nav-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'nav-toast';
+    toast.setAttribute('role', 'status');
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  void toast.offsetWidth;
+  toast.classList.add('visible');
+  clearTimeout(navToastTimer);
+  navToastTimer = setTimeout(() => toast.classList.remove('visible'), timeout);
+}
+
+/**
+ * 取页面 HTML。
+ * - 同一个路径同时只发一个请求（预取在路上时点下去 = 直接搭车，不重复下载）
+ * - 带硬超时，慢请求不会把整站锁死
+ * - 命中缓存（60s）直接返回，翻回来是 0 延迟
+ */
+function requestPage(url) {
+  const existing = inflightFetches.get(url);
+  if (existing) return existing;
+
+  const ctrl = new AbortController();
+  let timedOut = false;
+  const timer = setTimeout(() => {
+    timedOut = true;
+    ctrl.abort();
+  }, PAGE_FETCH_TIMEOUT);
+
+  const promise = fetch(url, { signal: ctrl.signal, credentials: 'same-origin' })
+    .then((res) => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.text();
+    })
+    .then((text) => {
+      pageCache.set(url, { text, time: Date.now() });
+      return text;
+    })
+    .catch((err) => {
+      if (err && err.name === 'AbortError') {
+        throw new Error(timedOut ? 'TIMEOUT' : 'SUPERSEDED');
+      }
+      throw err;
+    })
+    .finally(() => {
+      clearTimeout(timer);
+      inflightFetches.delete(url);
+    });
+
+  inflightFetches.set(url, promise);
+  return promise;
+}
+
+function fetchPageHTML(url) {
+  const cached = pageCache.get(url);
+  if (cached && Date.now() - cached.time < PAGE_CACHE_TTL) {
+    return Promise.resolve(cached.text);
+  }
+  return requestPage(url);
+}
+
 async function loadPage(url, addToHistory = true) {
-  if (isLoadingPage) return;
-  isLoadingPage = true;
+  const seq = ++navSeq;
 
   const settingsDialog = document.getElementById('settingsDialog');
   if (settingsDialog && settingsDialog.classList.contains('open')) {
@@ -508,9 +640,14 @@ async function loadPage(url, addToHistory = true) {
     settingsDialog.setAttribute('aria-hidden', 'true');
   }
 
+  showNavProgress();
+
+  let navOk = true;
+
   try {
-    const res = await fetch(url);
-    const text = await res.text();
+    const text = await fetchPageHTML(url);
+    if (seq !== navSeq) return;             // 已经被更新的导航取代
+
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
 
@@ -570,8 +707,10 @@ async function loadPage(url, addToHistory = true) {
     });
 
     await heroOutPromise;
+    if (seq !== navSeq) return;
     if (!currentHeaderContainer) {
       await new Promise(resolve => setTimeout(resolve, 250));
+      if (seq !== navSeq) return;
     }
 
     // 3.DOM 替换
@@ -689,78 +828,177 @@ async function loadPage(url, addToHistory = true) {
 
     window.__lastLoadedPath = url;
 
-    const currentPath = location.pathname;
-    document.querySelectorAll('.sidebar a').forEach(a => {
-      a.classList.remove('active');
-      const href = a.getAttribute('href');
-      if (
-        href === currentPath ||
-        href === currentPath.replace(/^\//, '') ||
-        (href === 'index.html' && (currentPath === '/' || currentPath === '/index.html'))
-      ) {
-        a.classList.add('active');
-      }
-    });
+    markActiveSidebarLink(url);
   } catch (err) {
+    // 被后一次点击顶掉：什么都不用做，新的导航接管了
+    if (seq !== navSeq || (err && err.message === 'SUPERSEDED')) return;
+
     console.error('页面加载失败:', err);
     document.querySelectorAll('.fade-out').forEach(el => {
       el.classList.remove('fade-out');
       el.classList.add('fade-in');
     });
+    navOk = false;
+    showNavToast(
+      err && err.message === 'TIMEOUT'
+        ? '页面加载超时了，点一下重试喵（如果一直这样，可能是网络抽风）'
+        : '页面加载失败，点一下重试喵'
+    );
   } finally {
-    isLoadingPage = false;
+    if (seq === navSeq) finishNavProgress(navOk);
   }
 }
 
+/** 同步侧边栏高亮：统一用 pageKey 比较，扩展名 / 有无 index 都不影响 */
+function markActiveSidebarLink(targetPath) {
+  const key = pageKey(targetPath);
+  clearTimeout(linkActiveTimer);
+  linkActiveTimer = setTimeout(() => {
+    document.querySelectorAll('.sidebar a').forEach(a => {
+      a.classList.toggle('active', pageKey(a.getAttribute('href') || '') === key);
+    });
+  }, 120);
+}
+
 /* =========================
-   链接绑定
+   链接绑定 + 预取
 ========================= */
 let linkActiveTimer = null;
+
+/* 已预取过的路径，避免鼠标在链接上来回划拉时反复请求 */
+const prefetched = new Set();
+
+/** 空闲时把目标页 HTML 提前抓进缓存，点击时直接命中 */
+function prefetchPage(href) {
+  if (!href) return;
+
+  let url;
+  try {
+    url = new URL(href, location.href);
+  } catch (err) {
+    return;
+  }
+  if (url.origin !== location.origin) return;
+
+  const path = url.pathname;
+  if (!isTopLevelPagePath(path)) return;
+  if (pageKey(path) === pageKey(location.pathname)) return;
+
+  const cached = pageCache.get(path);
+  if (cached && Date.now() - cached.time < PAGE_CACHE_TTL) return;
+  if (prefetched.has(path)) return;
+
+  prefetched.add(path);
+
+  // 走同一个 fetchPageHTML：命中在途请求会直接搭车，不会重复下载
+  fetchPageHTML(path)
+    .catch(() => {})
+    .finally(() => {
+      // 过一会儿允许重新预取，避免缓存过期后永远不再更新
+      setTimeout(() => prefetched.delete(path), PAGE_CACHE_TTL);
+    });
+}
+
+/** 省流量模式 / 弱网下不预取 */
+function prefetchAllowed() {
+  const conn = navigator.connection;
+  if (!conn) return true;
+  if (conn.saveData) return false;
+  if (conn.effectiveType && /(^|-)2g$/.test(conn.effectiveType)) return false;
+  return true;
+}
+
+function isTopLevelPagePath(pathname) {
+  return pathname === '/' || /^\/[^/]+$/.test(pathname);
+}
+
+/**
+ * 首屏稳定后，空闲时预取侧边栏几页。
+ * 这样最常见的那几次点击（主页 ↔ 文章 ↔ 视频）几乎不用等。
+ */
+function warmUpNavigation() {
+  if (!prefetchAllowed()) return;
+
+  const run = () => {
+    const links = Array.from(
+      document.querySelectorAll('.sidebar a[href], .home-link-card[href], .spa-link-home[href]')
+    ).slice(0, 6);
+    links.forEach((a, i) => {
+      setTimeout(() => prefetchPage(a.getAttribute('href')), 400 + i * 500);
+    });
+  };
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(run, { timeout: 5000 });
+  } else {
+    setTimeout(run, 2500);
+  }
+}
 
 function bindLinks() {
   if (document.body.dataset.spaLinksBound === 'true') return;
   document.body.dataset.spaLinksBound = 'true';
 
-  const normalizePath = (path) => {
-    if (path === '/' || path === '/index.html') return 'index.html';
-    return path.replace(/^\//, '');
-  };
+  /** 判断这次点击该不该由 SPA 接管；该接管则返回目标 URL */
+  const resolveSpaTarget = (link, event) => {
+    if (event.defaultPrevented) return null;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return null;                       // 交给浏览器开新标签
+    }
+    if (link.target && link.target !== '' && link.target !== '_self') return null;
+    if (link.hasAttribute('download')) return null;
 
-  const isSamePage = (url1, url2) => normalizePath(url1) === normalizePath(url2);
+    const href = link.getAttribute('href');
+    if (!href || href.charAt(0) === '#') return null;
+    if (/^(mailto:|tel:|javascript:|blob:|data:)/i.test(href)) return null;
 
-  const isInternalLink = (url) => {
-    if (!url) return false;
-    if (url.startsWith('http://') || url.startsWith('https://')) return false;
-    if (url.startsWith('mailto:') || url.startsWith('tel:') || url.startsWith('javascript:')) return false;
-    if (url.startsWith('#')) return false;
-    return true;
+    let url;
+    try {
+      url = new URL(href, location.href);
+    } catch (err) {
+      return null;
+    }
+
+    if (url.origin !== location.origin) return null;   // 站外链接
+    // 只接管站点根目录下的单段页面；/mikutap/ 这类子应用交给浏览器整页加载
+    if (!isTopLevelPagePath(url.pathname)) return null;
+    // 点的就是当前页：拦下来只滚回顶部，不重新加载
+    if (pageKey(url.pathname) === pageKey(location.pathname)) return { samePage: true };
+
+    return url;
   };
 
   document.body.addEventListener('click', (e) => {
-    const link = e.target.closest(
-      '.sidebar a, .spa-link, .spa-link-home, .content a[href$=".html"], .home-content a[href$=".html"]'
-    );
+    const link = e.target.closest('a[href]');
     if (!link) return;
 
-    const url = link.getAttribute('href');
-    if (!isInternalLink(url)) return;
+    const url = resolveSpaTarget(link, e);
+    if (!url) return;
 
     e.preventDefault();
+    if (url.samePage) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
 
-    if (isSamePage(url, location.pathname)) return;
-
-    clearTimeout(linkActiveTimer);
-    linkActiveTimer = setTimeout(() => {
-      document.querySelectorAll('.sidebar a').forEach(a => {
-        a.classList.remove('active');
-        if (a.getAttribute('href') === url) {
-          a.classList.add('active');
-        }
-      });
-    }, 300);
-
-    loadPage(url);
+    markActiveSidebarLink(url.pathname);
+    loadPage(url.pathname);
   });
+
+  // 鼠标移上/键盘聚焦就开始预取：等到真的点下去，内容往往已经在缓存里了
+  document.addEventListener('pointerover', (e) => {
+    const link = e.target.closest && e.target.closest('a[href]');
+    if (!link || !prefetchAllowed()) return;
+    prefetchPage(link.getAttribute('href'));
+  }, { passive: true });
+
+  document.addEventListener('focusin', (e) => {
+    const link = e.target.closest && e.target.closest('a[href]');
+    if (!link || !prefetchAllowed()) return;
+    prefetchPage(link.getAttribute('href'));
+  });
+
+  warmUpNavigation();
 }
 
 /* =========================
@@ -783,6 +1021,8 @@ function initCodeBoxes() {
   const codeBoxes = document.querySelectorAll('code-box');
   if (codeBoxes.length === 0) return;
 
+  const pendingHighlight = [];
+
   codeBoxes.forEach((box) => {
     if (box.getAttribute('data-initialized') === 'true') return;
 
@@ -801,9 +1041,7 @@ function initCodeBoxes() {
     `;
 
     const codeElement = box.querySelector('code');
-    if (typeof hljs !== 'undefined') {
-      hljs.highlightElement(codeElement);
-    }
+    if (codeElement) pendingHighlight.push(codeElement);
 
     const copyBtn = box.querySelector('.copy-btn');
     copyBtn.addEventListener('click', () => {
@@ -820,6 +1058,84 @@ function initCodeBoxes() {
 
     box.setAttribute('data-initialized', 'true');
   });
+
+  // 代码高亮放在最后按需加载：没有 <code-box> 的页面永远不下载 highlight.js
+  if (pendingHighlight.length === 0) return;
+  ensureHighlight().then((hljs) => {
+    if (!hljs) return;
+    pendingHighlight.forEach((codeEl) => {
+      if (!codeEl.isConnected || codeEl.dataset.highlighted === 'true') return;
+      try {
+        hljs.highlightElement(codeEl);
+      } catch (err) {
+        // 单个块失败不影响其它块
+      }
+    });
+    pendingHighlight.length = 0;
+  });
+}
+
+/* 按需加载脚本：同源、只加载一次、带超时 */
+function loadScriptOnce(src, timeout = 15000) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[data-lazy-src="${src}"]`);
+    if (existing) {
+      if (existing.dataset.loaded === 'true') return resolve();
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error('加载失败: ' + src)), { once: true });
+      return;
+    }
+
+    const el = document.createElement('script');
+    el.src = src;
+    el.async = true;
+    el.dataset.lazySrc = src;
+
+    const timer = setTimeout(() => reject(new Error('超时: ' + src)), timeout);
+
+    el.addEventListener('load', () => {
+      clearTimeout(timer);
+      el.dataset.loaded = 'true';
+      resolve();
+    }, { once: true });
+    el.addEventListener('error', () => {
+      clearTimeout(timer);
+      reject(new Error('加载失败: ' + src));
+    }, { once: true });
+
+    document.head.appendChild(el);
+  });
+}
+
+/* 仓库里只自托管了 javascript 语言包，其它语言让 hljs 自行降级 */
+const HIGHLIGHT_PACKS = { javascript: 'javascript', js: 'javascript' };
+let highlightPromise = null;
+
+function ensureHighlight() {
+  if (window.hljs) return Promise.resolve(window.hljs);
+  if (highlightPromise) return highlightPromise;
+
+  highlightPromise = loadScriptOnce(CONFIG.HIGHLIGHT_BASE + 'highlight.min.js')
+    .then(() => {
+      const langs = new Set();
+      document.querySelectorAll('code-box[data-lang]').forEach((box) => {
+        const lang = (box.getAttribute('data-lang') || '').toLowerCase();
+        const pack = HIGHLIGHT_PACKS[lang];
+        if (pack) langs.add(pack);
+      });
+      return Promise.all(
+        Array.from(langs).map((pack) =>
+          loadScriptOnce(CONFIG.HIGHLIGHT_BASE + pack + '.min.js').catch(() => {})
+        )
+      );
+    })
+    .then(() => window.hljs || null)
+    .catch((err) => {
+      console.warn('代码高亮加载失败，已降级为纯文本:', err);
+      return null;
+    });
+
+  return highlightPromise;
 }
 
 function fallbackCopyText(text, copyBtn) {
@@ -1832,6 +2148,7 @@ function initAll() {
   ColorThemeManager.init();
 
   bindLinks();
+  markActiveSidebarLink(location.pathname);   // 直达某页时侧边栏也能正确高亮
   addRippleEffect();
   bindSettingsTrigger();
   bindHorizontalWheel();
@@ -1880,11 +2197,7 @@ scheduleMascotModule();
 
 window.addEventListener('popstate', () => {
   const targetPath = location.pathname;
-  const normalize = (path) => {
-    if (path === '/' || path === '/index.html') return 'index.html';
-    return path.replace(/^\//, '');
-  };
-  if (normalize(targetPath) !== normalize(window.__lastLoadedPath || '')) {
+  if (pageKey(targetPath) !== pageKey(window.__lastLoadedPath || '')) {
     loadPage(targetPath, false);
   }
 });

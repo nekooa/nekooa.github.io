@@ -4,30 +4,29 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>文章列表 | ねねねこ</title>
   <meta name="description" content="ねねねこ 的全部文章：网站更新日志、EdgeTunnel 搭建教程、日常随笔与折腾记录。">
   <meta name="author" content="holo-world">
-  <link rel="canonical" href="https://0u0.l.cd/PAGEarticle.html">
+  <link rel="canonical" href="https://0u0.l.cd//PAGEarticle">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ねねねこ">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:title" content="文章列表 | ねねねこ">
   <meta property="og:description" content="ねねねこ 的全部文章：网站更新日志、EdgeTunnel 搭建教程、日常随笔与折腾记录。">
-  <meta property="og:url" content="https://0u0.l.cd/PAGEarticle.html">
+  <meta property="og:url" content="https://0u0.l.cd//PAGEarticle">
   <meta property="og:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="文章列表 | ねねねこ">
   <meta name="twitter:description" content="ねねねこ 的全部文章：网站更新日志、EdgeTunnel 搭建教程、日常随笔与折腾记录。">
   <meta name="twitter:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
   <link rel="icon" href="/favicon.png" type="image/svg+xml">
-  <link rel="stylesheet" href="vendor/highlight.js/11.9.0/atom-one-dark.min.css">
-  <script defer src="vendor/highlight.js/11.9.0/highlight.min.js"></script>
-  <script defer src="vendor/highlight.js/11.9.0/javascript.min.js"></script>
-  <link rel="stylesheet" href="styles/style.css">
-  <link rel="stylesheet" href="styles/article-typography.css">
-  <link rel="stylesheet" href="styles/viewer.css">
+  <!-- 第三方域名提前建连：图片走 a1.boltp.com，一言走 v1.hitokoto.cn -->
+  <link rel="preconnect" href="https://a1.boltp.com">
+  <link rel="preconnect" href="https://v1.hitokoto.cn">
+  <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
+  <link rel="stylesheet" href="styles/bundle.css?v=c2e3f12809">
 </head>
 
 <body>
@@ -63,7 +62,7 @@
   <div class="sidebar">
     <ul>
       <li>
-        <a href="index.html" class="sidebar-link">
+        <a href="/" class="sidebar-link">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
             transform="translate(0, -0.7)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -74,7 +73,7 @@
         <span class="sidebar-text">主页</span>
       </li>
       <li>
-        <a href="PAGEarticle.html" class="active">
+        <a href="/PAGEarticle" class="active">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.05)">
             <path
@@ -88,7 +87,7 @@
         <span class="sidebar-text">文章</span>
       </li>
       <li>
-        <a href="PAGEvideo.html" class="sidebar-link">
+        <a href="/PAGEvideo" class="sidebar-link">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.03) translate(0, -0.6)">
             <path
@@ -105,7 +104,7 @@
         <span class="sidebar-text">影音</span>
       </li>
       <li>
-        <a href="PAGEproject.html" class="sidebar-link">
+        <a href="/PAGEproject" class="sidebar-link">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.02) translate(0, -0.2)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -116,7 +115,7 @@
         <span class="sidebar-text">项目</span>
       </li>
       <li>
-        <a href="PAGEabout.html" class="sidebar-link">
+        <a href="/PAGEabout" class="sidebar-link">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="scale(0.0234375)" fill="currentColor">
               <path
@@ -130,7 +129,7 @@
   </div>
   <div class="content">
 
-    <a href="article10.html" class="spa-link">
+    <a href="/article10" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>我的桌面配置与脚本</h3>
@@ -141,7 +140,7 @@
       </div>
     </a>
 
-    <a href="article9.html" class="spa-link">
+    <a href="/article9" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>fufu!</h3>
@@ -153,7 +152,7 @@
     </a>
 
 
-    <a href="article8.html" class="spa-link">
+    <a href="/article8" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>文章系统更新</h3>
@@ -164,7 +163,7 @@
       </div>
     </a>
 
-    <a href="article0721.html" class="spa-link">
+    <a href="/article0721" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>no title</h3>
@@ -175,7 +174,7 @@
       </div>
     </a>
 
-    <a href="article6.html" class="spa-link">
+    <a href="/article6" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>EdgeTunnel</h3>
@@ -186,7 +185,7 @@
       </div>
     </a>
 
-    <a href="article5.html" class="spa-link">
+    <a href="/article5" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>许多更新 & 以后的计划</h3>
@@ -197,7 +196,7 @@
       </div>
     </a>
 
-    <a href="article4.html" class="spa-link">
+    <a href="/article4" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>更新日志4</h3>
@@ -208,7 +207,7 @@
       </div>
     </a>
 
-    <a href="article3.html" class="spa-link">
+    <a href="/article3" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>更新日志3</h3>
@@ -219,7 +218,7 @@
       </div>
     </a>
 
-    <a href="article2.html" class="spa-link">
+    <a href="/article2" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>更新日志2</h3>
@@ -230,7 +229,7 @@
       </div>
     </a>
 
-    <a href="article.html" class="spa-link">
+    <a href="/article" class="spa-link">
       <div class="card">
         <div class="card-title">
           <h3>更新日志</h3>
@@ -255,9 +254,9 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js"></script>
-  <script defer src="js/viewer.js"></script>
-  <script defer src="./xf-MusicPlayer.min.js"></script>
+  <script defer src="js/script.min.js?v=1d1c7c869c"></script>
+  <script defer src="js/viewer.js?v=0915250c13"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=347d1fef98"></script>
 
 </body>
 

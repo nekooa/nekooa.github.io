@@ -10,14 +10,20 @@
 
 ## 本地预览
 
-站点是纯静态的，直接起个静态服务器即可（推荐，`file://` 下部分功能不可用）：
+站点是纯静态的，但**站内链接是无扩展名写法**（`/article10` 而不是 `article10.html`，
+和 Cloudflare Pages 的清理 URL 行为保持一致，见下面"性能约定"）。
+`python3 -m http.server` 只会按文件路径找文件，访问 `/article10` 会直接 404，
+所以请用仓库自带的小服务器：
 
 ```bash
-python3 -m http.server 8000
-# 然后访问 http://localhost:8000
+npm run serve        # http://127.0.0.1:8000
+# 或 node tools/preview.js 8080
 ```
 
-部署同样不需要构建步骤：GitHub Pages / CloudFlare Pages 直接发布仓库根目录。
+它会补上 Pages 的两条行为：`/article10` → 返回 `article10.html`；
+访问 `*.html` → 301 跳回无扩展名版本（顺便提醒你别把链接写回带 `.html` 的）。
+
+部署不需要构建步骤：GitHub Pages / CloudFlare Pages 直接发布仓库根目录。
 
 > **注意：VS Code Live Server（默认端口 5500）会与本页的 CSP 冲突**
 >
@@ -29,22 +35,51 @@ python3 -m http.server 8000
 > （如上），或在本地调试期间临时注释掉 HTML 里的 CSP `<meta>` 行。
 > 不建议为此放开 `'unsafe-inline'`。
 
-## 构建（仅用于生成压缩产物）
+## 构建
 
-页面加载的是 `*.min.js`，仓库里保存的是可读源码。**改完源码后请重新压缩**，
-否则改动不会在线上生效：
+页面加载的是 `*.min.js` 和合并后的 `styles/bundle.css`，仓库里保存的是可读源码。
+**改完源码后请重新构建**，否则改动不会在线上生效：
 
 ```bash
 npm install     # 首次，安装 terser
-npm run build   # 重新生成 js/script.min.js 与 xf-MusicPlayer.min.js
+npm run build   # 生成产物 + 合并 CSS + 刷新资源指纹
 ```
 
-映射关系固定为：
+`npm run build` 做三件事：
+
+1. 压缩 JS：`js/script.js` → `js/script.min.js`，`xf-MusicPlayer.js` → `xf-MusicPlayer.min.js`
+2. 合并首屏 CSS：`style.css` + `article-typography.css` + `viewer.css` +
+   highlight 主题 → `styles/bundle.css`（顺序与原 `<link>` 完全一致，层叠顺序不变）
+3. 给产物算内容指纹，回写进全部 21 个 HTML：`styles/bundle.css?v=c2e3f12809`
+
+映射关系：
 
 | 源码 | 产物 | 被谁加载 |
 |---|---|---|
 | `js/script.js` | `js/script.min.js` | 全部页面 |
 | `xf-MusicPlayer.js` | `xf-MusicPlayer.min.js` | 全部页面 |
+| `styles/style.css` 等 4 个 CSS | `styles/bundle.css` | 全部页面 |
+
+> `styles/bundle.css` 是**生成物，不要手改**；改完 `styles/*.css` 后重新 `npm run build`。
+> 资源指纹没变说明文件没变，浏览器就会一直用本地缓存——这正是我们要的效果。
+
+## 性能约定（改动前先读这段）
+
+这些约定是为了不再回到"点一下等好几秒"的状态：
+
+1. **站内链接一律无扩展名**：写成 `href="/article10"`，不要写 `href="/article10.html"`。
+   Pages 会把带 `.html` 的地址 308 跳到无扩展名版本，等于每次点击多一个完整往返。
+   侧边栏高亮、SPA 路由都基于 `pageKey()` 归一化后比较，写错扩展名会认不出来。
+2. **`js/script.js` 里的 `loadPage()` 只管换 DOM**：取 HTML 由 `fetchPageHTML()` 负责，
+   它有 12 秒硬超时、60 秒内存缓存、同名请求合并（预取在路上时点下去直接搭车）。
+   改路由逻辑时别把 `navSeq` 的序号判断删掉，否则快速连点会互相覆盖 DOM。
+3. **预取**：鼠标悬停 / 键盘聚焦 / 首屏空闲时会提前抓目标页 HTML。想关掉改
+   `warmUpNavigation()` 即可；弱网与"省流量模式"下自动跳过。
+4. **代码高亮按需加载**：`vendor/highlight.js` 不再写进 HTML，第一次出现
+   `<code-box>` 时才由 `ensureHighlight()` 动态注入。新增语言要把语言包放进
+   `vendor/highlight.js/11.9.0/` 并加进 `HIGHLIGHT_PACKS`。
+5. **`_headers` 里 `/js/*`、`/styles/*` 是长缓存**，靠 `?v=` 指纹失效。
+   新增静态文件如果也需要长缓存，记得加进 `build.js` 的 `VERSIONED` 列表。
 
 ## 目录速览
 
