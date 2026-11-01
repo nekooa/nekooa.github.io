@@ -1800,6 +1800,12 @@ button,
   }
 }
 
+@media (max-width: 768px) {
+  .about-hero-actions {
+    display: none;
+  }
+}
+
 @media (max-width: 600px) {
   .about-hero {
     grid-template-columns: 1fr;
