@@ -35,6 +35,15 @@ npm run serve        # http://127.0.0.1:8000
 > （如上），或在本地调试期间临时注释掉 HTML 里的 CSP `<meta>` 行。
 > 不建议为此放开 `'unsafe-inline'`。
 
+## 部署注意
+
+1. 根目录的 `404.html` 不只是“自定义错误页”：Cloudflare Pages 在**缺少顶层 `404.html`** 时会把整站当成 SPA，
+   对任何未匹配路径回退首页并返回 200（软 404）；补上它之后，未匹配路径才会真正返回 404 状态码。
+   GitHub Pages 同样会使用这个文件。
+2. 本地 `npm run serve` 已按同样行为实现（未匹配路径 → `404.html` + 404 状态码），
+   和线上（存在顶层 `404.html` 时）的表现一致。
+3. `sitemap.xml` 与所有页面的 `canonical` / `og:url` 都写死了域名 `https://0u0.l.cd`，换域名时要一起改。
+
 ## 构建
 
 页面加载的是 `*.min.js` 和合并后的 `styles/bundle.css`，仓库里保存的是可读源码。
@@ -50,7 +59,7 @@ npm run build   # 生成产物 + 合并 CSS + 刷新资源指纹
 1. 压缩 JS：`js/script.js` → `js/script.min.js`，`xf-MusicPlayer.js` → `xf-MusicPlayer.min.js`
 2. 合并首屏 CSS：`style.css` + `article-typography.css` + `viewer.css` +
    highlight 主题 → `styles/bundle.css`（顺序与原 `<link>` 完全一致，层叠顺序不变）
-3. 给产物算内容指纹，回写进全部 21 个 HTML：`styles/bundle.css?v=c2e3f12809`
+3. 给产物算内容指纹，回写进全部 HTML 页面（含 `404.html`）：`styles/bundle.css?v=c2e3f12809`
 
 映射关系：
 
@@ -86,6 +95,7 @@ npm run build   # 生成产物 + 合并 CSS + 刷新资源指纹
 | 路径 | 说明 |
 |---|---|
 | `index.html` | 首页 |
+| `404.html` | 自定义 404 页（同时用于关闭 Pages 的 SPA 回退） |
 | `PAGE*.html` | 主页 / 文章 / 影音 / 项目 / 关于 的分区页 |
 | `article*.html` | 文章（含上一篇/下一篇导航） |
 | `novel*.html` | 小说连载 |

@@ -77,6 +77,16 @@ const server = http.createServer((req, res) => {
   }
 
   if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+    // 和 Pages / GitHub Pages 一样：有 404.html 就返回它，并带上真正的 404 状态码。
+    // （没有 404.html 时才退回纯文本，避免本地预览和线上行为不一致）
+    const notFoundPage = path.join(ROOT, '404.html');
+    if (fs.existsSync(notFoundPage)) {
+      res.writeHead(404, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-cache',
+      });
+      return fs.createReadStream(notFoundPage).pipe(res);
+    }
     return send(res, 404, '404 Not Found：' + pathname, { 'Content-Type': 'text/plain; charset=utf-8' });
   }
 

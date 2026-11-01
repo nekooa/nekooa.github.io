@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>用 EdgeTunnel 给自己搞个梯子！ | ねねねこ</title>
   <meta name="description" content="借助 Cloudflare 与 EdgeTunnel 搭建属于自己的代理：从注册账号、配置域名到部署的完整步骤记录。">
   <meta name="author" content="holo-world">
-  <link rel="canonical" href="https://0u0.l.cd//article6">
+  <link rel="canonical" href="https://0u0.l.cd/article6">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="ねねねこ">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:title" content="用 EdgeTunnel 给自己搞个梯子！ | ねねねこ">
   <meta property="og:description" content="借助 Cloudflare 与 EdgeTunnel 搭建属于自己的代理：从注册账号、配置域名到部署的完整步骤记录。">
-  <meta property="og:url" content="https://0u0.l.cd//article6">
+  <meta property="og:url" content="https://0u0.l.cd/article6">
   <meta property="og:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="用 EdgeTunnel 给自己搞个梯子！ | ねねねこ">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=c2e3f12809">
+  <link rel="stylesheet" href="styles/bundle.css?v=6ec7fbf31d">
 </head>
 
 <body>
@@ -140,7 +140,7 @@
 
       <h2 id="intro">前言：EdgeTunnel 是什么？<a class="heading-anchor" href="#intro">#</a></h2>
       <blockquote>
-        <a href="https://github.com/cmliu/edgetunnel" class="a">GitHub 项目主页</a>：edgetunnel 是一个基于 CF Workers/Pages 平台的边缘计算隧道解密方案。它能够高效地处理网络流量，并提供强大的管理面板和灵活的节点配置能力。
+        <a href="https://github.com/cmliu/edgetunnel" class="a" target="_blank">GitHub 项目主页</a>：edgetunnel 是一个基于 CF Workers/Pages 平台的边缘计算隧道解密方案。它能够高效地处理网络流量，并提供强大的管理面板和灵活的节点配置能力。
       </blockquote>
       <p>说人话就是一个白嫖 CloudFlare 的边缘计算来搭建梯子订阅的项目，支持 VLESS、Trojan、Shadowsocks 三种协议。</p>
 
@@ -153,18 +153,18 @@
         <figcaption>CloudFlare 提供的人机验证服务</figcaption>
       </figure>
       <p>这就是 CloudFlare 提供的人机验证服务，但 CloudFlare 提供的服务可远不止于此，CF 还提供 CDN、安全防护等服务。我们今天便要用到其中的 <strong>CloudFlare Pages</strong> 和 <strong>CloudFlare Workers</strong>。</p>
-      <p>打开 <a href="https://dash.cloudflare.com" class="a">CloudFlare 官网</a>，注册并登录。</p>
+      <p>打开 <a href="https://dash.cloudflare.com" class="a" target="_blank">CloudFlare 官网</a>，注册并登录。</p>
 
       <h3 id="prepare-2">2. 注册并登录 ClouDNS 账号<a class="heading-anchor" href="#prepare-2">#</a></h3>
       <p>ClouDNS 是一家专业 DNS 托管服务提供商，它的核心业务就是管理域名系统（DNS），我们等会需要用它免费注册一个 <strong>CNAME 域名</strong>来用。</p>
-      <p>打开 <a href="https://www.cloudns.net/" class="a">ClouDNS 官网</a>，注册并登录。</p>
+      <p>打开 <a href="https://www.cloudns.net/" class="a" target="_blank">ClouDNS 官网</a>，注册并登录。</p>
 
       <h2 id="deploy">二、开始部署！<a class="heading-anchor" href="#deploy">#</a></h2>
 
       <h3 id="deploy-1">1. 创建 Pages 应用程序<a class="heading-anchor" href="#deploy-1">#</a></h3>
       <ol>
-        <li>点击 <a href="https://pages.cloudflare.com/direct-upload-demo.zip" class="a">direct-upload-demo.zip</a> 下载 Cloudflare Pages 演示项目压缩包备用；</li>
-        <li>进入 <a href="https://dash.cloudflare.com" class="a">CloudFlare 官网</a>，点击侧边栏中 <strong>计算</strong> &gt; <strong>Workers 和 Pages</strong> &gt; <strong>创建应用程序</strong>；</li>
+        <li>点击 <a href="https://pages.cloudflare.com/direct-upload-demo.zip" class="a" target="_blank">direct-upload-demo.zip</a> 下载 Cloudflare Pages 演示项目压缩包备用；</li>
+        <li>进入 <a href="https://dash.cloudflare.com" class="a" target="_blank">CloudFlare 官网</a>，点击侧边栏中 <strong>计算</strong> &gt; <strong>Workers 和 Pages</strong> &gt; <strong>创建应用程序</strong>；</li>
       </ol>
       <figure>
         <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9d23f38.png" alt="CloudFlare 创建应用程序界面">
@@ -235,7 +235,7 @@
 
       <h3 id="deploy-4">4. 重新部署，使其变量生效！<a class="heading-anchor" href="#deploy-4">#</a></h3>
       <ol>
-        <li>点击 <a href="https://github.com/cmliu/edgetunnel/archive/refs/heads/main.zip" class="a">edgetunnel-main.zip</a> 下载最新版本项目压缩包备用；</li>
+        <li>点击 <a href="https://github.com/cmliu/edgetunnel/archive/refs/heads/main.zip" class="a" target="_blank">edgetunnel-main.zip</a> 下载最新版本项目压缩包备用；</li>
         <li>点击右上角 <strong>创建部署</strong>，上传上一步刚刚下载的 <strong>edgetunnel-main.zip</strong> 压缩包；</li>
       </ol>
       <figure>
@@ -254,7 +254,7 @@
 
       <h3 id="deploy-5">5. 注册自定义域名<a class="heading-anchor" href="#deploy-5">#</a></h3>
       <ol>
-        <li>我们在「准备工作」中已经登录好了 ClouDNS 账号，现在进入 <a href="https://www.cloudns.net/" class="a">ClouDNS 官网</a>；</li>
+        <li>我们在「准备工作」中已经登录好了 ClouDNS 账号，现在进入 <a href="https://www.cloudns.net/" class="a" target="_blank">ClouDNS 官网</a>；</li>
         <li>选择 <strong>创建区域</strong> &gt; <strong>免费区域</strong>；</li>
       </ol>
       <figure>
@@ -335,9 +335,9 @@
   </div>
 
   <!-- JS 脚本 -->
-  <script defer src="js/script.min.js?v=1d1c7c869c"></script>
+  <script defer src="js/script.min.js?v=9822af4c6e"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
-  <script defer src="./xf-MusicPlayer.min.js?v=347d1fef98"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
 
 </body>
 

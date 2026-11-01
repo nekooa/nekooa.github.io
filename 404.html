@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- 与站内其他页面一致的最小 CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 · 页面走丢了 | ねねねこ</title>
+  <meta name="description" content="页面不存在喵。">
+  <meta name="robots" content="noindex">
+  <!-- 404 会在任意路径下返回，所以资源一律用根绝对路径 -->
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/styles/bundle.css?v=6ec7fbf31d">
+  <style>
+    /* 版式复用 bundle.css 的 .content / .content-card / .thoughts / .button，这里只补 404 的居中布局 */
+    body.page-404 .content {
+      margin: 0;
+      max-width: none;
+      min-height: 100vh;
+      padding: 24px;
+      grid-template-columns: 1fr;
+      align-content: center;
+    }
+
+    body.page-404 .content-card {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 40px 28px 36px;
+      text-align: center;
+    }
+
+    body.page-404 .content-card h1 {
+      margin: 0 0 22px;
+      font-size: 1.5rem;
+    }
+
+    body.page-404 .error-code {
+      margin: 0;
+      font-size: clamp(64px, 16vw, 104px);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--color-pink);
+    }
+
+    body.page-404 .thoughts {
+      margin: 0 0 26px;
+      font-size: 0.95rem;
+    }
+
+    body.page-404 .button {
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    /* 水波纹沿用 script.js 的 .ripple，只是粉色实心按钮上换成更明显的白色 */
+    body.page-404 .button .ripple {
+      background: rgba(255, 255, 255, 0.55);
+    }
+  </style>
+</head>
+
+<body class="page-404" data-mascot="off">
+  <main class="content fade-in">
+    <div class="content-card">
+      <p class="error-code" aria-hidden="true">404</p>
+      <h1>页面走丢了喵</h1>
+      <div class="article-body">
+        <p class="thoughts">你要找的页面不存在，或者已经被移到别的地方去了。</p>
+      </div>
+      <!-- data-no-spa：不让 script.js 用 SPA 接管，整页回到首页（保留完整站点外壳） -->
+      <a class="button" href="/" data-no-spa>回到主页</a>
+    </div>
+  </main>
+
+  <script defer src="/js/script.min.js?v=9822af4c6e"></script>
+</body>
+
+</html>

@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>CachyOS + niri + Noctalia：我的桌面配置与 SDDM 自动换壁纸 | ねねねこ</title>
   <meta name="description" content="记录 CachyOS 上 niri + Noctalia Shell v5 的个性化配置，以及一个让 SDDM 登录界面壁纸跟随桌面壁纸自动同步的脚本，含 Qt6 greeter 切换与 pixie 主题配置的完整踩坑手册。">
   <meta name="author" content="holo-world">
-  <link rel="canonical" href="https://0u0.l.cd//article10">
+  <link rel="canonical" href="https://0u0.l.cd/article10">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="ねねねこ">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:title" content="CachyOS + niri + Noctalia：我的桌面配置与 SDDM 自动换壁纸 | ねねねこ">
   <meta property="og:description" content="记录 CachyOS 上 niri + Noctalia Shell v5 的个性化配置，以及一个让 SDDM 登录界面壁纸跟随桌面壁纸自动同步的脚本，含 Qt6 greeter 切换与 pixie 主题配置的完整踩坑手册。">
-  <meta property="og:url" content="https://0u0.l.cd//article10">
+  <meta property="og:url" content="https://0u0.l.cd/article10">
   <meta property="og:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CachyOS + niri + Noctalia：我的桌面配置与 SDDM 自动换壁纸 | ねねねこ">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=c2e3f12809">
+  <link rel="stylesheet" href="styles/bundle.css?v=6ec7fbf31d">
 </head>
 
 <body>
@@ -613,9 +613,9 @@ grep -rn "Current" /etc/sddm.conf /etc/sddm.conf.d/ 2&gt;/dev/null
   </div>
 
   <!-- JS 脚本 -->
-  <script defer src="js/script.min.js?v=1d1c7c869c"></script>
+  <script defer src="js/script.min.js?v=9822af4c6e"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
-  <script defer src="./xf-MusicPlayer.min.js?v=347d1fef98"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
 
 </body>
 

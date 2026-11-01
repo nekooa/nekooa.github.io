@@ -927,7 +927,7 @@
   position: absolute;
   border-radius: 50%;
   animation: xf-ripple-animation 0.5s ease-out forwards;
-  background: var(--sidebar-a);
+  background: rgba(255, 255, 255, 0.3);
   pointer-events: none;
 }
 

@@ -595,7 +595,7 @@ button,
   position: absolute;
   border-radius: 50%;
   animation: ripple-animation 0.5s ease-out forwards;
-  background: var(--sidebar-a);
+  background: rgba(255, 255, 255, 0.3);
   pointer-events: none;
 }
 
@@ -1091,8 +1091,7 @@ button,
 }
 
 .button.filled:hover {
-  background: var(--color-pink);
-  filter: brightness(1.1);
+  background: var(--color-pink-soft);
 }
 
 .settings-button {
@@ -1377,6 +1376,480 @@ button,
 }
 
 /* =========================
+   关于页 / About（Material 3）
+   颜色全部复用现有主题变量，对应 M3 的 primary / surface / on-surface / outline；
+   形状按 M3 shape scale：28 (extra-large) / 16 (large) / 12 (medium) / full；
+   间距统一走 8dp 网格。
+========================= */
+.content.about-page {
+  gap: 24px !important;
+  /* 注意：这里不要再加 z-index / position。
+     .fade-in 的 transform 已经让 .content 形成层叠上下文；一旦把它抬到
+     #mascot-layer（z-index:1）之上，桌宠就会被卡片压住，只能从卡片之间的
+     透明缝隙里露出一条，看起来像“穿出来”。保持默认层级即可让桌宠正常显示。 */
+}
+
+.content.about-page>.about-hero,
+.content.about-page>.about-stats,
+.content.about-page>.about-grid {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* —— 顶部个人卡 —— */
+.about-hero {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: start;
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--card-bg);
+}
+
+
+.about-hero>* {
+  position: relative;
+  z-index: 1;
+}
+
+.about-hero-avatar {
+  width: 112px;
+  height: 112px;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--profile-list-bg);
+  box-sizing: border-box;
+}
+
+.about-hero-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--img-placeholder-bg);
+}
+
+.about-hero .about-eyebrow {
+  margin: 2px 0 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-pink);
+}
+
+.about-hero h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 3.2vw, 2.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+.about-hero .about-handle {
+  margin: 6px 0 16px;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+.about-hero .about-bio {
+  margin: 0 0 18px;
+  max-width: 62ch;
+  line-height: 1.85;
+}
+
+.about-hero-tags {
+  justify-content: flex-start;
+  margin: 0 0 20px;
+}
+
+.about-hero-tags li,
+.about-section .about-list li {
+  height: 32px;
+  padding: 0 14px;
+  font-size: 0.8rem;
+}
+
+.about-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.about-hero-actions .button {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.about-hero-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--article-hr-color);
+}
+
+.about-hero-links-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.about-hero .about-a {
+  margin: 0;
+  justify-content: flex-start;
+}
+
+.about-hero .li-a {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+/* —— 数据 —— */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: var(--card-bg);
+}
+
+.about-stat-value {
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-pink);
+  font-variant-numeric: tabular-nums;
+}
+
+.about-stat-label {
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  opacity: 0.62;
+}
+
+/* —— 内容卡片网格 —— */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  padding: 26px 28px;
+  border-radius: 16px;
+}
+
+.about-section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.about-section-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--profile-list-bg);
+  color: var(--color-pink);
+}
+
+.about-section-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.about-section-head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.about-section-head .about-section-kicker {
+  margin: 2px 0 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+/* 近况列表 */
+.about-now-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.about-now-list li {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.about-now-marker {
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--color-pink);
+  box-shadow: 0 0 0 4px var(--profile-list-bg);
+}
+
+.about-now-list strong {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.about-now-list p {
+  margin: 2px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.75;
+  opacity: 0.68;
+}
+
+/* 兴趣标签 */
+.about-interests {
+  display: grid;
+  gap: 16px;
+}
+
+.about-mini-title {
+  margin: 0 0 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.about-section .about-list {
+  justify-content: flex-start;
+  margin: 0;
+}
+
+/* 关于本站 */
+.about-copy {
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+
+.about-section .about-copy p {
+  margin: 0 0 12px;
+}
+
+.about-section .about-copy .thoughts {
+  margin-top: 0;
+  font-size: 0.88rem;
+}
+
+.about-facts {
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+}
+
+.about-fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--article-hr-color);
+}
+
+.about-fact:first-child {
+  border-top: 0;
+}
+
+.about-fact dt {
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.about-fact dd {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.about-section .about-credit {
+  margin: 16px 0 0;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  text-align: center;
+  opacity: 0.5;
+}
+
+/* 时间线 */
+.about-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 18px;
+  position: relative;
+  display: grid;
+  gap: 18px;
+}
+
+.about-timeline::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 7px;
+  bottom: 7px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--article-hr-color);
+}
+
+.about-timeline li {
+  position: relative;
+}
+
+.about-timeline li::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-pink);
+  box-shadow: 0 0 0 4px var(--card-bg);
+}
+
+.about-timeline-date {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+}
+
+.about-timeline strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.9rem;
+}
+
+.about-timeline p {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  opacity: 0.68;
+}
+
+/* —— 响应式（M3 window size classes：compact / medium） —— */
+@media (max-width: 840px) {
+  .about-hero {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 20px;
+    padding: 26px;
+  }
+
+  .about-hero-avatar {
+    width: 96px;
+    height: 96px;
+  }
+
+  .about-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-hero {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+
+  .about-hero .li-a {
+    height: 36px;
+    padding: 0 10px;
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .about-hero .about-a {
+    gap: 8px;
+  }
+
+  .about-hero-avatar {
+    width: 88px;
+    height: 88px;
+  }
+
+  .about-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .about-hero-actions .button {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  .about-hero-links-label {
+    flex-basis: 100%;
+  }
+
+  .about-section {
+    padding: 22px 20px;
+  }
+
+  .about-fact {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .about-fact dd {
+    text-align: left;
+  }
+}
+
+/* =========================
    卡片
 ========================= */
 .card {
@@ -1502,8 +1975,8 @@ button,
 
 .scroll-item {
   flex: 0 0 auto;
-  width: 240px;
-  min-height: 200px;
+  width: 280px;
+  min-height: 220px;
   scroll-snap-align: start;
   text-decoration: none;
   color: var(--color-text);
@@ -1521,7 +1994,7 @@ button,
 
 .scroll-item-img {
   width: 100%;
-  height: 140px;
+  height: 160px;
   overflow: hidden;
   border-radius: 16px 16px 0 0;
 }
@@ -1554,11 +2027,11 @@ button,
 /* 移动端卡片尺寸 */
 @media (max-width: 768px) {
   .scroll-item {
-    width: 200px;
+    width: 240px;
   }
 
   .scroll-item-img {
-    height: 120px;
+    height: 140px;
   }
 }
 
@@ -1586,7 +2059,7 @@ button,
   position: relative;
   border-radius: 16px;
   box-sizing: border-box;
-  height: 200px;
+  height: 240px;
   opacity: 0;
   transform: translateY(15px);
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -1599,7 +2072,7 @@ button,
 .home-header {
   display: block;
   width: 100%;
-  height: 200px;
+  height: 240px;
   object-fit: cover;
   border-radius: 16px;
   transform: none !important;
@@ -2409,8 +2882,8 @@ select.ui-select:disabled {
 @media (min-width: 769px) {
   .header-container {
     width: calc(100% - var(--sidebar-width) - 40px);
-    max-width: 904px;
-    margin-left: max(calc((100% + var(--sidebar-width) - 904px) / 2),
+    max-width: 1100px;
+    margin-left: max(calc((100% + var(--sidebar-width) - 1100px) / 2),
         calc(var(--sidebar-width) + 20px));
     margin-right: auto;
     margin-top: var(--navbar-height);
@@ -2584,8 +3057,9 @@ html.hide-lyric #xf-lyric {
   pointer-events: none;
   opacity: 0;
   border-radius: 0 2px 2px 0;
-  background: linear-gradient(90deg, #7dd3fc, #a78bfa);
-  box-shadow: 0 0 8px rgba(125, 211, 252, 0.55);
+  /* 跟随站点强调色：浅色主题 #ff95bc，深色主题 #ffb3cf */
+  background: var(--color-pink);
+  box-shadow: 0 0 8px var(--color-pink-soft);
   transition: width 0.4s ease, opacity 0.25s ease, background 0.2s ease;
 }
 
@@ -2593,35 +3067,615 @@ html.hide-lyric #xf-lyric {
   opacity: 0.95;
 }
 
+/* =========================
+   切页提示条
+
+   视觉与位置对齐播放器的通知弹窗 .xf-music-pop
+   （见 styles/xf-MusicPlayer.css）：
+   粉色半透明胶囊、border-radius 30px、12px/500 字重、
+   水平居中 + 垂直方向 50% 处再上移 5px、0.3s 淡入淡出。
+   唯一的差别是内边距横向多 6px、允许换行——提示文案比
+   "已暂停"这类短句长，按原样 nowrap 会被截成省略号。
+========================= */
 #nav-toast {
   position: fixed;
+  bottom: 50%;
   left: 50%;
-  bottom: 2.2rem;
-  z-index: 10000;
-  max-width: min(90vw, 26rem);
-  padding: 0.6rem 1rem;
-  border-radius: 0.6rem;
-  background: rgba(28, 28, 32, 0.94);
-  color: #fff;
-  font-size: 0.85rem;
-  line-height: 1.55;
+  z-index: 1809185784;   /* 与播放器的 --z-index-100 同级，确保在播放器之上 */
+  width: auto;
+  max-width: min(50vw, 24rem);
+  min-width: 60px;
+  padding: 10px 16px;
+  border-radius: 30px;
+  background: rgba(253, 217, 231, 0.9);
+  color: #504348;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
   text-align: center;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transform: translateX(-50%) translateY(0.6rem);
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  transform: translateX(-50%);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
 }
 
 #nav-toast.visible {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  visibility: visible;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+/* 深色模式 — 手动切换 */
+[data-theme="dark"] #nav-toast {
+  background: rgba(89, 64, 75, 0.9);
+  color: #d4c2c8;
+}
+
+/* 深色模式 — 跟随系统（用户手动选了浅色时不算） */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) #nav-toast {
+    background: rgba(89, 64, 75, 0.9);
+    color: #d4c2c8;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   #nav-progress,
   #nav-toast {
     transition: none;
+  }
+}
+
+
+/* =========================
+   首页保留项
+   1) 分区标题复用 About 组件
+   2) 右侧 Articles / About 图标块
+   3) 响应式列宽与移动端 flex 修复
+========================= */
+
+/* —— 分区标题 —— */
+.scroll-title-top.home-section-title,
+.scroll-title.home-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.home-section-title .about-section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.home-section-title .about-section-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.home-section-title h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.home-section-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.home-section-title .about-section-kicker {
+  margin: 0;
+  font-size: 0.66rem;
+}
+
+/* —— 右侧入口卡：只保留图标块的横向布局，配色/内边距/箭头维持原样 —— */
+.home-link-card {
+  display: flex;
+  position: relative;
+  justify-content: flex-start;
+  gap: 14px;
+}
+
+.home-link-icon {
+  flex: 0 0 auto;
+}
+
+/* —— 响应式：桌面列宽随内容区收缩，避免 769–1044 宽裁切 —— */
+@media (min-width: 769px) {
+  .home-flex {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+}
+
+/* 移动端保持卡片的 flex 布局（原 .spa-link / .spa-link-home 的 display:block 会覆盖） */
+.scroll-item {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .home-section-title .about-section-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+  }
+
+  .home-section-title .about-section-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .home-section-title h2 {
+    font-size: 1.1rem;
+  }
+}
+
+/* =========================
+   项目页 / Projects（Material 3）
+   复用 About 页的 surface / section / chip / button 语汇；
+   形状：28 (extra-large) / 24 / 16 / full，间距走 8dp 网格。
+========================= */
+.project-hero-mark {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 28px;
+  background: var(--profile-list-bg);
+  color: var(--color-pink);
+}
+
+.project-hero-mark svg {
+  width: 48px;
+  height: 48px;
+}
+
+/* 项目卡网格：桌面 3 列，平板 2 列，移动端 1 列 */
+.project-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.project-card {
+  min-width: 0;
+}
+
+.project-card .about-section-head>div {
+  min-width: 0;
+}
+
+.project-card .about-section-head h2 {
+  overflow-wrap: anywhere;
+}
+
+.project-mark-img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.project-card .about-section-head h2 {
+  font-size: 1.25rem;
+}
+
+.project-desc {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  opacity: 0.75;
+  overflow-wrap: anywhere;
+}
+
+.project-tags {
+  margin: 0 0 18px;
+}
+
+.spacer {
+  flex: 1;          /* 吸收所有剩余空间 */
+  min-height: 15px; /* 最小 15px */
+}
+
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.project-actions .button {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* 版权说明：整行卡片，复用 About 的正文排版与代码框 */
+.project-notes {
+  grid-column: 1 / -1;
+}
+
+.project-notes .about-copy {
+  margin-bottom: 14px;
+}
+
+.project-notes code-box {
+  display: block;
+}
+
+@media (max-width: 840px) {
+  .project-hero-mark {
+    width: 96px;
+    height: 96px;
+    border-radius: 24px;
+  }
+
+  .project-hero-mark svg {
+    width: 40px;
+    height: 40px;
+  }
+
+}
+
+@media (max-width: 1100px) {
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .project-hero-mark {
+    width: 88px;
+    height: 88px;
+    border-radius: 22px;
+  }
+
+  .project-hero-mark svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .project-actions .button {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+/* 版权说明不是代码，移动端允许自然换行，避免横向截断 */
+@media (max-width: 768px) {
+  .project-notes .code-box-content pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    overflow-x: hidden;
+  }
+}
+
+/* =========================
+   首页 / Home（Material 3）
+   与 about-page 共用同一套组件：content-card / about-hero / about-stats /
+   about-section-head / button / li-a，这里只补首页专属的排版与卡片。
+   形状：28 (extra-large) / 16 (large) / 12 (medium) / full；
+   间距走 8dp 网格（8 / 12 / 16 / 24 / 28 / 32）。
+========================= */
+.home-content {
+  display: block;
+  margin: 24px 20px 0 calc(var(--sidebar-width) + 20px);
+  padding-top: 0;
+  padding-bottom: 40px;
+  max-width: none;
+}
+
+.home-shell {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+/* 横向滚动的卡片行宽度由卡片撑开，必须显式允许收缩，
+   否则整列会被撑成“5 张卡片”的宽度并溢出容器 */
+.home-shell>* {
+  min-width: 0;
+}
+
+/* —— 欢迎卡：主题色光晕，只用现有变量，不加新颜色 —— */
+/* 移动端 .content-card 有 width:94vw 的老规则，会把卡片撑出容器，这里收回 */
+.home-hero {
+  width: 100%;
+}
+
+.home-hero .home-hero-updated {
+  white-space: nowrap;
+}
+
+/* —— 区块标题：标题 + 右侧“查看全部”文字按钮 —— */
+.home-section-head {
+  margin-bottom: 14px;
+}
+
+.home-section-head>div {
+  min-width: 0;
+}
+
+.home-section-more {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-pink);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.home-section-more:hover {
+  background: var(--profile-list-bg);
+}
+
+.home-section-more .ripple {
+  background: var(--color-pink-soft);
+}
+
+.home-section-more svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* —— 最近更新：卡片补摘要与分类标签 —— */
+.scroll-item-img {
+  position: relative;
+}
+
+.scroll-item-img img {
+  transition: transform 0.35s ease;
+}
+
+.scroll-item-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #3d3d3d;
+  background: var(--color-pink-soft);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.scroll-item-excerpt {
+  margin: 0 12px 10px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  opacity: 0.62;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.scroll-item .scroll-item-date {
+  margin-top: auto;
+}
+
+/* —— 小说连载：三列文字卡，和影音卡同一套表面与圆角 —— */
+.home-novel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.home-novel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 148px;
+  padding: 22px 24px 20px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.home-novel-card:hover {
+  background: var(--sidebar-a);
+}
+
+.home-novel-index {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--color-pink);
+}
+
+.home-novel-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.home-novel-desc {
+  margin: 0 0 10px;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  opacity: 0.62;
+}
+
+.home-novel-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-pink);
+}
+
+.home-novel-link svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.home-novel-card:hover .home-novel-link svg {
+  transform: translateX(4px);
+}
+
+/* —— 影音：三列封面卡，填满整行 —— */
+.home-video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.home-video-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--color-text);
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.home-video-card:hover {
+  background: var(--sidebar-a);
+}
+
+.home-video-cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--img-placeholder-bg);
+}
+
+.home-video-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.home-video-play {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--color-pink);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.home-video-play svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 2px;
+}
+
+.home-video-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 18px 18px;
+}
+
+.home-video-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.home-video-meta {
+  font-size: 0.78rem;
+  opacity: 0.6;
+  font-variant-numeric: tabular-nums;
+}
+
+/* —— 响应式 —— */
+@media (max-width: 900px) {
+  .home-video-grid,
+  .home-novel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-video-cover {
+    aspect-ratio: 2 / 1;
+  }
+
+  .home-novel-card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-content {
+    margin-top: 20px;
+  }
+
+  .home-shell {
+    gap: 20px;
+  }
+
+  .home-hero::before {
+    top: -160px;
+    right: -70px;
+    width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-hero {
+    padding: 22px;
+  }
+
+  /* 小屏放不下英文原名：只留「同人 · 连载中」，让“从头读起”留在标题行 */
+  .home-kicker-en {
+    display: none;
+  }
+
+  .home-section-more {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .home-section-head {
+    flex-wrap: wrap;
+    gap: 10px;
   }
 }
 

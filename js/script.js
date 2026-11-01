@@ -19,8 +19,7 @@ const CONFIG = {
   GISCUS_BLUE_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-dark.css',
   GISCUS_BLUE_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-light.css',
   HITOKOTO_CACHE_DURATION: 5 * 1000,
-  // 加载屏最短停留时间。原来 1000ms 是纯等待——网速再快也要干等一秒，
-  // 体感上就是"点了没反应"，这里压到 450ms，动画仍然完整。
+  // 加载屏最短停留时间
   MIN_LOAD_TIME: 450,
   // 代码高亮按需加载：首页/列表页不再下载 120KB 的 highlight.js
   HIGHLIGHT_BASE: 'vendor/highlight.js/11.9.0/',
@@ -325,7 +324,8 @@ const ColorThemeManager = {
   },
 
   getColor() {
-    return localStorage.getItem(this.STORAGE_KEY) || 'pink';
+    const saved = localStorage.getItem(this.STORAGE_KEY);
+    return this.themes[saved] ? saved : 'blue';
   },
 
   isDarkMode() {
@@ -337,7 +337,7 @@ const ColorThemeManager = {
 
   applyColor(name) {
     const mode = this.isDarkMode() ? 'dark' : 'light';
-    const vars = this.themes[name]?.[mode] || this.themes.pink[mode];
+    const vars = this.themes[name]?.[mode] || this.themes.blue[mode];
 
     // 应用全局页面变量
     const cssText = Object.entries(vars)
@@ -947,6 +947,7 @@ function bindLinks() {
     }
     if (link.target && link.target !== '' && link.target !== '_self') return null;
     if (link.hasAttribute('download')) return null;
+    if (link.hasAttribute('data-no-spa')) return null;   // 刻意整页加载的链接（404 → 首页）
 
     const href = link.getAttribute('href');
     if (!href || href.charAt(0) === '#') return null;
@@ -999,6 +1000,25 @@ function bindLinks() {
   });
 
   warmUpNavigation();
+}
+
+/* =========================
+   空格键：只交给播放器，不滚动页面
+========================= */
+function isSpaceConsumer(target) {
+  return target instanceof HTMLElement && (
+    target.isContentEditable ||
+    /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(target.tagName)
+  );
+}
+
+function bindSpaceKey() {
+  document.addEventListener('keydown', (e) => {
+    if (e.code !== 'Space' && e.key !== ' ' && e.keyCode !== 32) return;
+    // 输入框、下拉框、按钮等需要自己消费空格的控件不拦
+    if (isSpaceConsumer(e.target)) return;
+    e.preventDefault();
+  });
 }
 
 /* =========================
@@ -1179,7 +1199,7 @@ function giscusThemeFor(baseUrl) {
 function getGiscusThemeUrl() {
   const color = (typeof ColorThemeManager !== 'undefined')
     ? ColorThemeManager.getColor()
-    : 'pink';
+    : 'blue';
 
   const isDark = (() => {
     const theme = ThemeManager.getTheme();
@@ -1357,6 +1377,7 @@ function addRippleEffect() {
     .li-a,
     .card,
     .home-link-card,
+    .home-section-more,
     .settings-button,
     .close-button,
     .button,
@@ -1947,6 +1968,9 @@ function loadMascotModule() {
 }
 
 function scheduleMascotModule() {
+  // 轻量页面（如 404）用 body[data-mascot="off"] 显式跳过桌宠，省掉 1MB+ 素材
+  if (document.body && document.body.dataset.mascot === 'off') return;
+
   const run = () => {
     if ('requestIdleCallback' in window) {
       requestIdleCallback(loadMascotModule, { timeout: 4000 });
@@ -2148,6 +2172,7 @@ function initAll() {
   ColorThemeManager.init();
 
   bindLinks();
+  bindSpaceKey();
   markActiveSidebarLink(location.pathname);   // 直达某页时侧边栏也能正确高亮
   addRippleEffect();
   bindSettingsTrigger();

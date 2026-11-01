@@ -507,8 +507,13 @@ window.addEventListener('DOMContentLoaded', function () {
                 if (window.__xfKeyupHandler) {
                     window.removeEventListener('keyup', window.__xfKeyupHandler);
                 }
+                // 空格快捷键：输入框、下拉框、按钮等自己消费空格的控件跳过
+                const consumesSpace = (el) => el instanceof HTMLElement && (
+                    el.isContentEditable ||
+                    /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(el.tagName)
+                );
                 window.__xfKeyupHandler = e => {
-                    if (e.key === ' ' || e.keyCode === 32) {
+                    if ((e.key === ' ' || e.keyCode === 32) && !consumesSpace(e.target)) {
                         togglePlayback();
                     }
                 };

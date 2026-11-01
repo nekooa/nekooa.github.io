@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>ねねねこ | holo-world の个人博客</title>
   <meta name="description" content="holo-world 的个人博客。记录 ACGN 日常、前端折腾笔记、原创小说与影音收藏，站点用纯 HTML/CSS/JS 手写。">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=c2e3f12809">
+  <link rel="stylesheet" href="styles/bundle.css?v=6ec7fbf31d">
 </head>
 
 <body>
@@ -135,141 +135,223 @@
     </picture>
     <div class="header-overlay"></div>
     <div class="hitokoto">
-      <a href="#" id="hitokoto_text" target="_blank">生活明朗，万物可爱</a>
+      <a href="#" id="hitokoto_text" target="_blank">获取中...</a>
       <span id="hitokoto_from" class="hitokoto-from loading"></span>
     </div>
   </div>
 
   <!-- 内容区域 -->
   <div class="home-content">
-    <div class="content-inner">
-      <div class="home-flex">
-        <div class="profile-card home-profile">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71788b42ffe.jpg" alt="SAGIRI">
-          <div class="profile-info">
-            <h2>holo-world</h2>
-            <ul class="profile-list">
-              <li>さぎり厨</li>
-              <li>柚子厨</li>
-              <li>00后</li>
-              <li>ACGN</li>
-              <li>ブルアカ</li>
-            </ul>
+    <div class="home-shell">
+
+      <!-- 欢迎卡：M3 extra-large 圆角 surface，复用关于页的 about-hero 组件 -->
+      <section class="content-card about-hero home-hero" aria-labelledby="home-name">
+        <div class="about-hero-avatar">
+          <img src="https://a1.boltp.com/2026/08/04/6a71788b42ffe.jpg" alt="holo-world 的头像">
+        </div>
+        <div class="about-hero-main">
+          <p class="about-eyebrow">Welcome to</p>
+          <h1 id="home-name">ねねねこ</h1>
+          <p class="about-handle">holo-world · @nekooa <span class="home-hero-updated">· 最近更新 2026-11-01</span></p>
+          <p class="about-bio">00 后 ACGN 爱好者，超级纱雾厨，喜欢折腾 Linux 桌面，学习前端ing... 这里写点文章、放点收藏、偶尔写小说。</p>
+          <ul class="about-list about-hero-tags" aria-label="标签">
+            <li>さぎり厨</li>
+            <li>柚子厨</li>
+            <li>00后</li>
+            <li>ACGN</li>
+            <li>ブルアカ</li>
+          </ul>
+          <div class="about-hero-actions">
+            <a class="button filled" href="/PAGEarticle">看看文章</a>
+            <a class="button" href="/PAGEvideo">影音</a>
+            <a class="button" href="/PAGEproject">项目</a>
+            <a class="button" href="/PAGEabout">关于</a>
           </div>
         </div>
+      </section>
 
-        <div class="scroll-title-top">
-          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-            transform="scale(1.05)">
-            <path
-              d="M22 4.84969V16.7397C22 17.7097 21.21 18.5997 20.24 18.7197L19.93 18.7597C18.29 18.9797 15.98 19.6597 14.12 20.4397C13.47 20.7097 12.75 20.2197 12.75 19.5097V5.59969C12.75 5.22969 12.96 4.88969 13.29 4.70969C15.12 3.71969 17.89 2.83969 19.77 2.67969H19.83C21.03 2.67969 22 3.64969 22 4.84969Z"
-              fill="currentColor"></path>
-            <path
-              d="M10.7083 4.70969C8.87828 3.71969 6.10828 2.83969 4.22828 2.67969H4.15828C2.95828 2.67969 1.98828 3.64969 1.98828 4.84969V16.7397C1.98828 17.7097 2.77828 18.5997 3.74828 18.7197L4.05828 18.7597C5.69828 18.9797 8.00828 19.6597 9.86828 20.4397C10.5183 20.7097 11.2383 20.2197 11.2383 19.5097V5.59969C11.2383 5.21969 11.0383 4.88969 10.7083 4.70969ZM4.99828 7.73969H7.24828C7.65828 7.73969 7.99828 8.07969 7.99828 8.48969C7.99828 8.90969 7.65828 9.23969 7.24828 9.23969H4.99828C4.58828 9.23969 4.24828 8.90969 4.24828 8.48969C4.24828 8.07969 4.58828 7.73969 4.99828 7.73969ZM7.99828 12.2397H4.99828C4.58828 12.2397 4.24828 11.9097 4.24828 11.4897C4.24828 11.0797 4.58828 10.7397 4.99828 10.7397H7.99828C8.40828 10.7397 8.74828 11.0797 8.74828 11.4897C8.74828 11.9097 8.40828 12.2397 7.99828 12.2397Z"
-              fill="currentColor"></path>
-          </svg> &nbsp;Latest
-        </div>
+
+    <section class="about-stats" aria-label="站点数据">
+      <div class="about-stat">
+        <span class="about-stat-value">10</span>
+        <span class="about-stat-label">篇文章</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat-value">9</span>
+        <span class="about-stat-label">个影音</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat-value">5</span>
+        <span class="about-stat-label">个项目</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat-value">2026</span>
+        <span class="about-stat-label">建站年份</span>
+      </div>
+    </section>
+
+      <!-- 最近更新 -->
+      <section class="home-section" aria-labelledby="home-latest">
+        <header class="about-section-head home-section-head">
+          <span class="about-section-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22 4.84969V16.7397C22 17.7097 21.21 18.5997 20.24 18.7197L19.93 18.7597C18.29 18.9797 15.98 19.6597 14.12 20.4397C13.47 20.7097 12.75 20.2197 12.75 19.5097V5.59969C12.75 5.22969 12.96 4.88969 13.29 4.70969C15.12 3.71969 17.89 2.83969 19.77 2.67969H19.83C21.03 2.67969 22 3.64969 22 4.84969Z"
+                fill="currentColor"></path>
+              <path
+                d="M10.7083 4.70969C8.87828 3.71969 6.10828 2.83969 4.22828 2.67969H4.15828C2.95828 2.67969 1.98828 3.64969 1.98828 4.84969V16.7397C1.98828 17.7097 2.77828 18.5997 3.74828 18.7197L4.05828 18.7597C5.69828 18.9797 8.00828 19.6597 9.86828 20.4397C10.5183 20.7097 11.2383 20.2197 11.2383 19.5097V5.59969C11.2383 5.21969 11.0383 4.88969 10.7083 4.70969ZM4.99828 7.73969H7.24828C7.65828 7.73969 7.99828 8.07969 7.99828 8.48969C7.99828 8.90969 7.65828 9.23969 7.24828 9.23969H4.99828C4.58828 9.23969 4.24828 8.90969 4.24828 8.48969C4.24828 8.07969 4.58828 7.73969 4.99828 7.73969ZM7.99828 12.2397H4.99828C4.58828 12.2397 4.24828 11.9097 4.24828 11.4897C4.24828 11.0797 4.58828 10.7397 4.99828 10.7397H7.99828C8.40828 10.7397 8.74828 11.0797 8.74828 11.4897C8.74828 11.9097 8.40828 12.2397 7.99828 12.2397Z"
+                fill="currentColor"></path>
+            </svg>
+          </span>
+          <div>
+            <h2 id="home-latest">Latest</h2>
+            <p class="about-section-kicker">最近更新</p>
+          </div>
+          <a class="home-section-more" href="/PAGEarticle">
+            全部文章
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+          </a>
+        </header>
         <div class="article-scroll-list">
           <div class="scroll-container">
 
             <a href="/article10" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19db2c620.png">
+                <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19db2c620.png" alt="我的桌面配置与脚本 封面">
+                <span class="scroll-item-badge">折腾</span>
               </div>
               <h3 class="scroll-item-title">我的桌面配置与脚本</h3>
+              <p class="scroll-item-excerpt">CachyOS + niri + Noctalia，还有 SDDM 自动换壁纸</p>
               <span class="scroll-item-date">2026-10-24</span>
             </a>
 
             <a href="/article9" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/14/6a7edf2ad6b8a.jpg">
+                <img loading="lazy" src="https://a1.boltp.com/2026/08/14/6a7edf2ad6b8a.jpg" alt="fufu! 封面">
+                <span class="scroll-item-badge">日常</span>
               </div>
               <h3 class="scroll-item-title">fufu!</h3>
+              <p class="scroll-item-excerpt">人生第一只 fufu</p>
               <span class="scroll-item-date">2026-08-14</span>
             </a>
 
             <a href="/article8" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7174429c2bd.jpg">
+                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7174429c2bd.jpg" alt="文章系统更新 封面">
+                <span class="scroll-item-badge">站点</span>
               </div>
               <h3 class="scroll-item-title">文章系统更新</h3>
+              <p class="scroll-item-excerpt">新版文章排版</p>
               <span class="scroll-item-date">2026-08-02</span>
             </a>
 
             <a href="/article0721" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71747bb5006.png">
+                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71747bb5006.png" alt="no title 封面">
+                <span class="scroll-item-badge">???</span>
               </div>
               <h3 class="scroll-item-title">no title</h3>
+              <p class="scroll-item-excerpt">你再看看日期呢？</p>
               <span class="scroll-item-date">2026-07-21</span>
             </a>
 
             <a href="/article6" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg">
+                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg" alt="EdgeTunnel 封面">
+                <span class="scroll-item-badge">教程</span>
               </div>
               <h3 class="scroll-item-title">EdgeTunnel</h3>
+              <p class="scroll-item-excerpt">用 EdgeTunnel 给自己搭一个免费梯子。</p>
               <span class="scroll-item-date">2026-06-09</span>
             </a>
 
           </div>
         </div>
+      </section>
 
-        <div class="scroll-title">
-          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-            transform="scale(1.03) translate(0, -0.6)">
-            <path
-              d="M8.50989 2.00001H15.49C15.7225 1.99995 15.9007 1.99991 16.0565 2.01515C17.1643 2.12352 18.0711 2.78958 18.4556 3.68678H5.54428C5.92879 2.78958 6.83555 2.12352 7.94337 2.01515C8.09917 1.99991 8.27741 1.99995 8.50989 2.00001Z"
-              fill="currentColor"></path>
-            <path
-              d="M6.31052 4.72312C4.91989 4.72312 3.77963 5.56287 3.3991 6.67691C3.39117 6.70013 3.38356 6.72348 3.37629 6.74693C3.77444 6.62636 4.18881 6.54759 4.60827 6.49382C5.68865 6.35531 7.05399 6.35538 8.64002 6.35547H15.5321C17.1181 6.35538 18.4835 6.35531 19.5639 6.49382C19.9833 6.54759 20.3977 6.62636 20.7958 6.74693C20.7886 6.72348 20.781 6.70013 20.773 6.67691C20.3925 5.56287 19.2522 4.72312 17.8616 4.72312H6.31052Z"
-              fill="currentColor"></path>
-            <path fill-rule="evenodd" clip-rule="evenodd"
-              d="M15.3276 7.54204H8.67239C5.29758 7.54204 3.61017 7.54204 2.66232 8.52887C1.71447 9.5157 1.93748 11.0403 2.38351 14.0896L2.80648 16.9811C3.15626 19.3724 3.33115 20.568 4.22834 21.284C5.12553 22 6.4488 22 9.09534 22H14.9046C17.5512 22 18.8745 22 19.7717 21.284C20.6689 20.568 20.8437 19.3724 21.1935 16.9811L21.6165 14.0896C22.0625 11.0404 22.2855 9.51569 21.3377 8.52887C20.3898 7.54204 18.7024 7.54204 15.3276 7.54204ZM14.5812 15.7942C15.1396 15.4481 15.1396 14.5519 14.5812 14.2058L11.2096 12.1156C10.6669 11.7792 10 12.2171 10 12.9099V17.0901C10 17.7829 10.6669 18.2208 11.2096 17.8844L14.5812 15.7942Z"
-              fill="currentColor"></path>
-          </svg> &nbsp;Videos
-        </div>
-        <div class="article-scroll-list">
-          <div class="scroll-container">
-            <a href="/video3" class="scroll-item spa-link-home">
-              <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717bddee7f7.jpg">
-              </div>
-              <h3 class="scroll-item-title">Dummy Romance</h3>
-              <span class="scroll-item-date">2026-07-17</span>
-            </a>
-            <a href="/video2" class="scroll-item spa-link-home">
-              <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9a63954.jpg">
-              </div>
-              <h3 class="scroll-item-title">夏日远去之后</h3>
-              <span class="scroll-item-date">2026-06-08</span>
-            </a>
-            <a href="/video1" class="scroll-item spa-link-home">
-              <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717bb6c0dab.jpeg">
-              </div>
-              <h3 class="scroll-item-title">Connect the World...</h3>
-              <span class="scroll-item-date">2026-03-28</span>
-            </a>
+      <!-- 影音收藏 -->
+      <section class="home-section" aria-labelledby="home-videos">
+        <header class="about-section-head home-section-head">
+          <span class="about-section-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M8.50989 2.00001H15.49C15.7225 1.99995 15.9007 1.99991 16.0565 2.01515C17.1643 2.12352 18.0711 2.78958 18.4556 3.68678H5.54428C5.92879 2.78958 6.83555 2.12352 7.94337 2.01515C8.09917 1.99991 8.27741 1.99995 8.50989 2.00001Z"
+                fill="currentColor"></path>
+              <path
+                d="M6.31052 4.72312C4.91989 4.72312 3.77963 5.56287 3.3991 6.67691C3.39117 6.70013 3.38356 6.72348 3.37629 6.74693C3.77444 6.62636 4.18881 6.54759 4.60827 6.49382C5.68865 6.35531 7.05399 6.35538 8.64002 6.35547H15.5321C17.1181 6.35538 18.4835 6.35531 19.5639 6.49382C19.9833 6.54759 20.3977 6.62636 20.7958 6.74693C20.7886 6.72348 20.781 6.70013 20.773 6.67691C20.3925 5.56287 19.2522 4.72312 17.8616 4.72312H6.31052Z"
+                fill="currentColor"></path>
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M15.3276 7.54204H8.67239C5.29758 7.54204 3.61017 7.54204 2.66232 8.52887C1.71447 9.5157 1.93748 11.0403 2.38351 14.0896L2.80648 16.9811C3.15626 19.3724 3.33115 20.568 4.22834 21.284C5.12553 22 6.4488 22 9.09534 22H14.9046C17.5512 22 18.8745 22 19.7717 21.284C20.6689 20.568 20.8437 19.3724 21.1935 16.9811L21.6165 14.0896C22.0625 11.0404 22.2855 9.51569 21.3377 8.52887C20.3898 7.54204 18.7024 7.54204 15.3276 7.54204ZM14.5812 15.7942C15.1396 15.4481 15.1396 14.5519 14.5812 14.2058L11.2096 12.1156C10.6669 11.7792 10 12.2171 10 12.9099V17.0901C10 17.7829 10.6669 18.2208 11.2096 17.8844L14.5812 15.7942Z"
+                fill="currentColor"></path>
+            </svg>
+          </span>
+          <div>
+            <h2 id="home-videos">Videos</h2>
+            <p class="about-section-kicker">影音收藏</p>
           </div>
-        </div>
+          <a class="home-section-more" href="/PAGEvideo">
+            全部影音
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
+          </a>
+        </header>
+        <div class="home-video-grid">
 
-        <div class="home-right-cards">
-          <a href="/PAGEarticle" class="spa-link home-link-card">
-            <div class="card-content">
-              <h3>Articles</h3>
-              <p>浏览所有文章...</p>
-            </div>
+          <a href="/video2" class="home-video-card spa-link-home">
+            <span class="home-video-cover">
+              <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9a63954.jpg" alt="夏日远去之后 封面">
+              <span class="home-video-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"></path>
+                </svg>
+              </span>
+            </span>
+            <span class="home-video-body">
+              <span class="home-video-title">夏日远去之后</span>
+              <span class="home-video-meta">2026-06-08</span>
+            </span>
           </a>
-          <a href="/PAGEabout" class="spa-link home-link-card">
-            <div class="card-content">
-              <h3>About</h3>
-              <p>关于这个网站...</p>
-            </div>
+
+          <a href="/video5" class="home-video-card spa-link-home">
+            <span class="home-video-cover">
+              <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8fee12c5.jpg" alt="人是猫 封面">
+              <span class="home-video-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"></path>
+                </svg>
+              </span>
+            </span>
+            <span class="home-video-body">
+              <span class="home-video-title">人是猫</span>
+              <span class="home-video-meta">2026-10-11</span>
+            </span>
           </a>
+
+          <a href="/video8" class="home-video-card spa-link-home">
+            <span class="home-video-cover">
+              <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8fa0d723.jpg" alt="two 小动画 封面">
+              <span class="home-video-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"></path>
+                </svg>
+              </span>
+            </span>
+            <span class="home-video-body">
+              <span class="home-video-title">two 小动画</span>
+              <span class="home-video-meta">2022-06-01</span>
+            </span>
+          </a>
+
         </div>
-      </div>
+      </section>
+
     </div>
   </div>
 
@@ -285,9 +367,9 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js?v=1d1c7c869c"></script>
+  <script defer src="js/script.min.js?v=9822af4c6e"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
-  <script defer src="./xf-MusicPlayer.min.js?v=347d1fef98"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
 
 </body>
 

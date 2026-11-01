@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>关于 | ねねねこ</title>
   <meta name="description" content="关于这个站点和它的作者：holo-world，00 后 ACGN 爱好者；「ねねねこ」是一个纯 HTML/CSS/JS 手写、没有使用任何框架的个人博客。">
   <meta name="author" content="holo-world">
-  <link rel="canonical" href="https://0u0.l.cd//PAGEabout">
+  <link rel="canonical" href="https://0u0.l.cd/PAGEabout">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ねねねこ">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:title" content="关于 | ねねねこ">
   <meta property="og:description" content="关于这个站点和它的作者：holo-world，00 后 ACGN 爱好者；「ねねねこ」是一个纯 HTML/CSS/JS 手写、没有使用任何框架的个人博客。">
-  <meta property="og:url" content="https://0u0.l.cd//PAGEabout">
+  <meta property="og:url" content="https://0u0.l.cd/PAGEabout">
   <meta property="og:image" content="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="关于 | ねねねこ">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=c2e3f12809">
+  <link rel="stylesheet" href="styles/bundle.css?v=6ec7fbf31d">
 </head>
 
 <body>
@@ -127,52 +127,253 @@
   </div>
 
   <!-- 内容区域 -->
-  <div class="content">
-    <div class="about-card">
-      <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71788b42ffe.jpg" alt="SAGIRI">
-      <div class="profile-info">
-        <h2>holo-world</h2>
-        <ul class="about-list">
+  <div class="content about-page">
+    <section class="content-card about-hero" aria-labelledby="about-name">
+      <div class="about-hero-avatar">
+        <img src="https://a1.boltp.com/2026/08/04/6a71788b42ffe.jpg" alt="holo-world 的头像">
+      </div>
+      <div class="about-hero-main">
+        <p class="about-eyebrow">About</p>
+        <h1 id="about-name">holo-world</h1>
+        <p class="about-handle">@nekooa</p>
+        <p class="about-bio">00 后 ACGN 爱好者，超级纱雾厨，喜欢折腾 Linux 桌面，学习前端ing... 这里写点文章、放点收藏、偶尔写小说。</p>
+        <ul class="about-list about-hero-tags" aria-label="标签">
           <li>さぎり厨</li>
           <li>柚子厨</li>
           <li>00后</li>
           <li>ACGN</li>
           <li>ブルアカ</li>
         </ul>
-        <div class="divider"><span>链接</span></div>
-        <ul class="about-a">
-          <a href="https://space.bilibili.com/1287762605" class="li-a" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" vertical-align="middle" xmlns="http://www.w3.org/2000/svg">
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3 10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4zm5-7l2 3m6-3l-2 3m-5 7v-2m6 0v2">
-              </path>
-            </svg>&nbsp;bilibili
-          </a>
-          <a href="https://github.com/nekooa" class="li-a" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" vertical-align="middle">
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21">
-              </path>
-            </svg>&nbsp;Github
-          </a>
-          <a href="https://t.me/hello800767" class="li-a" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 384 384" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-              style="border-radius: 4px;">
-              <path
-                d="m236.121094 113.414062-137.496094 45.832032c-11.3125 3.769531-18.625 13.921875-18.625 25.851562 0 11.925782 7.3125 22.070313 18.632812 25.847656l55.824219 18.605469 18.605469 55.832031c3.769531 11.304688 13.914062 18.617188 25.839844 18.617188 11.929687 0 22.074218-7.3125 25.851562-18.632812l45.832032-137.496094c3.277343-9.847656.757812-20.527344-6.585938-27.871094s-18.039062-9.878906-27.878906-6.585938zm-37.21875 148.304688-19.160156-57.472656-57.46875-19.15625 114.933593-38.3125zm0 0" />
-              <path
-                d="m192 0c-105.871094 0-192 86.128906-192 192s86.128906 192 192 192 192-86.128906 192-192-86.128906-192-192-192zm0 352c-88.222656 0-160-71.777344-160-160s71.777344-160 160-160 160 71.777344 160 160-71.777344 160-160 160zm0 0" />
-            </svg>&nbsp;Telegram
-          </a>
-        </ul>
+        <div class="about-hero-links">
+          <ul class="about-a">
+            <a href="https://space.bilibili.com/1287762605" class="li-a" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4zm5-7l2 3m6-3l-2 3m-5 7v-2m6 0v2">
+                </path>
+              </svg>&nbsp;bilibili
+            </a>
+            <a href="https://github.com/nekooa" class="li-a" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21">
+                </path>
+              </svg>&nbsp;Github
+            </a>
+            <a href="https://t.me/hello800767" class="li-a" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 384 384" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                <path d="m236.121094 113.414062-137.496094 45.832032c-11.3125 3.769531-18.625 13.921875-18.625 25.851562 0 11.925782 7.3125 22.070313 18.632812 25.847656l55.824219 18.605469 18.605469 55.832031c3.769531 11.304688 13.914062 18.617188 25.839844 18.617188 11.929687 0 22.074218-7.3125 25.851562-18.632812l45.832032-137.496094c3.277343-9.847656.757812-20.527344-6.585938-27.871094s-18.039062-9.878906-27.878906-6.585938zm-37.21875 148.304688-19.160156-57.472656-57.46875-19.15625 114.933593-38.3125zm0 0" />
+                <path d="m192 0c-105.871094 0-192 86.128906-192 192s86.128906 192 192 192 192-86.128906 192-192-86.128906-192-192-192zm0 352c-88.222656 0-160-71.777344-160-160s71.777344-160 160-160 160 71.777344 160 160-71.777344 160-160 160zm0 0" />
+              </svg>&nbsp;Telegram
+            </a>
+            <a href="mailto:sagiriworld@gmail.com" class="li-a" title="sagiriworld@gmail.com"
+              aria-label="Gmail：sagiriworld@gmail.com">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></rect>
+                <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="2"></path>
+              </svg>&nbsp;Gmail
+            </a>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="content-card article-body">
-      <h2>此网站 - ねねねこ</h2>
-      <p class="thoughts">「ねこ」，猫的意思，那「ねねねこ」就是猫猫猫？</p>
-      <p>这是我的个人网站，我会在上面不定时写些东西（可能几个月更一次，也可能日更）</p>
-      <p>没有使用任何框架！看起来像 Flutter 是因为我模仿了 Material Design 3 设计</p>
-      <p class="to-be-continued">感谢 GPT Gemini DeepSeek 对本网站编写提供的大力支持(</p>
+    </section>
+
+    <section class="about-stats" aria-label="站点数据">
+      <div class="about-stat">
+        <span class="about-stat-value">10</span>
+        <span class="about-stat-label">篇文章</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat-value">9</span>
+        <span class="about-stat-label">个影音</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat-value">5</span>
+        <span class="about-stat-label">个项目</span>
+      </div>
+      <div class="about-stat">
+        <span class="about-stat-value">2026</span>
+        <span class="about-stat-label">建站年份</span>
+      </div>
+    </section>
+
+    <div class="about-grid">
+      <section class="content-card about-section" aria-labelledby="about-now">
+        <header class="about-section-head">
+          <span class="about-section-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 7v5l3 2"></path>
+            </svg>
+          </span>
+          <div>
+            <h2 id="about-now">Now</h2>
+            <p class="about-section-kicker">最近在做什么</p>
+          </div>
+        </header>
+        <ul class="about-now-list">
+          <li>
+            <span class="about-now-marker" aria-hidden="true"></span>
+            <div>
+              <strong>维护 ねねねこ</strong>
+              <p>纯手写前端，最近在打磨加载性能、404 页和一些样式细节。</p>
+            </div>
+          </li>
+          <li>
+            <span class="about-now-marker" aria-hidden="true"></span>
+            <div>
+              <strong>折腾 Linux</strong>
+              <p>CachyOS + niri + Noctalia</p>
+            </div>
+          </li>
+          <li>
+            <span class="about-now-marker" aria-hidden="true"></span>
+            <div>
+              <strong>补同人小说</strong>
+              <p>Happy Sugar Life 后续，缓慢更新中。</p>
+            </div>
+          </li>
+          <li>
+            <span class="about-now-marker" aria-hidden="true"></span>
+            <div>
+              <strong>听歌与游戏</strong>
+              <p>Blue Archive、Arknights(Endfild)、音游、Vocaloid、日系摇滚。</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-card about-section" aria-labelledby="about-interests">
+        <header class="about-section-head">
+          <span class="about-section-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z">
+              </path>
+            </svg>
+          </span>
+          <div>
+            <h2 id="about-interests">Interests</h2>
+            <p class="about-section-kicker">喜欢的东西</p>
+          </div>
+        </header>
+        <div class="about-interests">
+          <div>
+            <h3 class="about-mini-title">ACGN</h3>
+            <ul class="about-list">
+              <li>さぎり</li>
+              <li>ブルアカ</li>
+              <li>明日方舟（终末地）</li>
+              <li>GalGame</li>
+              <li>百合</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="about-mini-title">技术</h3>
+            <ul class="about-list">
+              <li>Linux</li>
+              <li>niri</li>
+              <li>前端</li>
+              <li>自托管</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="about-mini-title">声音</h3>
+            <ul class="about-list">
+              <li>Vocaloid</li>
+              <li>日系摇滚</li>
+              <li>游戏 OST</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-card about-section" aria-labelledby="about-site">
+        <header class="about-section-head">
+          <span class="about-section-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 11v5"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+          </span>
+          <div>
+            <h2 id="about-site">The Site</h2>
+            <p class="about-section-kicker">此网站 - ねねねこ</p>
+          </div>
+        </header>
+        <div class="article-body about-copy">
+          <p class="thoughts">「ねこ」，猫的意思，那「ねねねこ」就是猫猫猫？？？</p>
+          <p>这是我的个人网站，写点东西、放点收藏，更新频率看心情——可能几个月一次，也可能日更。</p>
+          <p>没有使用任何框架，看起来像 Flutter 是因为我在模仿 Material Design 3。</p>
+        </div>
+        <dl class="about-facts">
+          <div class="about-fact">
+            <dt>上线</dt>
+            <dd>2026 年 3 月</dd>
+          </div>
+          <div class="about-fact">
+            <dt>技术</dt>
+            <dd>原生 HTML / CSS / JS</dd>
+          </div>
+          <div class="about-fact">
+            <dt>部署</dt>
+            <dd>Cloudflare Pages</dd>
+          </div>
+          <div class="about-fact">
+            <dt>授权</dt>
+            <dd>GPL-3.0 / CC BY-NC-SA 4.0</dd>
+          </div>
+        </dl>
+        <p class="about-credit">感谢 GPT / Gemini / DeepSeek 对本站编写提供的大力支持。</p>
+      </section>
+
+      <section class="content-card about-section" aria-labelledby="about-timeline">
+        <header class="about-section-head">
+          <span class="about-section-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="3"></rect>
+              <path d="M8 2v4M16 2v4M3 10h18"></path>
+            </svg>
+          </span>
+          <div>
+            <h2 id="about-timeline">Timeline</h2>
+            <p class="about-section-kicker">时间线</p>
+          </div>
+        </header>
+        <ol class="about-timeline">
+          <li>
+            <span class="about-timeline-date">2026.11</span>
+            <strong>界面重构</strong>
+            <p>主页、项目、关于页大重构 & 加载性能优化。</p>
+          </li>
+          <li>
+            <span class="about-timeline-date">2026.10</span>
+            <strong>新的折腾记录</strong>
+            <p>CachyOS + niri + Noctalia 的桌面配置。</p>
+          </li>
+          <li>
+            <span class="about-timeline-date">2026.08</span>
+            <strong>文章系统成形</strong>
+            <p>排版、代码框、上一篇 / 下一篇逐渐补齐。</p>
+          </li>
+          <li>
+            <span class="about-timeline-date">2026.04</span>
+            <strong>音乐播放器</strong>
+            <p>部署了旧版的<a href="https://gitee.com/xfwlclub/xf-MusicPlayer" class="a">小枫音乐播放器</a>，并做大量修改，以符合本站设计。</p>
+          </li>
+          <li>
+            <span class="about-timeline-date">2026.03</span>
+            <strong>站点上线</strong>
+            <p>第一版纯手写页面，从主页和文章页开始。</p>
+          </li>
+        </ol>
+      </section>
     </div>
   </div>
 
@@ -188,9 +389,9 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js?v=1d1c7c869c"></script>
+  <script defer src="js/script.min.js?v=9822af4c6e"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
-  <script defer src="./xf-MusicPlayer.min.js?v=347d1fef98"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
 
 </body>
 

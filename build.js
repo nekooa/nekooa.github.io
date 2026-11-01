@@ -177,8 +177,9 @@ function stampHtml() {
     let output = original;
 
     for (const [rel, hash] of hashes) {
-      // 同时兼容 src="x" / href="x" / src="./x" / 已带旧指纹的情况
-      const candidates = [rel, `./${rel}`];
+      // 同时兼容 src="x" / href="x" / src="./x" / src="/x" / 已带旧指纹的情况
+      // （404.html 会在任意路径下返回，所以它用 /styles/... 这种根绝对路径）
+      const candidates = [rel, `./${rel}`, `/${rel}`];
       for (const target of candidates) {
         const escaped = target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const re = new RegExp(`(src|href)="(${escaped})(?:\\?v=[0-9a-z]+)?"`, 'g');
