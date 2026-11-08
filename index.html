@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>ねねねこ | holo-world の个人博客</title>
   <meta name="description" content="holo-world 的个人博客。记录 ACGN 日常、前端折腾笔记、原创小说与影音收藏，站点用纯 HTML/CSS/JS 手写。">
@@ -26,7 +27,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=adb2631ab3">
+  <link rel="stylesheet" href="styles/bundle.css?v=861c173f88">
 </head>
 
 <body>
@@ -46,7 +47,7 @@
         <path fill-rule="evenodd" clip-rule="evenodd"
           d="M20.479 7.57827L15.093 3.12502C13.2787 1.62499 10.7213 1.62499 8.90703 3.12502L3.52097 7.57827C2.55059 8.38059 2 9.59706 2 10.8663V18.8739C2 20.5419 3.28643 22 5 22H7C8.65685 22 10 20.6569 10 19V15.6848C10 15.0044 10.5044 14.5587 11 14.5587H13C13.4956 14.5587 14 15.0044 14 15.6848V19C14 20.6569 15.3431 22 17 22H19C20.7136 22 22 20.5419 22 18.8739V10.8663C22 9.59706 21.4494 8.38059 20.479 7.57827Z"
           fill="currentColor"></path>
-      </svg> &nbsp;ねねねこ
+      </svg>
     </div>
     <button id="settings-nav" class="settings-button" aria-label="设置">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -130,8 +131,7 @@
     <picture>
       <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png"
         data-pink-src="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png"
-        data-blue-src="https://a1.boltp.com/2026/08/30/6a9430a4d351d.png" alt="头图"
-        class="home-header">
+        data-blue-src="https://a1.boltp.com/2026/08/30/6a9430a4d351d.png" alt="头图" class="home-header">
     </picture>
     <div class="header-overlay"></div>
     <div class="hitokoto">
@@ -152,8 +152,7 @@
         <div class="about-hero-main">
           <p class="about-eyebrow">Welcome to</p>
           <h1 id="home-name">ねねねこ</h1>
-          <p class="about-handle">holo-world · @nekooa</p>
-          <p class="about-bio">00 后 ACGN 爱好者，超级纱雾厨，喜欢折腾 Linux 桌面，学习前端ing... 这里写点文章、放点收藏、偶尔写小说。</p>
+          <p class="about-handle">@holo-world / nekooa</p>
           <ul class="about-list about-hero-tags" aria-label="标签">
             <li>さぎり厨</li>
             <li>柚子厨</li>
@@ -171,24 +170,24 @@
       </section>
 
 
-    <section class="about-stats" aria-label="站点数据">
-      <div class="about-stat">
-        <span class="about-stat-value">10</span>
-        <span class="about-stat-label">篇文章</span>
-      </div>
-      <div class="about-stat">
-        <span class="about-stat-value">9</span>
-        <span class="about-stat-label">个影音</span>
-      </div>
-      <div class="about-stat">
-        <span class="about-stat-value">5</span>
-        <span class="about-stat-label">个项目</span>
-      </div>
-      <div class="about-stat">
-        <span class="about-stat-value">2026</span>
-        <span class="about-stat-label">建站年份</span>
-      </div>
-    </section>
+      <section class="about-stats" aria-label="站点数据">
+        <div class="about-stat">
+          <span class="about-stat-value">10</span>
+          <span class="about-stat-label">篇文章</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat-value">9</span>
+          <span class="about-stat-label">个影音</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat-value">5</span>
+          <span class="about-stat-label">个项目</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat-value">2026</span>
+          <span class="about-stat-label">建站年份</span>
+        </div>
+      </section>
 
       <!-- 最近更新 -->
       <section class="home-section" aria-labelledby="home-latest">
@@ -367,7 +366,7 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js?v=9822af4c6e"></script>
+  <script defer src="js/script.min.js?v=e889f3b654"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
   <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
 

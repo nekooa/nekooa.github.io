@@ -122,6 +122,105 @@ const ThemeManager = {
 };
 
 /* =========================
+   头图 ripple 切换
+   换主题色时，新头图先等 0.3s，再从中心用圆形遮罩扩散出来。
+   动画期间旧图仍在底下，扩散完成后才把 src 写回 <img> 并移除覆盖层，
+   所以不会出现「图先变、动画后到」的错位。
+========================= */
+const HERO_RIPPLE_DELAY = 300;   // 延迟多久开始扩散（ms）
+const HERO_RIPPLE_DURATION = 700; // 扩散时长（ms），与 .header-ripple 的 transition 一致
+let heroRippleToken = 0;
+
+function swapHeroImage(heroImg, targetSrc, options = {}) {
+  const delay = options.delay ?? HERO_RIPPLE_DELAY;
+  const duration = options.duration ?? HERO_RIPPLE_DURATION;
+  const token = ++heroRippleToken;
+
+  // 上一次切换还没结束：直接落定，避免两层新图叠在一起
+  const container = heroImg.closest('.header-container');
+  const previous = container?.querySelector('.header-ripple');
+  if (previous) {
+    heroImg.src = previous.getAttribute('data-src') || heroImg.src;
+    previous.remove();
+  }
+
+  const still =
+    document.documentElement.classList.contains('animations-off') ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (still || !container) {
+    heroImg.src = targetSrc;
+    return;
+  }
+
+  // 延迟从「点击换色」开始算，而不是从图片加载完开始算，
+  // 这样缓存命中时是稳稳的 0.3s；网络慢时以加载完成为准。
+  const startedAt = performance.now();
+
+  // 预加载 + 解码：onload 只代表下载完，位图可能还没解码，
+  // 那时开始扩散会先露出旧图再「跳」一下。decode() 完成后再播才干净。
+  const preload = new Image();
+  preload.decoding = 'async';
+  let ready = false;
+  const onReady = () => {
+    if (ready || token !== heroRippleToken) return;
+    ready = true;
+    const wait = Math.max(0, delay - (performance.now() - startedAt));
+    window.setTimeout(() => reveal(wait), wait);
+  };
+  preload.onload = onReady;          // decode 不可用/失败时的兜底
+  preload.onerror = () => {
+    if (token === heroRippleToken) heroImg.src = targetSrc;
+  };
+  preload.src = targetSrc;
+  if (typeof preload.decode === 'function') {
+    preload.decode().then(onReady).catch(() => {});
+  }
+
+  function reveal(wait) {
+    if (token !== heroRippleToken) return;
+
+    const layer = document.createElement('img');
+    layer.className = 'header-ripple';
+    layer.alt = '';
+    layer.setAttribute('aria-hidden', 'true');
+    layer.setAttribute('data-src', targetSrc);
+    layer.decoding = 'async';
+    layer.src = targetSrc;
+    container.appendChild(layer);
+
+    // 先让浏览器吃到起始态 circle(0%)，下一帧再切终态，过渡才会跑
+    void layer.offsetWidth;
+
+    let fallbackTimer = 0;
+    const raf = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (token !== heroRippleToken) return;
+        layer.style.clipPath = 'circle(72% at 50% 50%)';
+      });
+    });
+
+    const finish = () => {
+      if (token !== heroRippleToken) return;
+      window.cancelAnimationFrame(raf);
+      window.clearTimeout(fallbackTimer);
+      layer.removeEventListener('transitionend', onEnd);
+      heroImg.src = targetSrc;
+      layer.remove();
+      heroRippleToken++; // 作废本轮，兜底定时器不会再动
+    };
+
+    const onEnd = (event) => {
+      if (event.propertyName === 'clip-path') finish();
+    };
+
+    layer.addEventListener('transitionend', onEnd);
+    // 兜底：过渡事件没来（切标签页、被中断）也要把图落定
+    fallbackTimer = window.setTimeout(finish, wait + duration + 250);
+  }
+}
+
+/* =========================
    主题颜色管理器
 ========================= */
 const ColorThemeManager = {
@@ -131,13 +230,17 @@ const ColorThemeManager = {
     pink: {
       light: {
         '--color-bg': '#FFFBFF',
-        '--color-pink': '#ff95bc',
-        '--color-pink-soft': 'rgba(255,216,231,0.7)',
+        '--accent': '#ff95bc',
+        '--accent-text': '#b3245c',
+        '--on-accent': '#4a0026',
+        '--accent-soft': 'rgba(255,216,231,0.7)',
         '--color-svg': '#352f31',
         '--sidebar-bg': 'rgba(240,240,240)',
         '--sidebar-a': 'rgba(106,106,106,0.2)',
         '--sidebar-bg-mobile': 'rgba(247,236,244,0.8)',
         '--card-bg': '#FAF2F8',
+        '--surface-container-high': '#F2E6EF',
+        '--surface-container-highest': '#EADCE7',
         '--profile-list-bg': 'rgba(255,216,231,0.3)',
         '--time-badge-bg': 'rgba(255,216,231,0.8)',
         '--li-a-bg': 'rgba(255,216,231,0.8)',
@@ -148,7 +251,6 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(255,235,245,0.5)',
         '--thoughts-border': '#f8bbd0',
         '--nav-time-bg': 'rgba(255,216,231,0.8)',
-        '--settings-panel-bg': '#FFFBFF',
         lyPop: {
           '--lyric-bg': 'rgba(253, 217, 231, 0.7)',
           '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.1)',
@@ -178,13 +280,17 @@ const ColorThemeManager = {
       },
       dark: {
         '--color-bg': '#1F1A1C',
-        '--color-pink': '#ffb3cf',
-        '--color-pink-soft': 'rgba(255,179,207,0.25)',
+        '--accent': '#ffb3cf',
+        '--accent-text': '#ffb3cf',
+        '--on-accent': '#3a0018',
+        '--accent-soft': 'rgba(255,179,207,0.25)',
         '--color-svg': '#fed9e6',
         '--sidebar-bg': 'rgba(30,30,30)',
         '--sidebar-a': 'rgba(106,106,106,0.25)',
         '--sidebar-bg-mobile': 'rgba(49,38,42,0.8)',
         '--card-bg': '#2A2125',
+        '--surface-container-high': '#33272F',
+        '--surface-container-highest': '#3D3038',
         '--profile-list-bg': 'rgba(90,63,72,0.5)',
         '--time-badge-bg': 'rgba(255,179,207,0.2)',
         '--li-a-bg': 'rgba(255,179,207,0.25)',
@@ -195,7 +301,6 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(255,210,225,0.08)',
         '--thoughts-border': '#f06292',
         '--nav-time-bg': 'rgba(255,179,207,0.2)',
-        '--settings-panel-bg': '#1F1A1C',
         lyPop: {
           '--lyric-bg': 'rgba(65, 42, 52, 0.9)',
           '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.4)',
@@ -228,13 +333,17 @@ const ColorThemeManager = {
     blue: {
       light: {
         '--color-bg': '#FBFCFE',
-        '--color-pink': '#006689',
-        '--color-pink-soft': '#C3E8FF',
+        '--accent': '#006689',
+        '--accent-text': '#006689',
+        '--on-accent': '#ffffff',
+        '--accent-soft': '#C3E8FF',
         '--color-svg': '#2f4554',
         '--sidebar-bg': '#EFF5F8',
         '--sidebar-a': 'rgba(106,106,106,0.2)',
         '--sidebar-bg-mobile': 'rgba(231,240,245,0.8)',
         '--card-bg': '#EFF5F8',
+        '--surface-container-high': '#E7EFF6',
+        '--surface-container-highest': '#DCE8F2',
         '--profile-list-bg': '#D1E5F4',
         '--time-badge-bg': 'rgba(195,232,255,0.6)',
         '--li-a-bg': 'rgba(195,232,255,0.8)',
@@ -245,7 +354,6 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(209,229,244,0.3)',
         '--thoughts-border': '#C3E8FF',
         '--nav-time-bg': 'rgba(195,232,255,0.6)',
-        '--settings-panel-bg': '#FBFCFE',
         lyPop: {
           '--lyric-bg': 'rgba(195, 232, 255, 0.7)',
           '--lyric-shadow': '0 -2px 10px rgba(91, 155, 213, 0.15)',
@@ -275,13 +383,17 @@ const ColorThemeManager = {
       },
       dark: {
         '--color-bg': '#191C1E',
-        '--color-pink': '#91c0f0',
-        '--color-pink-soft': 'rgba(145,192,240,0.25)',
+        '--accent': '#91c0f0',
+        '--accent-text': '#91c0f0',
+        '--on-accent': '#0b2334',
+        '--accent-soft': 'rgba(145,192,240,0.25)',
         '--color-svg': '#c8ddf0',
         '--sidebar-bg': 'rgba(20,28,36)',
         '--sidebar-a': 'rgba(100,130,160,0.25)',
         '--sidebar-bg-mobile': 'rgba(25,35,45,0.85)',
         '--card-bg': '#1E2529',
+        '--surface-container-high': '#242E36',
+        '--surface-container-highest': '#2B3742',
         '--profile-list-bg': 'rgba(30,60,90,0.5)',
         '--time-badge-bg': 'rgba(145,192,240,0.2)',
         '--li-a-bg': 'rgba(145,192,240,0.25)',
@@ -292,7 +404,6 @@ const ColorThemeManager = {
         '--thoughts-bg': 'rgba(30,60,90,0.15)',
         '--thoughts-border': '#4a7ca5',
         '--nav-time-bg': 'rgba(145,192,240,0.2)',
-        '--settings-panel-bg': '#17212b',
         lyPop: {
           '--lyric-bg': 'rgba(46, 67, 88, 0.9)',
           '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.4)',
@@ -335,7 +446,7 @@ const ColorThemeManager = {
     return prefersDarkMQ.matches;
   },
 
-  applyColor(name) {
+  applyColor(name, options = {}) {
     const mode = this.isDarkMode() ? 'dark' : 'light';
     const vars = this.themes[name]?.[mode] || this.themes.blue[mode];
 
@@ -381,7 +492,11 @@ const ColorThemeManager = {
     if (heroImg) {
       const targetSrc = heroImg.getAttribute(`data-${name}-src`);
       if (targetSrc && heroImg.src !== new URL(targetSrc, location.href).href) {
-        heroImg.src = targetSrc;
+        if (options.animateHero) {
+          swapHeroImage(heroImg, targetSrc);
+        } else {
+          heroImg.src = targetSrc;
+        }
       }
     }
 
@@ -390,7 +505,8 @@ const ColorThemeManager = {
 
   setColor(name) {
     localStorage.setItem(this.STORAGE_KEY, name);
-    this.applyColor(name);
+    // 只有用户主动换色才播头图 ripple；初始化/跟随系统时直接换
+    this.applyColor(name, { animateHero: true });
     if (document.querySelector('.giscus')) {
       updateGiscusContext();
     }
@@ -562,7 +678,7 @@ function finishNavProgress(success) {
       bar.style.transition = '';
     }, 260);
   }, 180);
-  if (!success) bar.style.background = '#ff6b6b';
+  if (!success) bar.style.background = 'var(--error)';
 }
 
 /* 轻量提示条：加载失败时告诉用户发生了什么，而不是静静地卡住 */
@@ -1371,6 +1487,12 @@ function addRippleEffect() {
   if (document.body.dataset.rippleGlobalBound === 'true') return;
   document.body.dataset.rippleGlobalBound = 'true';
 
+  // 水波纹裁剪只在动画期间生效（约 600ms）。
+  // 早期实现是常驻写内联 overflow:hidden，那会连带裁掉 ::after 撑出的
+  // 48px 点击命中区（见 style.css 的 ".sidebar a::after"），导航与设置
+  // 按钮因此一度被排除在水波纹之外。现在改为「按下时裁剪、波纹结束即归还」，
+  // 两者可以共存。
+  const RIPPLE_CLIP_MS = 600;
   const rippleSelector = `
     .sidebar a,
     .footer a,
@@ -1387,13 +1509,12 @@ function addRippleEffect() {
     .article-nav a
   `;
 
-  // 为所有匹配元素设置必要样式
+  // 为所有匹配元素补定位；不在这里写 overflow，
+  // 否则命中区会被永久裁剪
   document.querySelectorAll(rippleSelector).forEach(el => {
     if (el.dataset.rippleStyled === 'true') return;
     el.dataset.rippleStyled = 'true';
-    const pos = window.getComputedStyle(el).position;
-    if (pos === 'static') el.style.position = 'relative';
-    if (window.getComputedStyle(el).overflow !== 'hidden') el.style.overflow = 'hidden';
+    if (window.getComputedStyle(el).position === 'static') el.style.position = 'relative';
   });
 
   document.body.addEventListener('pointerdown', (e) => {
@@ -1404,10 +1525,12 @@ function addRippleEffect() {
 
     if (target.dataset.rippleStyled !== 'true') {
       target.dataset.rippleStyled = 'true';
-      const pos = window.getComputedStyle(target).position;
-      if (pos === 'static') target.style.position = 'relative';
-      if (window.getComputedStyle(target).overflow !== 'hidden') target.style.overflow = 'hidden';
+      if (window.getComputedStyle(target).position === 'static') target.style.position = 'relative';
     }
+
+    // 仅在波纹存续期间裁剪，避免常驻 overflow:hidden 吃掉命中区
+    const needsClip = window.getComputedStyle(target).overflow !== 'hidden';
+    if (needsClip) target.style.overflow = 'hidden';
 
     const rect = target.getBoundingClientRect();
     const circle = document.createElement('span');
@@ -1423,7 +1546,10 @@ function addRippleEffect() {
     if (old) old.remove();
 
     target.appendChild(circle);
-    setTimeout(() => circle.remove(), 600);
+    setTimeout(() => {
+      circle.remove();
+      if (needsClip && !target.querySelector('.ripple')) target.style.overflow = '';
+    }, RIPPLE_CLIP_MS);
   });
 }
 

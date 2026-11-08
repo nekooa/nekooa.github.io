@@ -5,21 +5,21 @@
 :root {
   /* 文章排版 */
   --article-max-width: 720px;
-  --article-font-size: 1rem;           /* 16px */
+  --article-font-size: var(--text-body);           /* 16px */
   --article-line-height: 1.8;
   --article-heading-line-height: 1.35;
   --article-letter-spacing: 0.02em;
   --article-paragraph-spacing: 1.15em;
 
   /* 文章颜色 */
-  --article-link-color: var(--color-pink);
-  --article-link-hover: var(--color-pink);
-  --article-blockquote-border: var(--color-pink);
+  --article-link-color: var(--accent-text, var(--accent));
+  --article-link-hover: var(--accent-text, var(--accent));
+  --article-blockquote-border: var(--accent);
   --article-blockquote-bg: var(--profile-list-bg);
-  --article-hr-color: var(--color-pink-soft);
+  --article-hr-color: var(--accent-soft);
   --article-table-border: rgba(0, 0, 0, 0.1);
   --article-table-header-bg: var(--card-bg);
-  --article-inline-code-bg: var(--color-pink-soft);
+  --article-inline-code-bg: var(--accent-soft);
   --article-inline-code-color: var(--color-text);
   --article-kbd-bg: #fafafa;
   --article-kbd-border: #ccc;
@@ -28,7 +28,7 @@
   --article-mark-bg: #fff3b0;
   --article-mark-color: inherit;
   --article-figcaption-color: rgba(0, 0, 0, 0.5);
-  --article-selection-bg: var(--color-pink-soft);
+  --article-selection-bg: var(--accent-soft);
 
   /* 文章卡片 */
   --article-card-padding: 40px 48px;
@@ -72,7 +72,7 @@
   --article-mark-color: #1a1517;
 
   /* 分割线 */
-  --divider-line-bg: var(--color-pink-soft);
+  --divider-line-bg: var(--accent-soft);
   --divider-text-opacity: 0.8;
 
   /* 文章装饰 */
@@ -108,7 +108,7 @@
     --article-mark-color: #1a1517;
 
     /* 分割线 */
-    --divider-line-bg: var(--color-pink-soft);
+    --divider-line-bg: var(--accent-soft);
     --divider-text-opacity: 0.8;
 
     /* 文章装饰 */
@@ -196,7 +196,7 @@
 
 .divider span {
   padding: 0 10px;
-  font-size: 12px;
+  font-size: var(--text-2xs);
   color: var(--divider-text-color);
   opacity: var(--divider-text-opacity);
 }
@@ -221,7 +221,7 @@ code-box {
   align-items: center;
   padding: 8px 10px 2px 14px;
   color: var(--code-box-header-color);
-  font-size: 14px;
+  font-size: var(--text-sm);
 }
 
 .code-lang {
@@ -234,7 +234,7 @@ code-box {
   border: none;
   color: var(--code-box-header-color);
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--text-2xs);
   padding: 4px 6px;
   border-radius: 4px;
   transition: background-color 0.2s;
@@ -252,7 +252,7 @@ code-box {
 .code-box-content pre {
   margin: 0;
   padding: 12px;
-  font-size: 14px;
+  font-size: var(--text-sm);
   line-height: 1.4;
   white-space: pre;
   overflow-x: auto;
@@ -327,7 +327,7 @@ code-box {
    ============================================================ */
 
 .article-card .article-title {
-  font-size: 2rem;
+  font-size: var(--text-display);
   font-weight: 700;
   line-height: var(--article-heading-line-height);
   margin: 0 0 0.4em;
@@ -341,7 +341,7 @@ code-box {
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-text);
   opacity: 0.6;
   margin-bottom: 1.5em;
@@ -409,33 +409,33 @@ code-box {
 }
 
 .article-body h1 {
-  font-size: 1.875rem;
+  font-size: var(--text-display);
   padding-bottom: 0.3em;
   border-bottom: 1px solid var(--article-hr-color);
 }
 
 .article-body h2 {
-  font-size: 1.5rem;
+  font-size: var(--text-display-sm);
   padding-bottom: 0.25em;
   border-bottom: 1px solid var(--article-hr-color);
 }
 
 .article-body h3 {
-  font-size: 1.25rem;
+  font-size: var(--text-headline);
 }
 
 .article-body h4 {
-  font-size: 1.1rem;
+  font-size: var(--text-title);
   opacity: 0.9;
 }
 
 .article-body h5 {
-  font-size: 1rem;
+  font-size: var(--text-body);
   opacity: 0.85;
 }
 
 .article-body h6 {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   opacity: 0.7;
 }
 
@@ -449,7 +449,7 @@ code-box {
   display: inline-block;
   margin-left: 0.3em;
   opacity: 0;
-  color: var(--color-pink);
+  color: var(--accent-text, var(--accent));
   text-decoration: none;
   font-weight: 400;
   transition: opacity 0.2s ease;
@@ -572,7 +572,7 @@ code-box {
 }
 .article-body .task-list-item input[type="checkbox"] {
   margin-right: 0.5em;
-  accent-color: var(--color-pink);
+  accent-color: var(--accent-text, var(--accent));
 }
 
 
@@ -606,7 +606,7 @@ code-box {
 
 .article-body figcaption {
   margin-top: 0.6em;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--article-figcaption-color);
   line-height: 1.5;
 }
@@ -626,7 +626,7 @@ code-box {
   border: 1px solid var(--article-table-border);
   border-radius: 10px;
   overflow-x: auto;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   line-height: 1.6;
 }
 
@@ -678,7 +678,7 @@ code-box {
 
 /* 点状分割线 */
 .article-body hr.dot {
-  border-top: 3px dotted var(--color-pink);
+  border-top: 3px dotted var(--accent);
   background: none;
   opacity: var(--dot-hr-opacity, 0.8);
 }
@@ -691,7 +691,7 @@ code-box {
 /* 标语 / 金句 */
 .article-body .slogan {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: var(--text-title);
   font-weight: 700;
   color: var(--slogan-color);
   text-shadow: var(--slogan-text-shadow);
@@ -716,7 +716,7 @@ code-box {
 /* 公告 */
 .article-body .announcement {
   display: block;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   color: var(--announcement-color);
   background: var(--announcement-bg);
   border: 1px dashed var(--announcement-border);
@@ -732,7 +732,7 @@ code-box {
   text-align: center;
   font-style: italic;
   color: var(--to-be-continued-color);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   margin-top: 2.5em;
   letter-spacing: 0.1em;
 }
@@ -771,14 +771,14 @@ code-box {
   font-size: 0.75em;
   line-height: 0;
   vertical-align: super;
-  color: var(--color-pink);
+  color: var(--accent-text, var(--accent));
 }
 
 .article-body .footnotes {
   margin-top: 3em;
   padding-top: 1.5em;
   border-top: 1px solid var(--article-hr-color);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   opacity: 0.85;
 }
 
@@ -820,14 +820,14 @@ code-box {
 }
 
 .article-card .article-nav .nav-label {
-  font-size: 0.75rem;
+  font-size: var(--text-2xs);
   opacity: 0.5;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .article-card .article-nav .nav-title {
-  font-size: 0.95rem;
+  font-size: var(--text-body);
   font-weight: 600;
   line-height: 1.6;
   overflow: hidden;
@@ -850,7 +850,7 @@ code-box {
 
 .article-card .article-tag {
   display: inline-block;
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
   padding: 4px 12px;
   border-radius: 999px;
   background: var(--profile-list-bg);
@@ -870,16 +870,16 @@ code-box {
 
 @media (max-width: 768px) {
   .article-card .article-title {
-    font-size: 1.625rem;
+    font-size: var(--text-display-sm);
   }
 
-  .article-body h1 { font-size: 1.5rem; }
-  .article-body h2 { font-size: 1.3rem; }
-  .article-body h3 { font-size: 1.125rem; }
-  .article-body h4 { font-size: 1rem; }
+  .article-body h1 { font-size: var(--text-display-sm); }
+  .article-body h2 { font-size: var(--text-headline); }
+  .article-body h3 { font-size: var(--text-title); }
+  .article-body h4 { font-size: var(--text-body); }
 
   .article-body .slogan {
-    font-size: 1.4rem;
+    font-size: var(--text-headline);
   }
 
   .article-body blockquote {
@@ -908,7 +908,7 @@ code-box {
 
   /* 表格移动端：保持可滚动，字号略小 */
   .article-body table {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
   }
 
   .article-body th,
