@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>我的桌面配置与脚本 · 二：kitty、fish、fastfetch 与 Noctalia | ねねねこ</title>
+  <meta name="description" content="接上一篇的 CachyOS + niri，补齐每天真正在用的四件套：kitty 终端、fish 交互 Shell、fastfetch 系统信息，以及 Noctalia Shell v5 里实际改过的主题、Bar、Dock、锁屏与插件配置。">
+  <meta name="author" content="holo-world">
+  <link rel="canonical" href="https://0u0.l.cd/article11">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ねねねこ">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="我的桌面配置与脚本 · 二：kitty、fish、fastfetch 与 Noctalia | ねねねこ">
+  <meta property="og:description" content="接上一篇的 CachyOS + niri，补齐每天真正在用的四件套：kitty 终端、fish 交互 Shell、fastfetch 系统信息，以及 Noctalia Shell v5 里实际改过的主题、Bar、Dock、锁屏与插件配置。">
+  <meta property="og:url" content="https://0u0.l.cd/article11">
+  <meta property="og:image" content="https://a1.boltp.com/2026/10/24/6adc19d942ed6.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="我的桌面配置与脚本 · 二：kitty、fish、fastfetch 与 Noctalia | ねねねこ">
+  <meta name="twitter:description" content="接上一篇的 CachyOS + niri，补齐每天真正在用的四件套：kitty 终端、fish 交互 Shell、fastfetch 系统信息，以及 Noctalia Shell v5 里实际改过的主题、Bar、Dock、锁屏与插件配置。">
+  <meta name="twitter:image" content="https://a1.boltp.com/2026/10/24/6adc19d942ed6.png">
+  <link rel="icon" href="/favicon.png" type="image/svg+xml">
+  <!-- 第三方域名提前建连：图片走 a1.boltp.com，一言走 v1.hitokoto.cn -->
+  <link rel="preconnect" href="https://a1.boltp.com">
+  <link rel="preconnect" href="https://v1.hitokoto.cn">
+  <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
+  <link rel="stylesheet" href="styles/bundle.css?v=861c173f88">
+</head>
+
+<body>
+
+  <div id="preloader">
+    <div class="loader-inner">
+      <div class="loader-ring"></div>
+      <p>正在加载喵...</p>
+    </div>
+  </div>
+
+  <!-- navbar -->
+  <div class="navbar">
+    <div class="logo">我的桌面配置与脚本 · 二</div>
+    <button id="settings-nav" class="settings-button" aria-label="设置">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.33-.02-.64-.06-.94l2.02-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.45 3.5c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.3 2.52c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.02 1.58c-.04.3-.06.61-.06.94 0 .33.02.64.06.94l-2.02 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.3 2.52c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.3-2.52c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.02-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+      </svg>
+    </button>
+  </div>
+
+  <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19d942ed6.png" alt="头图" class="article-header">
+
+  <!-- sidebar -->
+  <div class="sidebar">
+    <ul>
+      <li>
+        <a href="/" class="sidebar-link">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            transform="translate(0, -0.7)">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M20.479 7.57827L15.093 3.12502C13.2787 1.62499 10.7213 1.62499 8.90703 3.12502L3.52097 7.57827C2.55059 8.38059 2 9.59706 2 10.8663V18.8739C2 20.5419 3.28643 22 5 22H7C8.65685 22 10 20.6569 10 19V15.6848C10 15.0044 10.5044 14.5587 11 14.5587H13C13.4956 14.5587 14 15.0044 14 15.6848V19C14 20.6569 15.3431 22 17 22H19C20.7136 22 22 20.5419 22 18.8739V10.8663C22 9.59706 21.4494 8.38059 20.479 7.57827Z"
+              fill="currentColor"></path>
+          </svg>
+        </a>
+        <span class="sidebar-text">主页</span>
+      </li>
+      <li>
+        <a href="/PAGEarticle" class="sidebar-link">
+          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            transform="scale(1.05)">
+            <path
+              d="M22 4.84969V16.7397C22 17.7097 21.21 18.5997 20.24 18.7197L19.93 18.7597C18.29 18.9797 15.98 19.6597 14.12 20.4397C13.47 20.7097 12.75 20.2197 12.75 19.5097V5.59969C12.75 5.22969 12.96 4.88969 13.29 4.70969C15.12 3.71969 17.89 2.83969 19.77 2.67969H19.83C21.03 2.67969 22 3.64969 22 4.84969Z"
+              fill="currentColor"></path>
+            <path
+              d="M10.7083 4.70969C8.87828 3.71969 6.10828 2.83969 4.22828 2.67969H4.15828C2.95828 2.67969 1.98828 3.64969 1.98828 4.84969V16.7397C1.98828 17.7097 2.77828 18.5997 3.74828 18.7197L4.05828 18.7597C5.69828 18.9797 8.00828 19.6597 9.86828 20.4397C10.5183 20.7097 11.2383 20.2197 11.2383 19.5097V5.59969C11.2383 5.21969 11.0383 4.88969 10.7083 4.70969ZM4.99828 7.73969H7.24828C7.65828 7.73969 7.99828 8.07969 7.99828 8.48969C7.99828 8.90969 7.65828 9.23969 7.24828 9.23969H4.99828C4.58828 9.23969 4.24828 8.90969 4.24828 8.48969C4.24828 8.07969 4.58828 7.73969 4.99828 7.73969ZM7.99828 12.2397H4.99828C4.58828 12.2397 4.24828 11.9097 4.24828 11.4897C4.24828 11.0797 4.58828 10.7397 4.99828 10.7397H7.99828C8.40828 10.7397 8.74828 11.0797 8.74828 11.4897C8.74828 11.9097 8.40828 12.2397 7.99828 12.2397Z"
+              fill="currentColor"></path>
+          </svg>
+        </a>
+        <span class="sidebar-text">文章</span>
+      </li>
+      <li>
+        <a href="/PAGEvideo" class="sidebar-link">
+          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            transform="scale(1.03) translate(0, -0.6)">
+            <path
+              d="M8.50989 2.00001H15.49C15.7225 1.99995 15.9007 1.99991 16.0565 2.01515C17.1643 2.12352 18.0711 2.78958 18.4556 3.68678H5.54428C5.92879 2.78958 6.83555 2.12352 7.94337 2.01515C8.09917 1.99991 8.27741 1.99995 8.50989 2.00001Z"
+              fill="currentColor"></path>
+            <path
+              d="M6.31052 4.72312C4.91989 4.72312 3.77963 5.56287 3.3991 6.67691C3.39117 6.70013 3.38356 6.72348 3.37629 6.74693C3.77444 6.62636 4.18881 6.54759 4.60827 6.49382C5.68865 6.35531 7.05399 6.35538 8.64002 6.35547H15.5321C17.1181 6.35538 18.4835 6.35531 19.5639 6.49382C19.9833 6.54759 20.3977 6.62636 20.7958 6.74693C20.7886 6.72348 20.781 6.70013 20.773 6.67691C20.3925 5.56287 19.2522 4.72312 17.8616 4.72312H6.31052Z"
+              fill="currentColor"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M15.3276 7.54204H8.67239C5.29758 7.54204 3.61017 7.54204 2.66232 8.52887C1.71447 9.5157 1.93748 11.0403 2.38351 14.0896L2.80648 16.9811C3.15626 19.3724 3.33115 20.568 4.22834 21.284C5.12553 22 6.4488 22 9.09534 22H14.9046C17.5512 22 18.8745 22 19.7717 21.284C20.6689 20.568 20.8437 19.3724 21.1935 16.9811L21.6165 14.0896C22.0625 11.0404 22.2855 9.51569 21.3377 8.52887C20.3898 7.54204 18.7024 7.54204 15.3276 7.54204ZM14.5812 15.7942C15.1396 15.4481 15.1396 14.5519 14.5812 14.2058L11.2096 12.1156C10.6669 11.7792 10 12.2171 10 12.9099V17.0901C10 17.7829 10.6669 18.2208 11.2096 17.8844L14.5812 15.7942Z"
+              fill="currentColor"></path>
+          </svg>
+        </a>
+        <span class="sidebar-text">影音</span>
+      </li>
+      <li>
+        <a href="/PAGEproject" class="sidebar-link">
+          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            transform="scale(1.02) translate(0, -0.2)">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M2 6C2 3.79086 3.79086 2 6 2C8.20914 2 10 3.79086 10 6C10 7.86384 8.72523 9.42994 7 9.87398V14.126C8.40561 14.4878 9.5122 15.5944 9.87398 17H12.008C13.2201 17 14.1293 16.9373 14.82 16.7919C15.5022 16.6483 15.9041 16.4376 16.1667 16.1889C16.702 15.6818 17 14.6924 17 12.3242V9.87398C15.2748 9.42994 14 7.86384 14 6C14 3.79086 15.7909 2 18 2C20.2091 2 22 3.79086 22 6C22 7.86384 20.7252 9.42994 19 9.87398V12.3242C19 14.63 18.7692 16.4785 17.5421 17.6409C16.9235 18.2268 16.1359 18.5587 15.232 18.749C14.3366 18.9375 13.2631 19 12.008 19H9.87398C9.42994 20.7252 7.86384 22 6 22C3.79086 22 2 20.2091 2 18C2 16.1362 3.27477 14.5701 5 14.126V9.87398C3.27477 9.42994 2 7.86384 2 6Z"
+              fill="currentColor"></path>
+          </svg>
+        </a>
+        <span class="sidebar-text">项目</span>
+      </li>
+      <li>
+        <a href="/PAGEabout" class="sidebar-link">
+          <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g transform="scale(0.0234375)" fill="currentColor">
+              <path
+                d="M514.432 74.688c93.44 0 166.912 0 224.192 7.68 58.752 7.872 105.344 24.384 141.952 61.056 36.608 36.608 53.12 83.2 61.056 141.952 7.68 57.28 7.68 130.688 7.68 224.192v4.864c0 93.44 0 166.912-7.68 224.192-7.872 58.752-24.384 105.344-61.056 141.952-36.608 36.608-83.2 53.12-141.952 61.056-57.28 7.68-130.688 7.68-224.192 7.68h-4.864c-93.44 0-166.912 0-224.192-7.68-58.752-7.872-105.344-24.384-141.952-61.056-36.672-36.608-53.12-83.2-61.056-141.952-7.68-57.28-7.68-130.688-7.68-224.192v-4.864c0-93.44 0-166.912 7.68-224.192 7.872-58.752 24.384-105.344 61.056-141.952 36.608-36.672 83.2-53.12 141.952-61.056 57.28-7.68 130.688-7.68 224.192-7.68h4.864z m-16 374.464C489.6 448 479.552 448 471.04 448h-1.728a42.688 42.688 0 1 0 0 85.312V704a42.688 42.688 0 1 0 85.376 0V531.648c0-8.512 0-18.688-1.216-27.392a63.488 63.488 0 0 0-17.536-37.504 63.488 63.488 0 0 0-37.504-17.6z m13.376-171.84A42.56 42.56 0 0 0 469.312 320c0 23.552 19.008 42.688 42.496 42.688h0.384A42.56 42.56 0 0 0 554.688 320a42.56 42.56 0 0 0-42.496-42.688h-0.384z" />
+            </g>
+          </svg>
+        </a>
+        <span class="sidebar-text">关于</span>
+      </li>
+    </ul>
+  </div>
+
+
+  <div class="article-card">
+
+    <!-- 1. 文章头部 -->
+    <h1 class="article-title">我的桌面配置与脚本 · 二：kitty、fish、fastfetch 与 Noctalia</h1>
+    <div class="article-meta">
+      <time datetime="2026-11-14">2026-11-14</time>
+      <span>·</span>
+      <span>约 12 分钟阅读</span>
+      <span>·</span>
+      <a href="#" class="article-tag"># kitty</a>
+      <a href="#" class="article-tag"># fish</a>
+      <a href="#" class="article-tag"># fastfetch</a>
+      <a href="#" class="article-tag"># Noctalia</a>
+    </div>
+    <hr class="article-divider">
+
+    <!-- 2. 文章正文 -->
+    <div class="article-body">
+
+      <p>上一篇写了 niri、Noctalia 的壁纸 Hook 和 SDDM 自动换壁纸，这一篇把剩下的部分补齐：<strong>kitty、fish、fastfetch，以及 Noctalia Shell v5 里我真正改过的设置</strong>。</p>
+
+      <p>和上一篇一样，这不是教程，是配置文件加上"为什么这么写"的记录。看见 <code>/home/sagiriworld</code> 就换成你自己的用户名。</p>
+
+      <h2 id="section-1">环境<a class="heading-anchor" href="#section-1">#</a></h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>选择</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>发行版</td>
+            <td>CachyOS</td>
+          </tr>
+          <tr>
+            <td>窗口管理器</td>
+            <td>niri</td>
+          </tr>
+          <tr>
+            <td>Shell</td>
+            <td>Noctalia Shell v5</td>
+          </tr>
+          <tr>
+            <td>终端</td>
+            <td>kitty</td>
+          </tr>
+          <tr>
+            <td>交互 Shell</td>
+            <td>fish + Oh My Fish（kovial 主题）</td>
+          </tr>
+          <tr>
+            <td>系统信息</td>
+            <td>fastfetch</td>
+          </tr>
+          <tr>
+            <td>配色</td>
+            <td>Noctalia 壁纸取色（M3 content）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>这套组合里最有意思的一点是：<strong>kitty、fastfetch、Noctalia 的配色其实是同一个来源</strong>，只有 fish 的配色是 kovial 主题自己的。所以从终端开始讲最顺。</p>
+
+      <h2 id="section-2">kitty：配置几乎只写排版<a class="heading-anchor" href="#section-2">#</a></h2>
+
+      <p>kitty 只有一个配置文件：<code>~/.config/kitty/kitty.conf</code>。我的全部内容如下，短到可以直接贴进文章。</p>
+
+      <code-box data-lang="ini">
+# 字体
+font_family          FiraCode Nerd Font
+bold_font            auto
+italic_font          auto
+bold_italic_font     auto
+font_size            10.0
+
+# 背景
+background_opacity   0.85
+background_blur      30
+
+# 光标
+cursor_shape         block
+cursor_color      #ffffff
+cursor_blink_interval 0.5
+cursor_stop_blinking_after 0
+
+# Neovide 风格拖尾
+cursor_trail        3
+cursor_trail_decay  0.1 0.4
+cursor_trail_start_threshold 2
+
+# 性能
+scrollback_lines 10000
+include themes/noctalia.conf
+      </code-box>
+
+      <h3>逐项说明</h3>
+
+      <ul>
+        <li><strong><code>font_family</code> FiraCode Nerd Font</strong>：等宽 + Nerd Font 图标，fastfetch 的图标全靠它。</li>
+        <li><strong><code>background_opacity</code> 0.85 + <code>background_blur</code> 30</strong>：半透明 + 背景模糊；模糊是否生效取决于合成器，没效果不代表配置写错了。</li>
+        <li><strong><code>cursor_shape</code> block、<code>cursor_color</code> #ffffff</strong>：块状光标。颜色在主题文件里也有一份，那边优先。</li>
+        <li><strong><code>cursor_blink_interval</code> 0.5、<code>cursor_stop_blinking_after</code> 0</strong>：闪烁周期 0.5 秒，<code>0</code> 表示永不停止闪烁。</li>
+        <li><strong><code>cursor_trail</code> 3 / <code>cursor_trail_decay</code> 0.1 0.4 / <code>cursor_trail_start_threshold</code> 2</strong>：Neovide 风格的光标拖尾——长度 3 格，衰减 0.1→0.4，移动超过 2 格才出现。</li>
+        <li><strong><code>scrollback_lines</code> 10000</strong>：回滚缓冲行数，翻日志够用。</li>
+        <li><strong><code>include</code> themes/noctalia.conf</strong>：配色文件，由 Noctalia 自动生成，见下一节。</li>
+      </ul>
+
+      <p>一眼可知，这份配置里几乎没有"功能"——没有自定义快捷键、没有标签栏样式、没有布局预设。因为我用 niri 管窗口，kitty 只需要当一个好看的、带一点视觉反馈的终端就够了。</p>
+
+      <h3>配色不手写，交给 Noctalia</h3>
+
+      <p>最后一行 <code>include themes/noctalia.conf</code> 是整份配置里最省事的一行。Noctalia 的模板系统会把当前壁纸的取色结果写成这个文件：</p>
+
+      <code-box data-lang="ini">
+color0 #41474f
+color1 #ffb4ab
+color2 #94ccff
+color3 #b4c9df
+color4 #e8b5f5
+color5 #b2c5ff
+color6 #cac2e2
+color7 #c1c7d0
+color8 #8b9199
+color9 #ffcbc5
+color10 #b7dbff
+color11 #dbd2ff
+color12 #f5c8ff
+color13 #ace1e1
+color14 #f8d196
+color15 #e1e2e6
+
+cursor                #e1e2e6
+cursor_text_color     #111417
+background            #111417
+foreground            #e1e2e6
+selection_foreground  #c1c7d0
+selection_background  #41474f
+active_border_color   #94ccff
+inactive_border_color #41474f
+url_color             #94ccff
+
+active_tab_foreground   #003352
+active_tab_background   #94ccff
+inactive_tab_foreground #c1c7d0
+inactive_tab_background #41474f
+cursor_trail_color      #c1c7d0
+      </code-box>
+
+      <p>也就是说，kitty 里没有任何一个颜色是我手写的。换壁纸 → Noctalia 重新取色 → 自动重写这个文件 → 新开的 kitty 就是新配色。<strong>排版归 kitty，颜色归桌面</strong>，这是我觉得最舒服的分工。</p>
+
+      <p>顺带一提，Noctalia 用的是 Material 3 的 <code>m3-content</code> 方案——从一张壁纸里推出一整套协调的颜色。这个站点也在模仿 Material 3，所以看起来应该挺眼熟（我是真的很喜欢 Material 3！）。</p>
+
+      <h2 id="section-3">fish：三行配置，剩下的交给插件<a class="heading-anchor" href="#section-3">#</a></h2>
+
+      <p>fish 的配置文件短得有点不像话：</p>
+
+      <code-box data-lang="bash">
+# ~/.config/fish/config.fish
+
+set -g fish_greeting ""
+set -gx TERMINAL kitty
+
+fastfetch
+      </code-box>
+
+      <p>三行：</p>
+
+      <ul>
+        <li><strong><code>fish_greeting ""</code></strong>：关掉 fish 自带的欢迎语。因为紧接着的 <code>fastfetch</code> 就是我的欢迎界面，没必要先说一句"欢迎使用 fish"再打印一大块信息。</li>
+        <li><strong><code>TERMINAL kitty</code></strong>：给那些会读 <code>$TERMINAL</code> 的程序用。<i>（其实这里有个小插曲，我以前用的 foot 终端，这里填的 foot，写这篇文章时才发现www）</i></li>
+        <li><strong><code>fastfetch</code></strong>：每开一个交互终端就打印一次系统信息。代价是开终端会慢那么一点点；如果介意，可以包一层判断，只在交互式会话里跑。</li>
+      </ul>
+
+      <h3>插件：两套管理器并存</h3>
+
+      <p>我的 fish 里其实有两套插件机制，各管各的：</p>
+
+      <code-box data-lang="bash">
+# ~/.config/fish/conf.d/omf.fish —— Oh My Fish 自动生成，负责主题
+set -q XDG_DATA_HOME
+  and set -gx OMF_PATH "$XDG_DATA_HOME/omf"
+  or set -gx OMF_PATH "$HOME/.local/share/omf"
+
+source $OMF_PATH/init.fish
+
+# ~/.config/fish/fish_plugins —— fisher 管理，负责 nvm
+jorgebucaran/nvm.fish
+      </code-box>
+
+      <p>OMF 只用来加载 <strong>kovial</strong> 主题，fisher 只用来装 <strong>nvm.fish</strong>。两套系统同时存在不会打架，但升级或重装的时候要清楚谁管什么，别把一个插件装两遍——尤其是 nvm 这种会写 universal variables 的插件。</p>
+
+      <h3>kovial 主题：直接改主题文件</h3>
+
+      <p>kovial 是 OMF 的第三方主题，整个主题只有一个文件：</p>
+
+      <code-box data-lang="bash">
+~/.local/share/omf/themes/kovial/functions/fish_prompt.fish
+      </code-box>
+
+      <p>OMF 的路径规律就是 <code>$OMF_PATH/themes/主题名/</code>，当前启用哪个看 <code>~/.config/omf/theme</code>。它的提示符原本是方角的，现在长这样：</p>
+
+      <figure>
+        <img loading="lazy"
+          src="https://a1.boltp.com/2026/11/14/6af80be275de0.png"
+          alt="kovial 主题的 fish 提示符截图：圆角箭头、圆括号包住的主机名 cachyos-sagiri、方括号包住的当前目录 ~">
+        <figcaption>改完后的提示符：圆角箭头、<code>(主机名)</code>、<code>[目录]</code></figcaption>
+      </figure>
+
+      <p>原版用的是 <code>┌──</code> 和 <code>└──▶</code>，我在这个文件上改了三处细节，直接看 diff 最清楚：</p>
+
+      <code-box data-lang="diff">
+--- a/functions/fish_prompt.fish
++++ b/functions/fish_prompt.fish
+@@ -1,5 +1,5 @@
+ function hostname
+-  printf '%s[%s]%s' (set_color -o green) $hostname (set_color normal)
++  printf ' %s(%s)%s' (set_color -o green) $hostname (set_color normal)
+ end
+@@ -32,13 +32,13 @@
+   if set -q _flag_f
+-    printf '┌──'
++    printf '╭──'
+   else if set -q _flag_s
+-    printf '└──▶ '
++    printf '╰──▶ '
+   end
+ end
+ 
+ function fish_prompt
+-  printf '%s%s as %s in %s %s
+%s' (arrow -f) (hostname) (user) (custom_prompt_pwd) (git_branch) (arrow -s)
++  printf '%s%s as %s in [%s] %s
+%s' (arrow -f) (hostname) (user) (custom_prompt_pwd) (git_branch) (arrow -s)
+ end
+      </code-box>
+
+      <p>对应三处：hostname 从 <code>[host]</code> 变成 <code>(host)</code> 并多一个前导空格；上下箭头换成圆角；当前目录用 <code>[ ]</code> 包起来。</p>
+
+      <p>要注意 OMF 装主题其实是 <code>git clone</code> 到 <code>themes/</code> 下的，<code>omf update</code> 或重装主题时，这类未提交的本地改动有被覆盖或冲突的风险。最好改完复制成自己的主题名。</p>
+
+
+      <h2 id="section-4">fastfetch：用 custom 模块拼一张卡片<a class="heading-anchor" href="#section-4">#</a></h2>
+
+      <p>fastfetch 的配置是 JSONC（JSON + 注释），文件在 <code>~/.config/fastfetch/config.jsonc</code>。我不喜欢默认那种"左边 logo、右边一长串 key: value"的布局，所以用 <code>custom</code> 模块画了四条分组框，把信息按 <strong>硬件 / 软件 / 桌面 / 时长</strong> 分开。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>分组</th>
+            <th>模块</th>
+            <th>内容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>硬件</td>
+            <td><code>host</code> / <code>cpu</code> / <code>gpu</code> / <code>memory</code> / <code>disk</code></td>
+            <td>设备型号、CPU、GPU、内存、磁盘</td>
+          </tr>
+          <tr>
+            <td>软件</td>
+            <td><code>os</code> / <code>kernel</code> / <code>bios</code> / <code>packages</code> / <code>shell</code></td>
+            <td>系统、内核、BIOS、包数量、Shell</td>
+          </tr>
+          <tr>
+            <td>桌面</td>
+            <td><code>lm</code> / <code>wm</code> / <code>wmtheme</code> / <code>terminal</code></td>
+            <td>显示管理器、窗口管理器、主题、终端</td>
+          </tr>
+          <tr>
+            <td>时长</td>
+            <td><code>command</code> / <code>uptime</code></td>
+            <td>系统安装天数、开机时长</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>完整配置如下：</p>
+<div class="announcement">注意：此处可能无法正常渲染各项的 Nerd Font 图标，具体取决于浏览器字体！</div>
+      <code-box data-lang="json">
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "type": "kitty",
+        "source": "/home/sagiriworld/.config/fastfetch/cyan-nyan.png",
+        "width": 32,
+        "height": 15,
+        "padding": {
+            "top": 5,
+            "left": 8
+        }
+    },
+    "display": {
+        "separator": " "
+    },
+    "modules": [
+        "break",
+        {
+            "type": "custom",
+            "format": "\u001b[32m╭─────────────────────────── 硬件 ───────────────────────────╮",
+        },
+        {
+            "type": "host",
+            "key": "│  设备     ",
+            "keyColor": "green",
+            "keyWidth": 15
+        },
+        {
+            "type": "cpu",
+            "key": "│ ├ CPU   ",
+            "keyColor": "green",
+            "keyWidth": 15
+        },
+        {
+            "type": "gpu",
+            "key": "│ ├ GPU   ",
+            "keyColor": "green",
+            "keyWidth": 15
+        },
+        {
+            "type": "memory",
+            "key": "│ ├ 内存   ",
+            "keyColor": "green",
+            "keyWidth": 15
+        },
+        {
+            "type": "disk",
+            "key": "│ └ 磁盘  ",
+            "keyColor": "green",
+            "keyWidth": 15
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[32m╰────────────────────────────────────────────────────────────╯"
+        },
+        "break",
+        {
+            "type": "custom",
+            "format": "\u001b[33m╭─────────────────────────── 软件 ───────────────────────────╮"
+        },
+        {
+            "type": "os",
+            "key": "│  系统     ",
+            "keyColor": "yellow",
+            "keyWidth": 15
+        },
+        {
+            "type": "kernel",
+            "key": "│ ├ 内核 ",
+            "keyColor": "yellow",
+            "keyWidth": 15
+        },
+        {
+            "type": "bios",
+            "key": "│ ├ BIOS   ",
+            "keyColor": "yellow",
+            "keyWidth": 15
+        },
+        {
+            "type": "packages",
+            "key": "│ ├󰏖 Pkgs   ",
+            "keyColor": "yellow",
+            "keyWidth": 15
+        },
+        {
+            "type": "shell",
+            "key": "│ └ Shell  ",
+            "keyColor": "yellow",
+            "keyWidth": 15
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[33m╰────────────────────────────────────────────────────────────╯"
+        },
+        "break",
+        {
+            "type": "custom",
+            "format": "\u001b[34m╭─────────────────────────── 桌面 ───────────────────────────╮"
+        },
+        {
+            "type": "lm",
+            "key": "│  LM     ",
+            "keyColor": "blue",
+            "keyWidth": 15
+        },
+        {
+            "type": "wm",
+            "key": "│ ├ WM     ",
+            "keyColor": "blue",
+            "keyWidth": 15
+        },
+        {
+            "type": "wmtheme",
+            "key": "│ ├󰉼 主题  ",
+            "keyColor": "blue",
+            "keyWidth": 15
+        },
+        {
+            "type": "terminal",
+            "key": "│ └ 终端   ",
+            "keyColor": "blue",
+            "keyWidth": 15
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[34m╰────────────────────────────────────────────────────────────╯"
+        },
+        "break",
+        {
+            "type": "custom",
+            "format": "\u001b[35m╭───────────────── 系统安装时长 / 更新时间 ──────────────────╮"
+        },
+        {
+            "type": "command",
+            "key": "│  Cachy 娘调教时长   ",
+            "keyColor": "magenta",
+            "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
+        },
+        {
+            "type": "uptime",
+            "key": "│  开机时长           ",
+            "keyColor": "magenta"
+        },
+        {
+            "type": "custom",
+            "format": "\u001b[35m╰────────────────────────────────────────────────────────────╯"
+        },
+    ]
+}
+      </code-box>
+
+      <h3>几个细节</h3>
+
+      <ul>
+        <li><strong>边框是画出来的，不是组件。</strong><code>custom</code> 模块的 <code>format</code> 里直接写 <code>╭────╮</code>，前面拼上 ANSI 颜色（<code>\u001b[32m</code> 是绿色）。四组分别是绿、黄、蓝、品红，靠等宽字体对齐。（这里的 ANSI 颜色实际上会被 noctalia 覆盖）</li>
+        <li><strong><code>keyWidth: 15</code> 是灵魂。</strong>所有 key 都被填到 15 个字符宽，右边的值才会整齐地站成一列；<code>keyColor</code> 和分组框同色，视觉上就是一组。</li>
+        <li><strong>图片 logo 走 kitty 图形协议。</strong><code>"type": "kitty"</code> 只在支持该协议的终端里显示图片；换到 foot / 传统终端要改成 ASCII 或其它 type，否则那块会空着。</li>
+        <li><strong>图标是 Nerd Font 私用区字符。</strong>字体不对就会变成方块或问号——这也是为什么 kitty 的字体必须是 Nerd Font。</li>
+      </ul>
+
+      <figure>
+        <img loading="lazy"
+          src="https://a1.boltp.com/2026/11/14/6af80bf5589ce.png"
+          alt="fastfetch 实际输出截图：左侧是 kitty 图形协议显示的动漫立绘 logo，右侧是硬件、软件、桌面、安装时长四个分组框">
+        <figcaption>实际输出：左边 logo，右边四组信息</figcaption>
+      </figure>
+
+      <h2 id="section-5">Noctalia Shell v5：改过的设置<a class="heading-anchor" href="#section-5">#</a></h2>
+
+      <p>Noctalia 的配置分两层：<code>~/.config/noctalia/</code> 下的 <code>*.toml</code> 是手写层（按文件名排序合并），<code>~/.local/state/noctalia/settings.toml</code> 是 GUI 覆盖层，最后加载、优先级最高；两层都会热重载。</p>
+
+      <p>所以「设置里改了、<code>config.toml</code> 却没变」是正常的——改动写进了 <code>settings.toml</code>。</p>
+
+      <h3>主题：从壁纸里取色</h3>
+
+      <code-box data-lang="ini">
+[theme]
+builtin = "Ayu"
+mode = "dark"
+shell_mode = "dark"
+source = "wallpaper"
+wallpaper_scheme = "m3-content"
+
+[theme.templates]
+enable_builtin_templates = true
+enable_community_templates = true
+builtin_ids = [
+    "alacritty", "btop", "cava", "emacs", "foot", "gtk3", "gtk4",
+    "ghostty", "helix", "hyprland", "kcolorscheme", "kitty", "labwc",
+    "mango", "niri", "qt", "scroll", "starship", "sway", "umbriel", "wezterm",
+]
+      </code-box>
+
+      <p>这一段解释了两件事：</p>
+
+      <ul>
+        <li><code>source = "wallpaper"</code> + <code>wallpaper_scheme = "m3-content"</code>：配色从壁纸里推出来。</li>
+        <li><code>builtin_ids</code> 里的每一项都是一个"把当前配色写出去"的模板：kitty、foot、btop、cava、starship…… 上一篇里 kitty 的 <code>themes/noctalia.conf</code>、状态栏颜色等等都是这里统一生成的。</li>
+      </ul>
+
+      <p>这也是为什么我几乎不在各个程序里手写颜色——壁纸是唯一的源头。</p>
+
+      <h3>Bar 与 Dock：厚度、透明度与 widget 胶囊</h3>
+
+      <code-box data-lang="ini">
+[bar.default]
+position = "top"
+thickness = 34
+padding = 14
+margin_edge = 0
+margin_ends = 0
+radius = 0
+background_opacity = 0.49
+compositor_blur = true
+capsule = true
+capsule_fill = "surface"
+capsule_opacity = 0.4
+capsule_thickness = 0.76
+font_weight = 500
+start = [ "clock", "active_window" ]
+center = [ "workspaces" ]
+end = [ "tray", "clipboard", "network", "bluetooth", "battery", "volume", "brightness", "mpvpaper" ]
+
+[dock]
+enabled = true
+position = "bottom"
+icon_size = 48
+magnification = true
+magnification_scale = 1.45
+background_opacity = 0.65
+margin_edge = 10
+radius = 20
+show_running = true
+smart_auto_hide = true
+pinned = [ "chromium", "bettbox", "localsend", "qq", "lmms", "code-oss", "deepseek-harness" ]
+      </code-box>
+
+      <ul>
+        <li><strong>Bar 是贴着顶边的一条。</strong><code>margin_edge = 0</code>、<code>margin_ends = 0</code>、<code>radius = 0</code>，所以它从屏幕左边缘一直铺到右边缘，没有圆角，也不是浮动条；<code>padding = 14</code> 是 bar 两端到 start / end 区的内边距。</li>
+        <li><strong>胶囊是每个 widget 自己的。</strong><code>capsule = true</code> 不是把整条 bar 做成胶囊，而是给 bar 上的<strong>每个 widget</strong>各套一层：<code>capsule_fill = "surface"</code> 填 surface 色、<code>capsule_opacity = 0.4</code>、<code>capsule_thickness = 0.76</code>（占 bar 厚度的 76%）；没写 <code>capsule_radius</code>，所以自动取 pill 圆角。</li>
+        <li><strong>背景半透明 + 模糊。</strong><code>background_opacity = 0.49</code>，<code>compositor_blur = true</code> 向合成器声明一块模糊区域，让壁纸透上来。</li>
+        <li><strong>三段式布局。</strong><code>start</code> 放时间和当前窗口，<code>center</code> 放工作区，<code>end</code> 放托盘、剪贴板、网络、蓝牙、电池、音量、亮度和 <code>mpvpaper</code>——bongocat 那只猫已经从这一排移掉了。</li>
+        <li><strong>Dock 开了放大和运行指示。</strong><code>magnification</code> + <code>scale = 1.45</code>，鼠标划过时图标会放大；<code>show_running = true</code> 给正在运行的应用加小圆点。</li>
+        <li><strong><code>pinned</code> 是固定项。</strong>固定的是应用 id / 名称，重装应用后如果对不上号，删掉重 pin 一次就行。</li>
+      </ul>
+
+      <figure>
+        <img loading="lazy"
+          src="https://a1.boltp.com/2026/11/14/6af80bf27ddef.png"
+          alt="Noctalia 顶栏截图：左侧是时间与日期，中间是四个工作区编号，右侧是托盘、剪贴板、网络、蓝牙、音量与亮度">
+        <figcaption>顶栏：左时钟、中工作区、右系统状态</figcaption>
+      </figure>
+
+      <figure>
+        <img loading="lazy"
+          src="https://a1.boltp.com/2026/11/14/6af80bf69de3f.png"
+          alt="顶栏右侧 widget 放大图：托盘抽屉、QQ、Telegram、剪贴板、Wi-Fi、蓝牙、音量 100%、输入音量 20%、亮度 100%">
+        <figcaption>右侧 widget 放大：托盘、剪贴板、网络、蓝牙、音量 / 输入音量 / 亮度</figcaption>
+      </figure>
+
+      <figure>
+        <img loading="lazy"
+          src="https://a1.boltp.com/2026/11/14/6af80bf3f1fab.gif"
+          alt="Noctalia Dock 动画：鼠标划过图标时图标放大，运行中的应用下方有圆点指示">
+        <figcaption>Dock：放大效果 + 运行指示</figcaption>
+      </figure>
+
+      <h3>锁屏与空闲</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>项</th>
+            <th>值</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>锁屏</td>
+            <td><code>enabled = true</code>，<code>fingerprint = false</code></td>
+            <td>指纹关了；合盖前仍然先锁</td>
+          </tr>
+          <tr>
+            <td>锁屏外观</td>
+            <td><code>blur_intensity</code> / <code>tint_intensity</code> = 0</td>
+            <td>不模糊不压暗；登录框 surface_container</td>
+          </tr>
+          <tr>
+            <td>锁屏组件</td>
+            <td><code>lockscreen_widgets = true</code></td>
+            <td>两个登录框：eDP-1 + winit</td>
+          </tr>
+          <tr>
+            <td>空闲</td>
+            <td>熄屏 600s / 锁屏 660s</td>
+            <td>10 分钟关屏，11 分钟锁屏</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>桌面上还开了四个 desktop widget：时钟、天气、播放器、可视化。</p>
+
+      <h3>Hook：壁纸变化 → SDDM</h3>
+
+      <p>上一篇那个 SDDM 壁纸同步脚本，就是在这里挂上：</p>
+
+      <code-box data-lang="ini">
+[hooks]
+wallpaper_changed = "~/.local/bin/sddm-wallpaper-sync"
+      </code-box>
+
+      <h2 id="section-6">小结<a class="heading-anchor" href="#section-6">#</a></h2>
+
+      <p>四件东西，四种性格：kitty 只管排版，颜色全交给桌面；fish 几乎没有配置，重活都给了插件；fastfetch 是纯粹的"排版软件"；Noctalia 则是把壁纸、配色、模板串起来的那个枢纽。</p>
+
+      <p>它们之间真正的粘合剂是 Noctalia 的模板系统——一份壁纸配色，同步到终端、状态栏、btop、cava。配置越少，越不容易坏；颜色越统一，越不需要调。</p>
+
+      <div class="thoughts">
+        配置写到一定程度，追求的就该是"半年不用打开它"。
+      </div>
+
+    </div>
+
+
+    <!-- 3. 上/下篇导航 -->
+    <nav class="article-nav">
+      <a href="/article10" class="spa-link">
+        <span class="nav-label">← 上一篇</span>
+        <span class="nav-title">我的桌面配置与脚本</span>
+      </a>
+      <a>
+        <span class="nav-label">没有下一篇</span>
+        <span class="nav-title">这是最新一篇！</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- 评论区 -->
+  <div class="comment-content">
+    <div class="giscus"></div>
+  </div>
+
+  <footer class="footer">
+    <a href="https://icp.gov.moe/?keyword=20263334" target="_blank">萌ICP备20263334号</a>
+  </footer>
+
+  <!-- 音乐播放器 -->
+  <div id="xf-MusicPlayer" data-cdnName="./styles" data-themeColor="xf-girlPink" data-bottomHeight="7em"
+    data-songList="18004217713">
+  </div>
+
+  <!-- JS 脚本 -->
+  <script defer src="js/script.min.js?v=e889f3b654"></script>
+  <script defer src="js/viewer.js?v=0915250c13"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
+
+</body>
+
+</html>
