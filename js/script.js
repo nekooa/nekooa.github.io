@@ -920,6 +920,7 @@ async function loadPage(url, addToHistory = true) {
     // 4.初始化新页面内容
     syncPageMeta(doc);
     initCodeBoxes();
+    initArticleFilters();
     playEnterAnimation(
       '.content, .home-content, .card, .home-link-card, .about-card, ' +
       '.profile-card, .article-card, .header-container, .article-header, ' +
@@ -1209,6 +1210,245 @@ function initCodeBoxes() {
     });
     pendingHighlight.length = 0;
   });
+}
+
+/* =========================
+   文章分类 / 标签筛选（PAGEarticle）
+   - 分类：单选选项卡；标签：多选下拉
+   - 状态写回 URL：?cat=折腾&tag=kitty&tag=fish
+   - 文章页的 #标签 带 ?tag= 直接跳过来
+========================= */
+function initArticleFilters() {
+  const root = document.querySelector('.article-filters');
+  if (!root || root.dataset.bound === 'true') return;
+  root.dataset.bound = 'true';
+
+  const content = root.closest('.content');
+  if (!content) return;
+
+  const cards = Array.from(content.querySelectorAll(':scope > a[data-category]'));
+  const tabs = Array.from(root.querySelectorAll('.category-tab'));
+  const field = root.querySelector('.tag-filter-field');
+  const panel = root.querySelector('.tag-filter-panel');
+  const chipsWrap = root.querySelector('.tag-filter-chips');
+  const placeholder = root.querySelector('.tag-filter-placeholder');
+  const options = Array.from(root.querySelectorAll('.tag-option'));
+  const clearBtn = root.querySelector('.tag-filter-clear');
+  const hint = root.querySelector('.tag-filter-hint');
+  const emptyEl = content.querySelector('.articles-empty');
+  if (!cards.length || !tabs.length || !field || !panel || !chipsWrap) return;
+
+  const MAX_TAGS = 3;
+  const validTags = new Set(options.map((opt) => opt.dataset.tag));
+  const state = { category: '全部', tags: new Set() };
+  let closeTimer = 0;
+  let switchTimer = 0;
+
+  // 从 URL 读取初始状态（文章页的 #标签 链接会带 ?tag=）
+  const params = new URLSearchParams(location.search);
+  const urlCat = params.get('cat');
+  if (urlCat && tabs.some((tab) => tab.dataset.category === urlCat)) {
+    state.category = urlCat;
+  }
+  const urlTags = params.getAll('tag').filter((tag) => validTags.has(tag));
+  urlTags.slice(0, MAX_TAGS).forEach((tag) => state.tags.add(tag));
+  const urlTagsClamped = urlTags.length > MAX_TAGS;
+
+  function syncUrl() {
+    const query = new URLSearchParams();
+    if (state.category !== '全部') query.set('cat', state.category);
+    state.tags.forEach((tag) => query.append('tag', tag));
+    const qs = query.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+  }
+
+  function renderChips() {
+    chipsWrap.innerHTML = '';
+    state.tags.forEach((tag) => {
+      const chip = document.createElement('span');
+      chip.className = 'tag-chip';
+
+      const label = document.createElement('span');
+      label.className = 'tag-chip-label';
+      label.textContent = '# ' + tag;
+
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'tag-chip-remove';
+      remove.dataset.tag = tag;
+      remove.setAttribute('aria-label', '移除标签 ' + tag);
+      remove.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+
+      chip.appendChild(label);
+      chip.appendChild(remove);
+      chipsWrap.appendChild(chip);
+    });
+
+    if (placeholder) placeholder.hidden = state.tags.size > 0;
+  }
+
+  function renderOptions() {
+    const full = state.tags.size >= MAX_TAGS;
+    options.forEach((opt) => {
+      const selected = state.tags.has(opt.dataset.tag);
+      opt.hidden = selected;
+      opt.disabled = !selected && full;
+    });
+    if (hint) hint.hidden = !full;
+  }
+
+  function update(sync) {
+    cards.forEach((card) => {
+      const cardTags = (card.dataset.tags || '').split(/\s+/).filter(Boolean);
+      const okCategory = state.category === '全部' || card.dataset.category === state.category;
+      const okTags = Array.from(state.tags).every((tag) => cardTags.includes(tag));
+      card.hidden = !(okCategory && okTags);
+    });
+
+    tabs.forEach((tab) => {
+      tab.setAttribute('aria-pressed', String(tab.dataset.category === state.category));
+    });
+
+    renderChips();
+    renderOptions();
+
+    if (emptyEl) {
+      emptyEl.hidden = cards.some((card) => !card.hidden);
+    }
+
+    if (sync) syncUrl();
+  }
+
+  function openPanel() {
+    clearTimeout(closeTimer);
+    panel.hidden = false;
+    // 先让它以初始态显示，再加 class，过渡才会生效
+    void panel.offsetWidth;
+    panel.classList.add('is-open');
+    field.setAttribute('aria-expanded', 'true');
+  }
+
+  function closePanel() {
+    if (panel.hidden) return;
+    panel.classList.remove('is-open');
+    field.setAttribute('aria-expanded', 'false');
+    closeTimer = setTimeout(() => {
+      panel.hidden = true;
+    }, 200);
+  }
+
+  function togglePanel() {
+    if (panel.classList.contains('is-open')) closePanel();
+    else openPanel();
+  }
+
+  const reduceMotion = () => (
+    document.documentElement.classList.contains('animations-off') ||
+    (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  );
+
+  function clearSwitchClasses() {
+    cards.forEach((card) => card.classList.remove('is-leaving', 'is-entering'));
+  }
+
+  function animateIn(direction) {
+    const visible = cards.filter((card) => !card.hidden);
+    if (!visible.length) return;
+    content.style.setProperty('--switch-dir', String(direction));
+    visible.forEach((card) => card.classList.add('is-entering'));
+    // 先让初始位移/透明度生效，再移除 class 触发过渡
+    void content.offsetWidth;
+    requestAnimationFrame(() => {
+      visible.forEach((card) => card.classList.remove('is-entering'));
+    });
+  }
+
+  function applyCategory(category) {
+    if (category === state.category) return;
+
+    const prevIndex = tabs.findIndex((tab) => tab.dataset.category === state.category);
+    const nextIndex = tabs.findIndex((tab) => tab.dataset.category === category);
+    const direction = nextIndex >= prevIndex ? 1 : -1;
+
+    if (reduceMotion()) {
+      state.category = category;
+      update(true);
+      return;
+    }
+
+    clearTimeout(switchTimer);
+    clearSwitchClasses();
+    content.style.setProperty('--switch-dir', String(direction));
+    cards
+      .filter((card) => !card.hidden)
+      .forEach((card) => card.classList.add('is-leaving'));
+
+    switchTimer = setTimeout(() => {
+      state.category = category;
+      update(true);
+      clearSwitchClasses();
+      animateIn(direction);
+    }, 160);
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      applyCategory(tab.dataset.category);
+    });
+  });
+
+  options.forEach((opt) => {
+    opt.addEventListener('click', () => {
+      if (state.tags.size >= MAX_TAGS) return;
+      if (!state.tags.has(opt.dataset.tag)) {
+        state.tags.add(opt.dataset.tag);
+        update(true);
+      }
+    });
+  });
+
+  chipsWrap.addEventListener('click', (event) => {
+    const chip = event.target.closest('.tag-chip');
+    if (!chip) return;
+    // 点 chip 本体不让它冒泡去开关面板
+    event.stopPropagation();
+    const removeBtn = event.target.closest('.tag-chip-remove');
+    if (!removeBtn) return;
+    state.tags.delete(removeBtn.dataset.tag);
+    update(true);
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      state.tags.clear();
+      update(true);
+    });
+  }
+
+  field.addEventListener('click', (event) => {
+    if (event.target.closest('.tag-chip')) return;
+    togglePanel();
+  });
+
+  field.addEventListener('keydown', (event) => {
+    if (event.target !== field) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      togglePanel();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!root.isConnected || panel.hidden || root.contains(event.target)) return;
+    closePanel();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !panel.hidden) closePanel();
+  });
+
+  update(false);
+  if (urlTagsClamped) syncUrl();
 }
 
 /* 按需加载脚本：同源、只加载一次、带超时 */
@@ -1506,7 +1746,12 @@ function addRippleEffect() {
     .list-item,
     .spa-link-home,
     .project,
-    .article-nav a
+    .article-nav a,
+    .category-tab,
+    .tag-filter-field,
+    .tag-option,
+    .tag-chip-remove,
+    .tag-filter-clear
   `;
 
   // 为所有匹配元素补定位；不在这里写 overflow，
@@ -2303,6 +2548,7 @@ function initAll() {
   addRippleEffect();
   bindSettingsTrigger();
   bindHorizontalWheel();
+  initArticleFilters();
   Calendar.init();
   initGiscus();
 

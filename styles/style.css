@@ -154,7 +154,9 @@ html.custom-font {
 button,
 .sidebar a,
 .nav-link,
-.list-item {
+.list-item,
+.category-tab,
+.tag-filter-field {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -1998,7 +2000,7 @@ button,
    卡片
 ========================= */
 .card {
-  height: 250px;
+  min-height: 255px;
   padding: 20px;
   border-radius: 16px;
   display: flex;
@@ -2017,7 +2019,7 @@ button,
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  min-height: 48px;
+  min-height: 33px !important;
 }
 
 .card-title h3 {
@@ -3161,6 +3163,32 @@ select.ui-select:disabled {
     background: var(--accent-soft) !important;
   }
 
+  /* 实心按钮在移动端保持填充色（.button:hover 的 !important 会把它清空） */
+  .button.filled:hover {
+    background: var(--accent) !important;
+    color: var(--on-accent) !important;
+  }
+
+  /* 新增筛选组件：触屏上不保留 hover 状态 */
+  .category-tab:hover {
+    background: var(--card-bg) !important;
+  }
+
+  .category-tab[aria-pressed="true"]:hover {
+    background: var(--accent) !important;
+    color: var(--on-accent) !important;
+  }
+
+  .tag-filter-field:hover:not([aria-expanded="true"]) {
+    border-color: var(--select-border) !important;
+  }
+
+  .tag-chip-remove:hover,
+  .tag-option:hover,
+  .tag-filter-clear:hover {
+    background: transparent !important;
+  }
+
   /* 触屏没有真正的 hover：避免点完残留状态层，按压反馈交给 :active */
   .button.filled:hover::after {
     opacity: 0;
@@ -3611,7 +3639,8 @@ html.hide-lyric #xf-lyric {
   transition: transform 0.35s ease;
 }
 
-.scroll-item-badge {
+.scroll-item-badge,
+.card-category {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -3620,12 +3649,11 @@ html.hide-lyric #xf-lyric {
   font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: 0.02em;
-  /* 原来写死 #3d3d3d：深色主题下浅色文字压在 accent-soft 上才对，
-     所以交给 --color-text 跟随明暗 */
-  color: var(--color-text);
-  background: var(--accent-soft);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  /* 用强调色实心块 + on-accent 文字：明暗两套主题都有足够对比度，
+     压在任意壁纸/封面上都能看清 */
+  color: var(--on-accent);
+  background: var(--accent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
 }
 
 .scroll-item-excerpt {
@@ -3840,5 +3868,392 @@ html.hide-lyric #xf-lyric {
   .home-section-head {
     flex-wrap: wrap;
     gap: 10px;
+  }
+}
+
+/* =========================
+   文章分类 / 标签筛选（PAGEarticle）
+   颜色与形状全部复用现有变量：
+   primary = --accent，surface = --card-bg，
+   状态层 = --sidebar-a，圆角按 16 / 20 / 999。
+========================= */
+.article-filters {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.category-tab {
+  appearance: none;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.category-tab:hover {
+  background: var(--sidebar-a);
+}
+
+.category-tab[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.category-tab:focus-visible,
+.tag-filter-field:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tag-filter {
+  position: relative;
+  margin-left: auto;
+}
+
+/* 标签选择框：多选后以 chip 形式堆在框内 */
+.tag-filter-field {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 40px;
+  max-width: 420px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--select-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tag-filter-field:hover,
+.tag-filter-field[aria-expanded="true"] {
+  border-color: var(--accent);
+}
+
+.tag-filter-field > svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  opacity: 0.75;
+}
+
+.tag-filter-placeholder {
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+.tag-filter-placeholder[hidden] {
+  display: none;
+}
+
+.tag-filter-chevron {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+
+.tag-filter-field[aria-expanded="true"] .tag-filter-chevron {
+  transform: rotate(180deg);
+}
+
+.tag-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 4px 0 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--color-text);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tag-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tag-chip-remove:hover {
+  background: var(--sidebar-a);
+}
+
+.tag-chip-remove svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* 弹出面板：外层藏滚动条，滚动放在内部列表，保证圆角不被压住 */
+.tag-filter-panel {
+  box-sizing: border-box;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 60;
+  width: 260px;
+  padding: 8px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--article-hr-color);
+  box-shadow: var(--elevation-3);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: top right;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.tag-filter-panel.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.tag-filter-options {
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tag-filter-options::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.tag-option {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tag-option:hover {
+  background: var(--sidebar-a);
+}
+
+.tag-option[hidden] {
+  display: none;
+}
+
+.tag-option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tag-option:disabled:hover {
+  background: transparent;
+}
+
+.tag-filter-hint {
+  margin: 6px 2px 2px;
+  color: var(--color-text);
+  font-size: var(--text-2xs);
+  opacity: 0.55;
+}
+
+.tag-filter-clear {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--accent-text);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tag-filter-clear:hover {
+  background: var(--sidebar-a);
+}
+
+/* 分类切换：列表左右滑动 + 渐隐渐显 */
+.articles-page {
+  --switch-dir: 1;
+}
+
+.articles-page>a {
+  transition: opacity 0.13s ease, transform 0.13s ease;
+}
+
+.articles-page>a.is-leaving {
+  opacity: 0;
+  transform: translateX(calc(-24px * var(--switch-dir, 1)));
+}
+
+.articles-page>a.is-entering {
+  opacity: 0;
+  transform: translateX(calc(24px * var(--switch-dir, 1)));
+  transition: none;
+}
+
+.articles-empty {
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* 卡片封面上的分类角标，视觉与首页 .scroll-item-badge 一致 */
+.card-cover {
+  position: relative;
+  width: 300px;
+  height: 180px;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* PAGEarticle 卡片内部排版：
+   外层尺寸保持 250 内容高 + 40 内边距不变；
+   标题不再用 48px 最小高度、段落上下边距收紧、封面略降，
+   让内容高度恰好落在卡片内，标题不会被 overflow 裁到顶部。
+   PAGEvideo 的 .card 不受影响。 */
+.articles-page .card {
+  justify-content: flex-start;
+}
+
+.articles-page .card-title {
+  min-height: 0;
+}
+
+.articles-page .card p {
+  margin: 8px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.articles-page .card-title h3 {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.articles-page .card-cover {
+  height: 180px;
+}
+
+.content>a[hidden] {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .article-filters {
+    gap: 10px;
+  }
+
+  .category-tabs {
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-tab {
+    flex: 0 0 auto;
+  }
+
+  .tag-filter {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .tag-filter-field {
+    width: 100%;
+    max-width: none;
+  }
+
+  .tag-filter-panel {
+    left: 0;
+    right: auto;
+    width: 100%;
+  }
+
+  .card-cover {
+    width: 100%;
   }
 }

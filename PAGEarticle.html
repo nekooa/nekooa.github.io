@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=861c173f88">
+  <link rel="stylesheet" href="styles/bundle.css?v=e2c2b75f60">
 </head>
 
 <body>
@@ -127,129 +127,214 @@
       </li>
     </ul>
   </div>
-  <div class="content">
+  <div class="content articles-page">
 
-    <a href="/article11" class="spa-link">
+    <section class="article-filters" aria-label="文章筛选">
+      <div class="category-tabs" role="group" aria-label="按分类筛选">
+        <button type="button" class="category-tab" data-category="全部" aria-pressed="true">全部</button>
+        <button type="button" class="category-tab" data-category="折腾" aria-pressed="false">折腾</button>
+        <button type="button" class="category-tab" data-category="日常" aria-pressed="false">日常</button>
+        <button type="button" class="category-tab" data-category="站点" aria-pressed="false">站点</button>
+        <button type="button" class="category-tab" data-category="教程" aria-pressed="false">教程</button>
+        <button type="button" class="category-tab" data-category="???" aria-pressed="false">???</button>
+      </div>
+      <div class="tag-filter">
+        <div class="tag-filter-field" id="tagFilterField" role="button" tabindex="0" aria-expanded="false"
+          aria-controls="tagFilterPanel" aria-label="按标签筛选">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24H5a2 2 0 0 0-2 2v4.59c0 .53.21 1.04.59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83Z"></path>
+            <circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"></circle>
+          </svg>
+          <span class="tag-filter-placeholder">标签</span>
+          <span class="tag-filter-chips" id="tagFilterChips"></span>
+          <svg class="tag-filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </div>
+        <div class="tag-filter-panel" id="tagFilterPanel" hidden>
+          <div class="tag-filter-options" id="tagFilterOptions">
+            <button type="button" class="tag-option" data-tag="kitty"># kitty</button>
+            <button type="button" class="tag-option" data-tag="fish"># fish</button>
+            <button type="button" class="tag-option" data-tag="fastfetch"># fastfetch</button>
+            <button type="button" class="tag-option" data-tag="Noctalia"># Noctalia</button>
+            <button type="button" class="tag-option" data-tag="niri"># niri</button>
+            <button type="button" class="tag-option" data-tag="CachyOS"># CachyOS</button>
+            <button type="button" class="tag-option" data-tag="SDDM"># SDDM</button>
+            <button type="button" class="tag-option" data-tag="Linux"># Linux</button>
+            <button type="button" class="tag-option" data-tag="博客"># 博客</button>
+            <button type="button" class="tag-option" data-tag="杂谈"># 杂谈</button>
+            <button type="button" class="tag-option" data-tag="更新日志"># 更新日志</button>
+            <button type="button" class="tag-option" data-tag="CSS"># CSS</button>
+            <button type="button" class="tag-option" data-tag="播放器"># 播放器</button>
+            <button type="button" class="tag-option" data-tag="教程"># 教程</button>
+            <button type="button" class="tag-option" data-tag="CloudFlare"># CloudFlare</button>
+            <button type="button" class="tag-option" data-tag="梯子"># 梯子</button>
+          </div>
+          <p class="tag-filter-hint" hidden>最多选择 3 个标签</p>
+          <button type="button" class="tag-filter-clear">清除已选标签</button>
+        </div>
+      </div>
+    </section>
+
+
+    <a href="/article11" class="spa-link" data-category="折腾" data-tags="kitty fish fastfetch Noctalia">
       <div class="card">
         <div class="card-title">
           <h3>我的桌面配置与脚本 · 二</h3>
           <span class="time-badge">2026-11-14</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19d942ed6.png" alt="我的桌面配置与脚本 · 二 封面">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19d942ed6.png" alt="我的桌面配置与脚本 · 二 封面">
+          <span class="card-category">折腾</span>
+        </div>
         <p>kitty、fish、fastfetch 与 Noctalia Shell v5</p>
       </div>
     </a>
 
-    <a href="/article10" class="spa-link">
+    <a href="/article10" class="spa-link" data-category="折腾" data-tags="niri CachyOS SDDM Linux">
       <div class="card">
         <div class="card-title">
           <h3>我的桌面配置与脚本</h3>
           <span class="time-badge">2026-10-24</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19db2c620.png">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19db2c620.png">
+          <span class="card-category">折腾</span>
+        </div>
         <p>我的桌面配置与 SDDM 自动换壁纸</p>
       </div>
     </a>
 
-    <a href="/article9" class="spa-link">
+    <a href="/article9" class="spa-link" data-category="日常" data-tags="杂谈 博客">
       <div class="card">
         <div class="card-title">
           <h3>fufu!</h3>
           <span class="time-badge">2026-08-14</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/14/6a7edf2ad6b8a.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/14/6a7edf2ad6b8a.jpg">
+          <span class="card-category">日常</span>
+        </div>
         <p>人生第一只fufu！</p>
       </div>
     </a>
 
 
-    <a href="/article8" class="spa-link">
+    <a href="/article8" class="spa-link" data-category="站点" data-tags="更新日志 博客 CSS">
       <div class="card">
         <div class="card-title">
           <h3>文章系统更新</h3>
           <span class="time-badge">2026-08-02</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7174429c2bd.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7174429c2bd.jpg">
+          <span class="card-category">站点</span>
+        </div>
         <p>新版文章样式展示！</p>
       </div>
     </a>
 
-    <a href="/article0721" class="spa-link">
+    <a href="/article0721" class="spa-link" data-category="???" data-tags="杂谈 博客">
       <div class="card">
         <div class="card-title">
           <h3>no title</h3>
           <span class="time-badge">2026-07-21</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71747bb5006.png">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71747bb5006.png">
+          <span class="card-category">???</span>
+        </div>
         <p>你再看看日期呢</p>
       </div>
     </a>
 
-    <a href="/article6" class="spa-link">
+    <a href="/article6" class="spa-link" data-category="教程" data-tags="教程 CloudFlare 梯子">
       <div class="card">
         <div class="card-title">
           <h3>EdgeTunnel</h3>
           <span class="time-badge">2026-06-09</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg">
+          <span class="card-category">教程</span>
+        </div>
         <p>用 EdgeTunnel 给自己搞个免费梯子!</p>
       </div>
     </a>
 
-    <a href="/article5" class="spa-link">
+    <a href="/article5" class="spa-link" data-category="站点" data-tags="更新日志 博客">
       <div class="card">
         <div class="card-title">
           <h3>许多更新 & 以后的计划</h3>
           <span class="time-badge">2026-05-01</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9c405c6.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9c405c6.jpg">
+          <span class="card-category">站点</span>
+        </div>
         <p>咕咕咕</p>
       </div>
     </a>
 
-    <a href="/article4" class="spa-link">
+    <a href="/article4" class="spa-link" data-category="站点" data-tags="更新日志 博客 播放器">
       <div class="card">
         <div class="card-title">
           <h3>更新日志4</h3>
           <span class="time-badge">2026-04-05</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9c22bec.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9c22bec.jpg">
+          <span class="card-category">站点</span>
+        </div>
         <p>音乐播放器！</p>
       </div>
     </a>
 
-    <a href="/article3" class="spa-link">
+    <a href="/article3" class="spa-link" data-category="站点" data-tags="更新日志 博客 CSS">
       <div class="card">
         <div class="card-title">
           <h3>更新日志3</h3>
           <span class="time-badge">2026-04-03</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b676044.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b676044.jpg">
+          <span class="card-category">站点</span>
+        </div>
         <p>代码框高亮！</p>
       </div>
     </a>
 
-    <a href="/article2" class="spa-link">
+    <a href="/article2" class="spa-link" data-category="站点" data-tags="更新日志 博客">
       <div class="card">
         <div class="card-title">
           <h3>更新日志2</h3>
           <span class="time-badge">2026-03-29</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b694c85.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b694c85.jpg">
+          <span class="card-category">站点</span>
+        </div>
         <p>一点改动~</p>
       </div>
     </a>
 
-    <a href="/article" class="spa-link">
+    <a href="/article" class="spa-link" data-category="站点" data-tags="更新日志 博客">
       <div class="card">
         <div class="card-title">
           <h3>更新日志</h3>
           <span class="time-badge">2026-03-28</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b69d20e.jpg">
+        <div class="card-cover">
+          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b69d20e.jpg">
+          <span class="card-category">站点</span>
+        </div>
         <p>一些改动~</p>
       </div>
     </a>
+
+    <div class="articles-empty" hidden>没有符合条件的文章，换个分类或标签试试。</div>
 
   </div>
 
@@ -265,7 +350,7 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js?v=e889f3b654"></script>
+  <script defer src="js/script.min.js?v=bc6d317325"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
   <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
 
