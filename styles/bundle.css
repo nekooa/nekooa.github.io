@@ -3890,6 +3890,7 @@ html.hide-lyric #xf-lyric {
   grid-column: 1 / -1;
   width: 100%;
   max-width: 1300px;
+  min-width: 0px;
   margin: 0 auto 4px;
   display: flex;
   align-items: center;
@@ -4265,6 +4266,39 @@ html.hide-lyric #xf-lyric {
   .card-cover {
     width: 100%;
   }
+}
+
+/* =========================
+   可点击元素：文本不可选中
+   只覆盖 UI/导航/卡片/筛选组件，文章正文里的链接保持可选中，
+   避免影响正常阅读时复制文字。
+========================= */
+button,
+.button,
+.sidebar a,
+.footer a,
+.spa-link,
+.card,
+.scroll-item,
+.home-link-card,
+.home-section-more,
+.article-nav a,
+.article-tag,
+.li-a,
+.project,
+.settings-button,
+.close-button,
+.list-item,
+.copy-btn,
+.theme-color-btn,
+.calendar-day,
+.category-tab,
+.tag-filter-field,
+.tag-option,
+.tag-chip,
+.tag-filter-clear {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ==== styles/article-typography.css ==== */
