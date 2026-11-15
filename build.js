@@ -11,7 +11,7 @@
  * 构建脚本做三件事：
  *
  *   1. 把未压缩源码压成页面实际加载的 *.min.js
- *   2. 把 4 个首屏 CSS 合并成 styles/bundle.css（减少请求数）
+ *   2. 把 4 个首屏 CSS 合并并压缩成 styles/bundle.css（减少请求数与体积）
  *   3. 给静态资源打上内容指纹：xxx.js?v=1a2b3c4d
  *
  * 为什么需要第 3 步
@@ -26,7 +26,7 @@
  * 所以每次部署都会拿到新的指纹 URL —— 既快又不会看到旧样式。
  *
  * 用法：
- *   npm install     # 首次安装 terser
+ *   npm install     # 首次安装 terser / csso
  *   npm run build   # 生成 .min.js + bundle.css + 更新所有 HTML 的 ?v=
  *
  * 提醒：改完 js/script.js、xf-MusicPlayer.js、styles/*.css 之后
@@ -38,12 +38,21 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const zlib = require('zlib');
 
 let minify;
 try {
   ({ minify } = require('terser'));
 } catch (err) {
   console.error('找不到 terser，请先运行：npm install');
+  process.exit(1);
+}
+
+let csso;
+try {
+  csso = require('csso');
+} catch (err) {
+  console.error('找不到 csso，请先运行：npm install');
   process.exit(1);
 }
 
@@ -150,11 +159,23 @@ function buildCssBundle() {
     ' * 修改样式请改 styles/style.css、article-typography.css、viewer.css 后重新 npm run build。\n' +
     ' * 版权与许可见仓库根目录 LICENSE / THIRD-PARTY-NOTICES.md。\n */\n';
 
-  const output = header + parts.join('\n');
+  const source = header + parts.join('\n');
+  let output;
+  try {
+    output = csso.minify(source, { comments: 'exclamation' }).css;
+  } catch (err) {
+    fail(`CSS 压缩失败：${err}`);
+    return;
+  }
+  if (!output.endsWith('\n')) output += '\n';
+
   fs.writeFileSync(abs(CSS_BUNDLE.dest), output, 'utf8');
 
-  const bytes = Buffer.byteLength(output, 'utf8');
-  console.log(`  ${CSS_BUNDLE.sources.length} 个 CSS → ${CSS_BUNDLE.dest}   ${bytes} B`);
+  const before = Buffer.byteLength(source, 'utf8');
+  const after = Buffer.byteLength(output, 'utf8');
+  const gzip = zlib.gzipSync(Buffer.from(output)).length;
+  const saved = ((1 - after / before) * 100).toFixed(1);
+  console.log(`  ${CSS_BUNDLE.sources.length} 个 CSS → ${CSS_BUNDLE.dest}   ${before} B → ${after} B（省 ${saved}%，gzip ${gzip} B）`);
 }
 
 /* ---------------- 3. 内容指纹 ---------------- */

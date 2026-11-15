@@ -57,3 +57,11 @@
 #   cache-control: public, max-age=0, must-revalidate
 # 这样每次部署都能立刻拿到新 HTML，而新 HTML 里带着新的 ?v= 指纹，
 # 静态资源自然跟着换新 —— 既没有"改了样式看不到"，也不用每次重下资源。
+
+# ---------- 安全响应头 ----------
+# HSTS / 点击劫持 / 源隔离；CSP 仍由各页面的 <meta> 提供
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Cross-Origin-Opener-Policy: same-origin-allow-popups

@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com https://cloudflareinsights.com https://static.cloudflareinsights.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>影音 | ねねねこ</title>
   <meta name="description" content="ねねねこ 收藏的影音内容：B 站 MV、同人动画、翻唱与原创曲。">
   <meta name="author" content="holo-world">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=3873a15b39">
+  <link rel="stylesheet" href="styles/bundle.css?v=ae1a93d111">
 </head>
 
 <body>
@@ -67,7 +67,7 @@
   <div class="sidebar">
     <ul>
       <li>
-        <a href="/" class="sidebar-link">
+        <a href="/" class="sidebar-link" aria-label="主页">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
             transform="translate(0, -0.7)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -78,7 +78,7 @@
         <span class="sidebar-text">主页</span>
       </li>
       <li>
-        <a href="/PAGEarticle" class="sidebar-link">
+        <a href="/PAGEarticle" class="sidebar-link" aria-label="文章">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.05)">
             <path
@@ -92,7 +92,7 @@
         <span class="sidebar-text">文章</span>
       </li>
       <li>
-        <a href="/PAGEvideo" class="active">
+        <a href="/PAGEvideo" class="active" aria-label="影音">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.03) translate(0, -0.6)">
             <path
@@ -109,7 +109,7 @@
         <span class="sidebar-text">影音</span>
       </li>
       <li>
-        <a href="/PAGEproject" class="sidebar-link">
+        <a href="/PAGEproject" class="sidebar-link" aria-label="项目">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.02) translate(0, -0.2)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -120,7 +120,7 @@
         <span class="sidebar-text">项目</span>
       </li>
       <li>
-        <a href="/PAGEabout" class="sidebar-link">
+        <a href="/PAGEabout" class="sidebar-link" aria-label="关于">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="scale(0.0234375)" fill="currentColor">
               <path
@@ -134,7 +134,7 @@
   </div>
 
   <!-- 内容区域 -->
-  <div class="content">
+  <div class="content videos-page" role="main">
 
     <a href="/video5" class="spa-link">
       <div class="card">
@@ -142,7 +142,7 @@
           <h3>人是猫</h3>
           <span class="time-badge">2026-10-11</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8fee12c5.jpg" alt="人是猫 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908e924ed4.jpg" alt="人是猫 封面" width="600" height="360">
         <p>deepseek 翻唱</p>
       </div>
     </a>
@@ -153,7 +153,7 @@
           <h3>P(doom)</h3>
           <span class="time-badge">2026-09-29</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d90147384.jpg" alt="P(doom) 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908e619cb5.jpg" alt="P(doom) 封面" width="600" height="360">
         <p>Opus 5.5 MV</p>
       </div>
     </a>
@@ -164,7 +164,7 @@
           <h3>将棋一番！</h3>
           <span class="time-badge">2026-08-07</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d90384e73.jpg" alt="将棋一番！ 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908eb18546.jpg" alt="将棋一番！ 封面" width="600" height="360">
         <p>歌愛ユキ</p>
       </div>
     </a>
@@ -175,7 +175,7 @@
           <h3>ニャニャニャチュニャ</h3>
           <span class="time-badge">2026-07-26</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8efcb917.jpg" alt="NNNCN 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af9094423d41.jpg" alt="NNNCN 封面" width="600" height="360">
         <p>TAK · Kotoha</p>
       </div>
     </a>
@@ -186,7 +186,7 @@
           <h3>Dummy Romance</h3>
           <span class="time-badge">2026-07-17</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717bddee7f7.jpg" alt="Dummy Romance 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908e397bbb.jpg" alt="Dummy Romance 封面" width="600" height="360">
         <p>DECO新曲！</p>
       </div>
     </a>
@@ -197,7 +197,7 @@
           <h3>夏日远去之后</h3>
           <span class="time-badge">2026-06-08</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9a63954.jpg" alt="夏日远去之后 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908e08eacd.jpg" alt="夏日远去之后 封面" width="600" height="360">
         <p>明日方舟 2026高考应援曲</p>
       </div>
     </a>
@@ -208,7 +208,7 @@
           <h3>Connect the World...</h3>
           <span class="time-badge">2026-03-28</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a717bb6c0dab.jpeg" alt="Connect the World... 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908dde1f42.jpg" alt="Connect the World... 封面" width="600" height="360">
         <p>Nanatsukaze & nakotanmaru</p>
       </div>
     </a>
@@ -219,7 +219,7 @@
           <h3>エマヒロで舌打ち</h3>
           <span class="time-badge">2025-11-03</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8fc8a09b.jpg" alt="エマヒロで舌打ち 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908f083166.jpg" alt="エマヒロで舌打ち 封面" width="600" height="360">
         <p>魔法少女的魔女审判二创</p>
       </div>
     </a>
@@ -230,7 +230,7 @@
           <h3>two 小动画</h3>
           <span class="time-badge">2022-06-01</span>
         </div>
-        <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8fa0d723.jpg" alt="two 小动画 封面">
+        <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af909463dc82.jpg" alt="two 小动画 封面" width="600" height="360">
         <p>鹿乃 two 专辑</p>
       </div>
     </a>
@@ -248,9 +248,9 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js?v=bc6d317325"></script>
+  <script defer src="js/script.min.js?v=43cc559fc0"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
-  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=11b7898164"></script>
 
 </body>
 

@@ -157,6 +157,24 @@ function ensureLayer() {
     layer.id = 'mascot-layer';
     document.body.appendChild(layer);
   }
+  // 桌宠是纯装饰：引擎动态插入的图片补空 alt，避免无障碍检查报错
+  if (!layer.dataset.altPatched) {
+    layer.dataset.altPatched = 'true';
+    const patch = (root) => {
+      if (root.nodeType !== 1) return;
+      const imgs = root.tagName === 'IMG' ? [root] : root.querySelectorAll('img');
+      imgs.forEach((img) => {
+        if (!img.hasAttribute('alt')) {
+          img.alt = '';
+          img.setAttribute('aria-hidden', 'true');
+        }
+      });
+    };
+    new MutationObserver((mutations) => {
+      mutations.forEach((m) => m.addedNodes.forEach(patch));
+    }).observe(layer, { childList: true, subtree: true });
+    layer.querySelectorAll('img').forEach(patch);
+  }
   return layer;
 }
 

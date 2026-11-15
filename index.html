@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com https://cloudflareinsights.com https://static.cloudflareinsights.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ねねねこ | holo-world の个人博客</title>
   <meta name="description" content="holo-world 的个人博客。记录 ACGN 日常、前端折腾笔记、原创小说与影音收藏，站点用纯 HTML/CSS/JS 手写。">
   <meta name="author" content="holo-world">
@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=3873a15b39">
+  <link rel="stylesheet" href="styles/bundle.css?v=ae1a93d111">
 </head>
 
 <body>
@@ -61,7 +61,7 @@
   <div class="sidebar">
     <ul>
       <li>
-        <a href="/" class="active">
+        <a href="/" class="active" aria-label="主页">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
             transform="translate(0, -0.7)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -72,7 +72,7 @@
         <span class="sidebar-text">主页</span>
       </li>
       <li>
-        <a href="/PAGEarticle" class="sidebar-link">
+        <a href="/PAGEarticle" class="sidebar-link" aria-label="文章">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.05)">
             <path
@@ -86,7 +86,7 @@
         <span class="sidebar-text">文章</span>
       </li>
       <li>
-        <a href="/PAGEvideo" class="sidebar-link">
+        <a href="/PAGEvideo" class="sidebar-link" aria-label="影音">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.03) translate(0, -0.6)">
             <path
@@ -103,7 +103,7 @@
         <span class="sidebar-text">影音</span>
       </li>
       <li>
-        <a href="/PAGEproject" class="sidebar-link">
+        <a href="/PAGEproject" class="sidebar-link" aria-label="项目">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.02) translate(0, -0.2)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -114,7 +114,7 @@
         <span class="sidebar-text">项目</span>
       </li>
       <li>
-        <a href="/PAGEabout" class="sidebar-link">
+        <a href="/PAGEabout" class="sidebar-link" aria-label="关于">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="scale(0.0234375)" fill="currentColor">
               <path
@@ -129,9 +129,9 @@
 
   <div class="header-container">
     <picture>
-      <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png"
-        data-pink-src="https://a1.boltp.com/2026/08/04/6a7176bf3f3aa.png"
-        data-blue-src="https://a1.boltp.com/2026/08/30/6a9430a4d351d.png" alt="头图" class="home-header">
+      <img src="https://a1.boltp.com/2026/11/15/6af909487d4ed.jpg" data-pink-src="https://a1.boltp.com/2026/11/15/6af909487d4ed.jpg"
+        data-blue-src="https://a1.boltp.com/2026/11/15/6af9094aedc56.jpg" alt="头图" class="home-header"
+        width="1100" height="240" fetchpriority="high" decoding="async">
     </picture>
     <div class="header-overlay"></div>
     <div class="hitokoto">
@@ -141,13 +141,13 @@
   </div>
 
   <!-- 内容区域 -->
-  <div class="home-content">
+  <div class="home-content" role="main">
     <div class="home-shell">
 
       <!-- 欢迎卡：M3 extra-large 圆角 surface，复用关于页的 about-hero 组件 -->
       <section class="content-card about-hero home-hero" aria-labelledby="home-name">
         <div class="about-hero-avatar">
-          <img src="https://a1.boltp.com/2026/08/04/6a71788b42ffe.jpg" alt="holo-world 的头像">
+          <img src="https://a1.boltp.com/2026/11/15/6af9094d77cd0.jpg" width="80" height="80" alt="holo-world 的头像">
         </div>
         <div class="about-hero-main">
           <p class="about-eyebrow">Welcome to</p>
@@ -220,7 +220,7 @@
 
             <a href="/article11" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19d942ed6.png" alt="我的桌面配置与脚本 · 二 封面">
+                <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908b31f512.jpg" width="600" height="360" alt="我的桌面配置与脚本 · 二 封面">
                 <span class="scroll-item-badge">折腾</span>
               </div>
               <h3 class="scroll-item-title">我的桌面配置与脚本 · 二</h3>
@@ -230,7 +230,7 @@
 
             <a href="/article10" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19db2c620.png" alt="我的桌面配置与脚本 封面">
+                <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908c07efbf.jpg" width="600" height="360" alt="我的桌面配置与脚本 封面">
                 <span class="scroll-item-badge">折腾</span>
               </div>
               <h3 class="scroll-item-title">我的桌面配置与脚本</h3>
@@ -240,7 +240,7 @@
 
             <a href="/article9" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/14/6a7edf2ad6b8a.jpg" alt="fufu! 封面">
+                <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908c2f1c47.jpg" width="600" height="360" alt="fufu! 封面">
                 <span class="scroll-item-badge">日常</span>
               </div>
               <h3 class="scroll-item-title">fufu!</h3>
@@ -250,7 +250,7 @@
 
             <a href="/article8" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7174429c2bd.jpg" alt="文章系统更新 封面">
+                <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908c4ee6c7.jpg" width="600" height="360" alt="文章系统更新 封面">
                 <span class="scroll-item-badge">站点</span>
               </div>
               <h3 class="scroll-item-title">文章系统更新</h3>
@@ -260,7 +260,7 @@
 
             <a href="/article0721" class="scroll-item spa-link-home">
               <div class="scroll-item-img">
-                <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71747bb5006.png" alt="no title 封面">
+                <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908cc121ad.jpg" width="600" height="360" alt="no title 封面">
                 <span class="scroll-item-badge">???</span>
               </div>
               <h3 class="scroll-item-title">no title</h3>
@@ -305,7 +305,7 @@
 
           <a href="/video2" class="home-video-card spa-link-home">
             <span class="home-video-cover">
-              <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9a63954.jpg" alt="夏日远去之后 封面">
+              <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908e08eacd.jpg" width="840" height="472" alt="夏日远去之后 封面">
               <span class="home-video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"></path>
@@ -320,7 +320,7 @@
 
           <a href="/video5" class="home-video-card spa-link-home">
             <span class="home-video-cover">
-              <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8fee12c5.jpg" alt="人是猫 封面">
+              <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908e924ed4.jpg" width="840" height="472" alt="人是猫 封面">
               <span class="home-video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"></path>
@@ -335,7 +335,7 @@
 
           <a href="/video8" class="home-video-card spa-link-home">
             <span class="home-video-cover">
-              <img loading="lazy" src="https://a1.boltp.com/2026/11/01/6ae6d8fa0d723.jpg" alt="two 小动画 封面">
+              <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af909463dc82.jpg" width="840" height="472" alt="two 小动画 封面">
               <span class="home-video-play" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14Z"></path>
@@ -366,9 +366,9 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js?v=bc6d317325"></script>
+  <script defer src="js/script.min.js?v=43cc559fc0"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
-  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=11b7898164"></script>
 
 </body>
 

@@ -926,21 +926,22 @@
 #xf-MusicPlayer .xf-ripple {
   position: absolute;
   border-radius: 50%;
-  animation: xf-ripple-animation 0.5s ease-out forwards;
   background: rgba(255, 255, 255, 0.3);
   pointer-events: none;
+  transform: scale(0.25);
+  opacity: 0.8;
+  transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1), opacity 0.35s linear;
+  will-change: transform, opacity;
 }
 
-@keyframes xf-ripple-animation {
-  from {
-    transform: scale(0.25);
-    opacity: 0.8;
-  }
+/* 按住时扩散到最大并保持，松开后由 JS 加 .is-releasing 渐隐 */
+#xf-MusicPlayer .xf-ripple.is-active {
+  transform: scale(2.5);
+  opacity: 1;
+}
 
-  to {
-    transform: scale(2.5);
-    opacity: 0;
-  }
+#xf-MusicPlayer .xf-ripple.is-releasing {
+  opacity: 0;
 }
 
 /* .xf-switchPlayer 已有 position:absolute，只需加 overflow */

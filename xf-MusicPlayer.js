@@ -191,16 +191,16 @@ window.addEventListener('DOMContentLoaded', function () {
             '      <ul class="xf-bottomControl">',
             '        <li class="xf-progressBar">',
             '          <span class="xf-currentTime">00:00</span>',
-            '          <h5 class="xf-totalAudioProgress">',
+            '          <div class="xf-totalAudioProgress">',
             '            <p class="xf-audioProgress" style="width: 0;"></p>',
-            '          </h5>',
+            '          </div>',
             '          <span class="xf-totalTime">00:00</span>',
             '        </li>',
             '        <li class="xf-playlistBtn"><i class="iconfont icon-gedan xf-iconCircle"></i></li>',
             '      </ul>',
             '    </div>',
             '  </div>',
-            '  <div class="xf-outsideSongList">',
+            '  <div class="xf-outsideSongList" tabindex="0" aria-label="播放列表">',
             '    <ul class="xf-listOfSongs"></ul>',
             '  </div>',
             '</div>'
@@ -380,7 +380,7 @@ window.addEventListener('DOMContentLoaded', function () {
                     '  </div>',
                     '  <div class="xf-playlistSongInformation">',
                     '    <div class="xf-songTitle">',
-                    `      <h5 class="xf-songName">${escapeHTML(Title)}</h5>`,
+                    `      <div class="xf-songName">${escapeHTML(Title)}</div>`,
                     '      <p class="xf-authorAndDuration">',
                     `        <span class="xf-songAuthor">${escapeHTML(Author)}</span>`,
                     `        <span class="xf-songLength iconfont icon-shijian">\t${escapeHTML(loadingTime)}</span>`,
@@ -1207,7 +1207,36 @@ window.addEventListener('DOMContentLoaded', function () {
                 if (old) old.remove();
 
                 target.appendChild(circle);
-                setTimeout(() => circle.remove(), 600);
+                void circle.offsetWidth;
+                circle.classList.add('is-active');
+
+                let released = false;
+                let fading = false;
+                let fadeTimer = 0;
+
+                const removeRipple = () => {
+                    clearTimeout(fadeTimer);
+                    circle.remove();
+                };
+
+                const fadeRipple = () => {
+                    if (fading) return;
+                    fading = true;
+                    circle.classList.add('is-releasing');
+                    fadeTimer = setTimeout(removeRipple, 360);
+                };
+
+                const releaseRipple = () => {
+                    document.removeEventListener('pointerup', releaseRipple);
+                    document.removeEventListener('pointercancel', releaseRipple);
+                    if (released) return;
+                    released = true;
+                    // 快速点击也立即渐隐
+                    fadeRipple();
+                };
+
+                document.addEventListener('pointerup', releaseRipple);
+                document.addEventListener('pointercancel', releaseRipple);
             });
             
             /* ---------- 展开/收起播放器面板 ---------- */

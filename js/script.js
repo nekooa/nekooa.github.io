@@ -1727,12 +1727,9 @@ function addRippleEffect() {
   if (document.body.dataset.rippleGlobalBound === 'true') return;
   document.body.dataset.rippleGlobalBound = 'true';
 
-  // 水波纹裁剪只在动画期间生效（约 600ms）。
-  // 早期实现是常驻写内联 overflow:hidden，那会连带裁掉 ::after 撑出的
-  // 48px 点击命中区（见 style.css 的 ".sidebar a::after"），导航与设置
-  // 按钮因此一度被排除在水波纹之外。现在改为「按下时裁剪、波纹结束即归还」，
-  // 两者可以共存。
-  const RIPPLE_CLIP_MS = 600;
+  const RIPPLE_FADE_MS = 360;
+  const activeRipples = new Map();
+
   const rippleSelector = `
     .sidebar a,
     .footer a,
@@ -1762,6 +1759,39 @@ function addRippleEffect() {
     if (window.getComputedStyle(el).position === 'static') el.style.position = 'relative';
   });
 
+  function restoreClip(state) {
+    if (state.clip && !state.target.querySelector('.ripple')) {
+      state.target.style.overflow = '';
+    }
+  }
+
+  function removeRipple(state) {
+    if (!state || state.done) return;
+    state.done = true;
+    clearTimeout(state.fadeTimer);
+    state.circle.remove();
+    restoreClip(state);
+  }
+
+  function fadeRipple(state) {
+    if (!state || state.done || state.fading) return;
+    state.fading = true;
+    state.circle.classList.add('is-releasing');
+    state.fadeTimer = setTimeout(() => removeRipple(state), RIPPLE_FADE_MS);
+  }
+
+  function releaseRipple(state) {
+    if (!state || state.released) return;
+    state.released = true;
+    // 快速点击也立即开始渐隐，不等待扩散结束
+    fadeRipple(state);
+  }
+
+  function releaseAll() {
+    activeRipples.forEach((state) => releaseRipple(state));
+    activeRipples.clear();
+  }
+
   document.body.addEventListener('pointerdown', (e) => {
     // 动画关闭时禁用水波纹
     if (document.documentElement.classList.contains('animations-off')) return;
@@ -1773,29 +1803,62 @@ function addRippleEffect() {
       if (window.getComputedStyle(target).position === 'static') target.style.position = 'relative';
     }
 
+    // 同一根手指/鼠标再次按下，或同一目标上有旧波纹时，先收掉旧的
+    activeRipples.forEach((state, id) => {
+      if (id === e.pointerId || state.target === target) {
+        removeRipple(state);
+        activeRipples.delete(id);
+      }
+    });
+    target.querySelectorAll('.ripple').forEach((el) => el.remove());
+
     // 仅在波纹存续期间裁剪，避免常驻 overflow:hidden 吃掉命中区
-    const needsClip = window.getComputedStyle(target).overflow !== 'hidden';
-    if (needsClip) target.style.overflow = 'hidden';
+    const clip = window.getComputedStyle(target).overflow !== 'hidden';
+    if (clip) target.style.overflow = 'hidden';
 
     const rect = target.getBoundingClientRect();
-    const circle = document.createElement('span');
     const diameter = Math.max(rect.width, rect.height);
     const radius = diameter / 2;
 
-    circle.classList.add('ripple');
+    const circle = document.createElement('span');
+    circle.className = 'ripple';
     circle.style.width = circle.style.height = `${diameter}px`;
     circle.style.left = `${e.clientX - rect.left - radius}px`;
     circle.style.top = `${e.clientY - rect.top - radius}px`;
-
-    const old = target.querySelector('.ripple');
-    if (old) old.remove();
-
     target.appendChild(circle);
-    setTimeout(() => {
-      circle.remove();
-      if (needsClip && !target.querySelector('.ripple')) target.style.overflow = '';
-    }, RIPPLE_CLIP_MS);
+
+    const state = {
+      target,
+      circle,
+      clip,
+      released: false,
+      fading: false,
+      done: false,
+      fadeTimer: 0,
+    };
+
+    // 先让初始态（scale .25）落地，再加 class 触发扩散
+    void circle.offsetWidth;
+    circle.classList.add('is-active');
+
+    activeRipples.set(e.pointerId, state);
   });
+
+  document.addEventListener('pointerup', (e) => {
+    const state = activeRipples.get(e.pointerId);
+    if (!state) return;
+    activeRipples.delete(e.pointerId);
+    releaseRipple(state);
+  });
+
+  document.addEventListener('pointercancel', (e) => {
+    const state = activeRipples.get(e.pointerId);
+    if (!state) return;
+    activeRipples.delete(e.pointerId);
+    releaseRipple(state);
+  });
+
+  window.addEventListener('blur', releaseAll);
 }
 
 /* =========================

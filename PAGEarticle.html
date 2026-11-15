@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <!-- 内容安全策略：脚本仅允许同源（highlight.js 已自托管），禁止插件与 base 劫持 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; media-src 'self' https: http: blob: data:; connect-src 'self' https://api.xfyun.club https://v1.hitokoto.cn https://a1.boltp.com https://cloudflareinsights.com https://static.cloudflareinsights.com; frame-src https://giscus.app https://player.bilibili.com https://www.bilibili.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>文章列表 | ねねねこ</title>
   <meta name="description" content="ねねねこ 的全部文章：网站更新日志、EdgeTunnel 搭建教程、日常随笔与折腾记录。">
   <meta name="author" content="holo-world">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://a1.boltp.com">
   <link rel="preconnect" href="https://v1.hitokoto.cn">
   <!-- 4 个 CSS 合并成 1 个（构建脚本生成，顺序与原样一致）；highlight 主题也并入其中 -->
-  <link rel="stylesheet" href="styles/bundle.css?v=3873a15b39">
+  <link rel="stylesheet" href="styles/bundle.css?v=ae1a93d111">
 </head>
 
 <body>
@@ -62,7 +62,7 @@
   <div class="sidebar">
     <ul>
       <li>
-        <a href="/" class="sidebar-link">
+        <a href="/" class="sidebar-link" aria-label="主页">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
             transform="translate(0, -0.7)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -73,7 +73,7 @@
         <span class="sidebar-text">主页</span>
       </li>
       <li>
-        <a href="/PAGEarticle" class="active">
+        <a href="/PAGEarticle" class="active" aria-label="文章">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.05)">
             <path
@@ -87,7 +87,7 @@
         <span class="sidebar-text">文章</span>
       </li>
       <li>
-        <a href="/PAGEvideo" class="sidebar-link">
+        <a href="/PAGEvideo" class="sidebar-link" aria-label="影音">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.03) translate(0, -0.6)">
             <path
@@ -104,7 +104,7 @@
         <span class="sidebar-text">影音</span>
       </li>
       <li>
-        <a href="/PAGEproject" class="sidebar-link">
+        <a href="/PAGEproject" class="sidebar-link" aria-label="项目">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
             transform="scale(1.02) translate(0, -0.2)">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -115,7 +115,7 @@
         <span class="sidebar-text">项目</span>
       </li>
       <li>
-        <a href="/PAGEabout" class="sidebar-link">
+        <a href="/PAGEabout" class="sidebar-link" aria-label="关于">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="scale(0.0234375)" fill="currentColor">
               <path
@@ -127,7 +127,7 @@
       </li>
     </ul>
   </div>
-  <div class="content articles-page">
+  <div class="content articles-page" role="main">
 
     <section class="article-filters" aria-label="文章筛选">
       <div class="category-tabs" role="group" aria-label="按分类筛选">
@@ -186,7 +186,7 @@
           <span class="time-badge">2026-11-14</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19d942ed6.png" alt="我的桌面配置与脚本 · 二 封面">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908b31f512.jpg" alt="我的桌面配置与脚本 · 二 封面" width="600" height="360">
           <span class="card-category">折腾</span>
         </div>
         <p>kitty、fish、fastfetch 与 Noctalia Shell v5</p>
@@ -200,7 +200,7 @@
           <span class="time-badge">2026-10-24</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/10/24/6adc19db2c620.png">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908c07efbf.jpg" alt="我的桌面配置与脚本 封面" width="600" height="360">
           <span class="card-category">折腾</span>
         </div>
         <p>我的桌面配置与 SDDM 自动换壁纸</p>
@@ -214,7 +214,7 @@
           <span class="time-badge">2026-08-14</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/14/6a7edf2ad6b8a.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908c2f1c47.jpg" alt="fufu! 封面" width="600" height="360">
           <span class="card-category">日常</span>
         </div>
         <p>人生第一只fufu！</p>
@@ -229,7 +229,7 @@
           <span class="time-badge">2026-08-02</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7174429c2bd.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908c4ee6c7.jpg" alt="文章系统更新 封面" width="600" height="360">
           <span class="card-category">站点</span>
         </div>
         <p>新版文章样式展示！</p>
@@ -243,7 +243,7 @@
           <span class="time-badge">2026-07-21</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71747bb5006.png">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908cc121ad.jpg" alt="no title 封面" width="600" height="360">
           <span class="card-category">???</span>
         </div>
         <p>你再看看日期呢</p>
@@ -257,7 +257,7 @@
           <span class="time-badge">2026-06-09</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a71754f00f6e.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908ce86962.jpg" alt="EdgeTunnel 封面" width="600" height="360">
           <span class="card-category">教程</span>
         </div>
         <p>用 EdgeTunnel 给自己搞个免费梯子!</p>
@@ -271,7 +271,7 @@
           <span class="time-badge">2026-05-01</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9c405c6.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908d11559a.jpg" alt="许多更新 & 以后的计划 封面" width="600" height="360">
           <span class="card-category">站点</span>
         </div>
         <p>咕咕咕</p>
@@ -285,7 +285,7 @@
           <span class="time-badge">2026-04-05</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/03/6a707e9c22bec.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908d4aa4f1.jpg" alt="更新日志4 封面" width="600" height="360">
           <span class="card-category">站点</span>
         </div>
         <p>音乐播放器！</p>
@@ -299,7 +299,7 @@
           <span class="time-badge">2026-04-03</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b676044.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908d6b9139.jpg" alt="更新日志3 封面" width="600" height="360">
           <span class="card-category">站点</span>
         </div>
         <p>代码框高亮！</p>
@@ -313,7 +313,7 @@
           <span class="time-badge">2026-03-29</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b694c85.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908d9184d8.jpg" alt="更新日志2 封面" width="600" height="360">
           <span class="card-category">站点</span>
         </div>
         <p>一点改动~</p>
@@ -327,7 +327,7 @@
           <span class="time-badge">2026-03-28</span>
         </div>
         <div class="card-cover">
-          <img loading="lazy" src="https://a1.boltp.com/2026/08/04/6a7175b69d20e.jpg">
+          <img loading="lazy" src="https://a1.boltp.com/2026/11/15/6af908db316f6.jpg" alt="更新日志 封面" width="600" height="360">
           <span class="card-category">站点</span>
         </div>
         <p>一些改动~</p>
@@ -350,9 +350,9 @@
   </div>
 
   <!-- JS脚本 -->
-  <script defer src="js/script.min.js?v=bc6d317325"></script>
+  <script defer src="js/script.min.js?v=43cc559fc0"></script>
   <script defer src="js/viewer.js?v=0915250c13"></script>
-  <script defer src="./xf-MusicPlayer.min.js?v=515d374fa3"></script>
+  <script defer src="./xf-MusicPlayer.min.js?v=11b7898164"></script>
 
 </body>
 
