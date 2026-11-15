@@ -1238,8 +1238,8 @@ async function loadPage(url, addToHistory = true) {
     navOk = false;
     showNavToast(
       err && err.message === 'TIMEOUT'
-        ? '页面加载超时了，点一下重试喵（如果一直这样，可能是网络抽风）'
-        : '页面加载失败，点一下重试喵'
+        ? '加载超时了，点一下重试喵（试试开梯子？）'
+        : '加载失败，点一下重试喵'
     );
   } finally {
     if (seq === navSeq) finishNavProgress(navOk);
