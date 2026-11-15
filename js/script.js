@@ -18,6 +18,8 @@ const CONFIG = {
   GISCUS_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-light.css',
   GISCUS_BLUE_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-dark.css',
   GISCUS_BLUE_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-blue-light.css',
+  GISCUS_GREEN_DARK_THEME: 'https://neneneko.pages.dev/styles/giscus-green-dark.css',
+  GISCUS_GREEN_LIGHT_THEME: 'https://neneneko.pages.dev/styles/giscus-green-light.css',
   HITOKOTO_CACHE_DURATION: 5 * 1000,
   // 加载屏最短停留时间
   MIN_LOAD_TIME: 450,
@@ -104,11 +106,13 @@ const ThemeManager = {
     }
     const isDark = prefersDarkMQ.matches;
     const theme = this.getTheme();
-    if (theme === 'dark' || (theme === 'auto' && isDark)) {
-      meta.content = '#201418';
-    } else {
-      meta.content = '#FFFBFF';
+    const dark = theme === 'dark' || (theme === 'auto' && isDark);
+    let color = dark ? '#201418' : '#FFFBFF';
+    if (typeof ColorThemeManager !== 'undefined') {
+      const vars = ColorThemeManager.themes[ColorThemeManager.getColor()]?.[dark ? 'dark' : 'light'];
+      if (vars && vars['--color-bg']) color = vars['--color-bg'];
     }
+    meta.content = color;
   },
   init() {
     const saved = localStorage.getItem(this.STORAGE_KEY) || 'auto';
@@ -131,18 +135,185 @@ const HERO_RIPPLE_DELAY = 300;   // 延迟多久开始扩散（ms）
 const HERO_RIPPLE_DURATION = 700; // 扩散时长（ms），与 .header-ripple 的 transition 一致
 let heroRippleToken = 0;
 
+/* =========================
+   头图：同主题随机轮播
+   每个颜色主题有 4 张头图，每 8 秒随机换一张（不与当前重复）。
+   轮播用淡入淡出；用户主动换主题色时仍沿用上面的 ripple 动画。
+========================= */
+const HERO_ROTATE_INTERVAL = 8000;
+const HERO_FADE_DURATION = 700;
+const heroIndexByColor = Object.create(null);
+const heroPreloaded = new Set();
+let heroRotation = null;
+
+/** 解析 data-pink-src / data-blue-src / data-green-src 里的逗号分隔图片列表 */
+function getHeroSources(heroImg, color) {
+  const raw = heroImg?.getAttribute(`data-${color}-src`) || '';
+  return raw.split(',').map(src => src.trim()).filter(Boolean);
+}
+
+/** 空闲时预加载整套同主题图片，避免第一次轮播时才下载 */
+function preloadHeroSources(sources) {
+  const queue = sources.filter(src => !heroPreloaded.has(src));
+  if (!queue.length) return;
+  queue.forEach(src => heroPreloaded.add(src));
+
+  const run = () => {
+    queue.forEach(src => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = src;
+      if (typeof img.decode === 'function') img.decode().catch(() => {});
+    });
+  };
+
+  const idle = () => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(run, { timeout: 2500 });
+    } else {
+      window.setTimeout(run, 1200);
+    }
+  };
+
+  if (document.readyState === 'complete') {
+    idle();
+  } else {
+    window.addEventListener('load', idle, { once: true });
+  }
+}
+
+function stopHeroRotation() {
+  if (heroRotation) window.clearTimeout(heroRotation.timer);
+  heroRotation = null;
+}
+
+function scheduleHeroRotation() {
+  if (!heroRotation) return;
+  window.clearTimeout(heroRotation.timer);
+  heroRotation.timer = window.setTimeout(rotateHeroImage, HERO_ROTATE_INTERVAL);
+}
+
+function rotateHeroImage() {
+  const state = heroRotation;
+  if (!state) return;
+
+  // 标签页在后台时不换图，回来后再重新计时
+  if (document.hidden || !state.heroImg.isConnected) {
+    scheduleHeroRotation();
+    return;
+  }
+
+  const total = state.sources.length;
+  if (total > 1) {
+    // 在「除当前这张以外」的图片里均匀随机
+    let next = Math.floor(Math.random() * (total - 1));
+    if (next >= state.index) next += 1;
+    state.index = next;
+    heroIndexByColor[state.color] = next;
+    crossfadeHeroImage(state.heroImg, state.sources[next]);
+  }
+
+  scheduleHeroRotation();
+}
+
+function startHeroRotation(heroImg, color, sources, index) {
+  stopHeroRotation();
+  if (!heroImg || !sources || sources.length < 2) return;
+  heroRotation = {
+    heroImg,
+    color,
+    sources,
+    index: Math.min(Math.max(index | 0, 0), sources.length - 1),
+    timer: 0,
+  };
+  preloadHeroSources(sources);
+  scheduleHeroRotation();
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!heroRotation) return;
+  if (document.hidden) {
+    window.clearTimeout(heroRotation.timer);
+  } else {
+    scheduleHeroRotation();
+  }
+});
+
+/** 收掉未完成的过渡层，并把主图落到过渡层当前的目标图 */
+function settleHeroLayers(heroImg) {
+  const container = heroImg.closest('.header-container');
+  if (!container) return null;
+  container.querySelectorAll('.header-ripple, .header-fade').forEach(layer => {
+    const src = layer.getAttribute('data-src');
+    if (src) heroImg.src = src;
+    layer.remove();
+  });
+  return container;
+}
+
+/** 自动轮播用：新图淡入盖住旧图，过渡结束后写回主图 */
+function crossfadeHeroImage(heroImg, targetSrc) {
+  const container = settleHeroLayers(heroImg);
+  const still =
+    document.documentElement.classList.contains('animations-off') ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (still || !container) {
+    heroImg.src = targetSrc;
+    return;
+  }
+
+  const layer = document.createElement('img');
+  layer.className = 'header-fade';
+  layer.alt = '';
+  layer.setAttribute('aria-hidden', 'true');
+  layer.setAttribute('data-src', targetSrc);
+  layer.decoding = 'async';
+  layer.src = targetSrc;
+  container.appendChild(layer);
+
+  let finished = false;
+  let fallbackTimer = 0;
+
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    layer.removeEventListener('transitionend', onEnd);
+    window.clearTimeout(fallbackTimer);
+    heroImg.src = targetSrc;
+    layer.remove();
+  };
+
+  const onEnd = (event) => {
+    if (event.propertyName === 'opacity') finish();
+  };
+
+  const startFade = () => {
+    if (finished) return;
+    void layer.offsetWidth; // 先让浏览器吃到 opacity:0 起始态
+    window.requestAnimationFrame(() => {
+      if (!finished) layer.style.opacity = '1';
+    });
+  };
+
+  layer.addEventListener('transitionend', onEnd);
+  fallbackTimer = window.setTimeout(finish, HERO_FADE_DURATION + 2000);
+
+  if (layer.complete) {
+    startFade();
+  } else {
+    layer.addEventListener('load', startFade, { once: true });
+    layer.addEventListener('error', finish, { once: true });
+  }
+}
+
 function swapHeroImage(heroImg, targetSrc, options = {}) {
   const delay = options.delay ?? HERO_RIPPLE_DELAY;
   const duration = options.duration ?? HERO_RIPPLE_DURATION;
   const token = ++heroRippleToken;
 
-  // 上一次切换还没结束：直接落定，避免两层新图叠在一起
-  const container = heroImg.closest('.header-container');
-  const previous = container?.querySelector('.header-ripple');
-  if (previous) {
-    heroImg.src = previous.getAttribute('data-src') || heroImg.src;
-    previous.remove();
-  }
+  // 上一次切换（ripple 或轮播淡入）还没结束：直接落定，避免两层新图叠在一起
+  const container = settleHeroLayers(heroImg);
 
   const still =
     document.documentElement.classList.contains('animations-off') ||
@@ -432,6 +603,109 @@ const ColorThemeManager = {
         }
       }
     }
+,
+    green: {
+      light: {
+        '--color-bg': '#FBFAED',
+        '--accent': '#526126',
+        '--accent-text': '#556423',
+        '--on-accent': '#FFFFFF',
+        '--accent-soft': '#D8EB9A',
+        '--color-svg': '#2F3229',
+        '--sidebar-bg': '#F5F4E8',
+        '--sidebar-a': 'rgba(70,72,60,0.2)',
+        '--sidebar-bg-mobile': 'rgba(245,244,232,0.85)',
+        '--card-bg': '#F5F4E8',
+        '--surface-container-high': '#E9E9DC',
+        '--surface-container-highest': '#E4E3D7',
+        '--profile-list-bg': 'rgba(216,235,154,0.45)',
+        '--time-badge-bg': 'rgba(216,235,154,0.6)',
+        '--li-a-bg': 'rgba(216,235,154,0.8)',
+        '--li-a-hover-bg': '#BCCE81',
+        '--slogan-color': '#556423',
+        '--slogan-text-shadow': '0 2px 8px rgba(85,100,35,0.2)',
+        '--thoughts-color': '#3A665E',
+        '--thoughts-bg': 'rgba(188,236,225,0.3)',
+        '--thoughts-border': '#BCECE1',
+        '--nav-time-bg': 'rgba(216,235,154,0.6)',
+        lyPop: {
+          '--lyric-bg': 'rgba(216, 235, 154, 0.7)',
+          '--lyric-shadow': '0 -2px 10px rgba(85, 100, 35, 0.15)',
+          '--pop-bg': 'rgba(216, 235, 154, 0.9)',
+          '--pop-color': '#3E4C0C'
+        },
+        player: {
+          '--playerColor-1': '#fbfaed',
+          '--playerColor-2': '#1b1c15',
+          '--playerColor-3': '#d8eb9a',
+          '--playerColor-4': '#46483c',
+          '--playerColor-5': '#1b1c15',
+          '--playerColor-6': '#556423',
+          '--playerColor-7': '#d8eb9a',
+          '--playerColor-8': '#3e4c0c',
+          '--playerColor-9': '#e3e4d3',
+          '--playerColor-10': '#5b6146',
+          '--playerColor-11': '#879850',
+          '--playerColor-12': '#3e4c0c',
+          '--playerColor-rgba-1': 'rgba(85,100,35,0.08)',
+          '--playerColor-rgba-2': 'rgba(255,255,255,0.8)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(85,100,35,0.05),0px 1px 3px 0px rgba(0,0,0,0.08)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(85,100,35,0.08),inset -4px 4px 10px 0px rgba(0,0,0,0.03)',
+          '--playerTextShadow-1': '0 0 1px rgba(85,100,35,0.15)',
+          '--playerTextShadow-2': '0 0 1px rgba(255,255,255,0.5)'
+        }
+      },
+      dark: {
+        '--color-bg': '#13140D',
+        '--accent': '#BCCE81',
+        '--accent-text': '#BCCE81',
+        '--on-accent': '#293500',
+        '--accent-soft': 'rgba(188,206,129,0.25)',
+        '--color-svg': '#E4E3D7',
+        '--sidebar-bg': '#1C1F16',
+        '--sidebar-a': 'rgba(188,206,129,0.2)',
+        '--sidebar-bg-mobile': 'rgba(27,28,21,0.85)',
+        '--card-bg': '#1B1C15',
+        '--surface-container-high': '#292B23',
+        '--surface-container-highest': '#34352D',
+        '--profile-list-bg': 'rgba(62,76,12,0.5)',
+        '--time-badge-bg': 'rgba(188,206,129,0.2)',
+        '--li-a-bg': 'rgba(188,206,129,0.25)',
+        '--li-a-hover-bg': 'rgba(188,206,129,0.35)',
+        '--slogan-color': '#BCCE81',
+        '--slogan-text-shadow': '0 2px 12px rgba(188,206,129,0.35)',
+        '--thoughts-color': '#A1D0C5',
+        '--thoughts-bg': 'rgba(33,78,70,0.15)',
+        '--thoughts-border': '#214E46',
+        '--nav-time-bg': 'rgba(188,206,129,0.2)',
+        lyPop: {
+          '--lyric-bg': 'rgba(62, 76, 12, 0.9)',
+          '--lyric-shadow': '0 -2px 10px rgba(0, 0, 0, 0.4)',
+          '--pop-bg': 'rgba(62, 76, 12, 0.9)',
+          '--pop-color': '#D8EB9A'
+        },
+        player: {
+          '--playerColor-1': '#13140d',
+          '--playerColor-2': '#e4e3d7',
+          '--playerColor-3': '#292b23',
+          '--playerColor-4': '#c7c8b8',
+          '--playerColor-5': '#bcce81',
+          '--playerColor-6': '#bcce81',
+          '--playerColor-7': '#292b23',
+          '--playerColor-8': '#d8eb9a',
+          '--playerColor-9': '#46483c',
+          '--playerColor-10': '#c4caa9',
+          '--playerColor-11': '#bcce81',
+          '--playerColor-12': '#d8eb9a',
+          '--playerColor-rgba-1': 'rgba(188,206,129,0.12)',
+          '--playerColor-rgba-2': 'rgba(19,20,13,0.7)',
+          '--playerShadow-1': '0px 4px 8px 3px rgba(0,0,0,0.3),0px 1px 3px 0px rgba(0,0,0,0.4)',
+          '--playerShadow-2': '-4px 4px 8px 0px rgba(0,0,0,0.4),inset -4px 4px 10px 0px rgba(188,206,129,0.05)',
+          '--playerTextShadow-1': '0 0 1px rgba(188,206,129,0.4)',
+          '--playerTextShadow-2': '0 0 1px rgba(0,0,0,0.5)'
+        }
+      }
+    }
   },
 
   getColor() {
@@ -487,10 +761,12 @@ const ColorThemeManager = {
       if (xfPop) { xfPop.style.background = ''; xfPop.style.color = ''; }
     }
 
-    // 切换主页头图
+    // 切换主页头图，并启动同主题随机轮播
     const heroImg = document.querySelector('.home-header');
     if (heroImg) {
-      const targetSrc = heroImg.getAttribute(`data-${name}-src`);
+      const sources = getHeroSources(heroImg, name);
+      const index = Math.min(heroIndexByColor[name] || 0, Math.max(sources.length - 1, 0));
+      const targetSrc = sources[index];
       if (targetSrc && heroImg.src !== new URL(targetSrc, location.href).href) {
         if (options.animateHero) {
           swapHeroImage(heroImg, targetSrc);
@@ -498,9 +774,13 @@ const ColorThemeManager = {
           heroImg.src = targetSrc;
         }
       }
+      startHeroRotation(heroImg, name, sources, index);
+    } else {
+      stopHeroRotation();
     }
 
     this.updateActiveButton(name);
+    if (typeof ThemeManager !== 'undefined') ThemeManager.updateMetaThemeColor();
   },
 
   setColor(name) {
@@ -1569,6 +1849,11 @@ function getGiscusThemeUrl() {
       isDark ? CONFIG.GISCUS_BLUE_DARK_THEME : CONFIG.GISCUS_BLUE_LIGHT_THEME
     );
   }
+  if (color === 'green') {
+    return giscusThemeFor(
+      isDark ? CONFIG.GISCUS_GREEN_DARK_THEME : CONFIG.GISCUS_GREEN_LIGHT_THEME
+    );
+  }
   return giscusThemeFor(isDark ? CONFIG.GISCUS_DARK_THEME : CONFIG.GISCUS_LIGHT_THEME);
 }
 
@@ -2002,6 +2287,7 @@ function createSettingsDialog() {
             <span class="theme-color-options">
               <span class="theme-color-btn pink" data-color="pink"></span>
               <span class="theme-color-btn blue" data-color="blue"></span>
+              <span class="theme-color-btn green" data-color="green"></span>
             </span>
           </div>
           <label class="list-item">

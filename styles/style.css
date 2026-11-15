@@ -1299,7 +1299,7 @@ button,
 }
 
 .theme-color-btn.green {
-  background: #8fceb4;
+  background: #879850;
 }
 
 .theme-color-btn.purple {
@@ -2263,7 +2263,24 @@ button,
   will-change: clip-path;
 }
 
-.header-container>*:not(.header-overlay):not(.home-header):not(.hitokoto):not(.header-ripple) {
+/* 自动轮播用的淡入层：结构与 ripple 相同，只是改用透明度过渡，
+   每 8 秒随机换图时不会像 ripple 那样抢注意力 */
+.header-fade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 28px;
+  pointer-events: none;
+  background-color: var(--color-bg);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 700ms ease;
+  will-change: opacity;
+}
+
+.header-container>*:not(.header-overlay):not(.home-header):not(.hitokoto):not(.header-ripple):not(.header-fade) {
   position: relative;
   z-index: 2;
 }
